@@ -1,0 +1,95 @@
+{
+  "entities": {
+    "Job": {
+      "title": "Assay Job",
+      "description": "A collection of samples processed together in a shift.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "jobId": { "type": "string" },
+        "name": { "type": "string" },
+        "site": { "type": "string" },
+        "shift": { "type": "string", "enum": ["Morning", "Afternoon", "Night"] },
+        "status": { "type": "string", "enum": ["Open", "In-Process", "Completed"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "createdBy": { "type": "string" }
+      },
+      "required": ["jobId", "name", "status"]
+    },
+    "Sample": {
+      "title": "Assay Sample",
+      "description": "A sample submitted for metallurgical assaying.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "jobId": { "type": "string", "description": "Reference to the Job ID" },
+        "sampleId": { "type": "string", "description": "QR/Barcode ID" },
+        "clientName": { "type": "string" },
+        "source": { "type": "string", "enum": ["Mining", "BallMill", "ILR", "CIL", "PlantFeed", "PlantTails"] },
+        "sampleType": { "type": "string", "enum": ["Ore", "Concentrate", "Tailings", "Bullion", "Waste", "Cyanidation", "Pulp", "Solution", "Carbon"] },
+        "status": { "type": "string", "enum": ["Received", "Preparation", "Analysis", "Finalized", "Cancelled"] },
+        "priority": { "type": "string", "enum": ["Low", "Standard", "High", "Emergency"] },
+        "physicalProperties": {
+          "type": "object",
+          "properties": {
+            "moistureContent": { "type": "number" },
+            "mass": { "type": "number" },
+            "form": { "type": "string", "enum": ["pulp", "solution", "carbon", "rock"] }
+          }
+        },
+        "method": { "type": "string", "enum": ["FireAssay", "AAS", "CarbonAnalysis", "WetChemistry"] },
+        "methodData": { "type": "object" },
+        "qaqc": { "type": "object" },
+        "collectedAt": { "type": "string", "format": "date-time" },
+        "submittedById": { "type": "string" },
+        "elements": {
+          "type": "object",
+          "properties": {
+            "gold": { "type": "number", "description": "Au concentration in g/t" },
+            "silver": { "type": "number", "description": "Ag concentration in g/t" },
+            "copper": { "type": "number", "description": "Cu percentage" },
+            "iron": { "type": "number", "description": "Fe percentage" },
+            "cyanideFree": { "type": "number", "description": "Free Cyanide ppm" },
+            "cyanideTotal": { "type": "number", "description": "Total Cyanide ppm" }
+          }
+        },
+        "history": {
+          "type": "array",
+          "items": { "type": "object" },
+          "description": "Chain of custody log entries."
+        },
+        "notes": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["jobId", "sampleId", "status", "submittedById"]
+    },
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Metadata for a lab technician or client.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["Admin", "Technician", "Client"] }
+      },
+      "required": ["uid", "email", "role"]
+    }
+  },
+  "firestore": {
+    "/jobs/{jobId}": {
+      "schema": "Job",
+      "description": "Lab assay job batches."
+    },
+    "/samples/{sampleId}": {
+      "schema": "Sample",
+      "description": "Lab assay samples."
+    },
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User account information and roles."
+    }
+  }
+}

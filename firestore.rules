@@ -1,0 +1,94 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() { return request.auth != null; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+    function isVerified() { return request.auth.token.email_verified == true; }
+    
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+    
+    function isTechnician() { 
+      let userDoc = get(/databases/$(database)/documents/users/$(request.auth.uid));
+      return isSignedIn() && (
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && userDoc.data.role == 'Technician') ||
+        request.auth.token.email == 'no.madyauta@gmail.com'
+      ); 
+    }
+    function isAdmin() { 
+      let userDoc = get(/databases/$(database)/documents/users/$(request.auth.uid));
+      return isSignedIn() && (
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && userDoc.data.role == 'Admin') ||
+        request.auth.token.email == 'no.madyauta@gmail.com'
+      ); 
+    }
+
+    // User Profiles
+    match /users/{userId} {
+      allow get: if isSignedIn() && (isOwner(userId) || isTechnician() || isAdmin());
+      allow list: if isAdmin();
+      allow create: if isSignedIn() && isOwner(userId); // Allow creating with any role for owner during setup
+      allow update: if isSignedIn() && (
+        (isOwner(userId) && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'role'])) ||
+        isAdmin()
+      );
+    }
+
+    // Jobs
+    match /jobs/{jobId} {
+      function isValidJob(data) {
+        return data.jobId is string && data.name is string &&
+               data.status in ['Open', 'In-Process', 'Completed'] &&
+               data.shift in ['Morning', 'Afternoon', 'Night'] &&
+               data.createdBy == request.auth.uid;
+      }
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isValidJob(incoming());
+      allow update: if isSignedIn() && (isTechnician() || isAdmin() || isOwner(existing().createdBy));
+    }
+
+    // Samples
+    match /samples/{sampleId} {
+      function isValidSample(data) {
+        return data.jobId is string &&
+               data.sampleId is string &&
+               data.clientName is string &&
+               data.status in ['Received', 'Preparation', 'Analysis', 'Finalized', 'Cancelled'] &&
+               data.sampleType in ['Ore', 'Concentrate', 'Tailings', 'Bullion', 'Waste', 'Cyanidation', 'Pulp', 'Solution', 'Carbon'] &&
+               data.source in ['Mining', 'BallMill', 'ILR', 'CIL', 'PlantFeed', 'PlantTails'] &&
+               data.priority in ['Low', 'Standard', 'High', 'Emergency'] &&
+               data.submittedById == request.auth.uid &&
+               data.history is list &&
+               data.createdAt is string &&
+               data.updatedAt is string;
+      }
+
+      allow read: if isSignedIn();
+      
+      allow create: if isSignedIn() && isValidSample(incoming()) && 
+                    incoming().keys().hasAll(['jobId', 'sampleId', 'status', 'submittedById', 'sampleType', 'createdAt', 'updatedAt', 'priority', 'history', 'source']);
+
+      allow update: if isSignedIn() && (
+        // Lab technicians updating status, elements, calculations
+        (isTechnician() || isAdmin()) && (
+          incoming().diff(existing()).affectedKeys().hasAny(['status', 'updatedAt', 'history', 'elements', 'method', 'methodData', 'physicalProperties']) &&
+          incoming().history.size() > existing().history.size()
+        ) ||
+        // Owners updating notes
+        (isOwner(existing().submittedById) && incoming().diff(existing()).affectedKeys().hasOnly(['notes', 'updatedAt', 'history']) &&
+         incoming().history.size() > existing().history.size())
+      );
+
+      allow delete: if isAdmin();
+    }
+  }
+}
