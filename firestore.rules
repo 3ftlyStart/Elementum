@@ -6,39 +6,46 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // Global Helpers
     function isSignedIn() { return request.auth != null; }
     function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
     function incoming() { return request.resource.data; }
     function existing() { return resource.data; }
     function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
-    function isVerified() { return request.auth.token.email_verified == true; }
     
-    function getUserRole() {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    // Auth tokens do not contain roles. Fetch from trusted user doc.
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
     }
     
-    function isTechnician() { 
-      let userDoc = get(/databases/$(database)/documents/users/$(request.auth.uid));
+    function isAdmin() {
       return isSignedIn() && (
-        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && userDoc.data.role == 'Technician') ||
-        request.auth.token.email == 'no.madyauta@gmail.com'
-      ); 
+        request.auth.token.email == 'no.madyauta@gmail.com' || 
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && getUserData().role == 'Admin')
+      );
     }
-    function isAdmin() { 
-      let userDoc = get(/databases/$(database)/documents/users/$(request.auth.uid));
+    
+    function isTechnician() {
       return isSignedIn() && (
-        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && userDoc.data.role == 'Admin') ||
-        request.auth.token.email == 'no.madyauta@gmail.com'
-      ); 
+        isAdmin() || 
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && getUserData().role == 'Technician')
+      );
     }
 
     // User Profiles
     match /users/{userId} {
-      allow get: if isSignedIn() && (isOwner(userId) || isTechnician() || isAdmin());
+      function isValidUser(data) {
+        return data.keys().hasAll(['uid', 'email', 'displayName', 'role']) &&
+               data.email is string && data.email.size() < 256 &&
+               data.displayName is string && data.displayName.size() < 128 &&
+               data.role in ['Admin', 'Technician', 'Client'];
+      }
+      
+      allow get: if isSignedIn() && (isOwner(userId) || isTechnician());
       allow list: if isAdmin();
-      allow create: if isSignedIn() && isOwner(userId); // Allow creating with any role for owner during setup
+      allow create: if isSignedIn() && isOwner(userId) && isValidUser(incoming());
       allow update: if isSignedIn() && (
-        (isOwner(userId) && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'role'])) ||
+        (isOwner(userId) && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'role']) && isValidUser(incoming())) ||
         isAdmin()
       );
     }
@@ -46,49 +53,88 @@ service cloud.firestore {
     // Jobs
     match /jobs/{jobId} {
       function isValidJob(data) {
-        return data.jobId is string && data.name is string &&
+        return data.keys().hasAll(['jobId', 'name', 'site', 'shift', 'status', 'createdAt', 'updatedAt', 'createdBy']) &&
+               data.jobId is string && data.jobId.size() < 50 &&
+               data.name is string && data.name.size() < 256 &&
                data.status in ['Open', 'In-Process', 'Completed'] &&
-               data.shift in ['Morning', 'Afternoon', 'Night'] &&
                data.createdBy == request.auth.uid;
       }
-      allow read: if isSignedIn();
-      allow create: if isSignedIn() && isValidJob(incoming());
-      allow update: if isSignedIn() && (isTechnician() || isAdmin() || isOwner(existing().createdBy));
+      allow get: if isSignedIn();
+      allow list: if isSignedIn(); 
+      allow create: if isTechnician() && isValidJob(incoming());
+      allow update: if isTechnician() && isValidJob(incoming()) && (
+        incoming().createdBy == existing().createdBy // Immutable owner
+      );
+      allow delete: if isAdmin();
     }
 
     // Samples
     match /samples/{sampleId} {
       function isValidSample(data) {
-        return data.jobId is string &&
-               data.sampleId is string &&
-               data.clientName is string &&
+        return data.keys().hasAll(['jobId', 'sampleId', 'clientName', 'status', 'sampleType', 'source', 'priority', 'submittedById', 'history', 'createdAt', 'updatedAt']) &&
+               data.sampleId is string && data.sampleId.size() < 64 &&
                data.status in ['Received', 'Preparation', 'Analysis', 'Finalized', 'Cancelled'] &&
-               data.sampleType in ['Ore', 'Concentrate', 'Tailings', 'Bullion', 'Waste', 'Cyanidation', 'Pulp', 'Solution', 'Carbon'] &&
-               data.source in ['Mining', 'BallMill', 'ILR', 'CIL', 'PlantFeed', 'PlantTails'] &&
-               data.priority in ['Low', 'Standard', 'High', 'Emergency'] &&
-               data.submittedById == request.auth.uid &&
-               data.history is list &&
-               data.createdAt is string &&
-               data.updatedAt is string;
+               data.history is list && data.history.size() <= 100;
+      }
+      
+      // Client Isolation
+      allow get: if isSignedIn() && (isTechnician() || existing().clientName == getUserData().displayName);
+      allow list: if isSignedIn() && (isTechnician() || resource.data.clientName == getUserData().displayName);
+      
+      allow create: if isTechnician() && isValidSample(incoming()) && incoming().submittedById == request.auth.uid;
+      allow update: if isTechnician() && isValidSample(incoming()) && (
+        incoming().submittedById == existing().submittedById && // Immutable owner
+        incoming().diff(existing()).affectedKeys().hasAny(['status', 'elements', 'updatedAt', 'history', 'method', 'methodData', 'physicalProperties'])
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Requisitions
+    match /requisitions/{reqId} {
+      function isValidRequisition(data) {
+        return data.keys().hasAll(['itemId', 'itemName', 'quantityRequested', 'unit', 'status', 'requestedBy', 'requestedByUserName', 'createdAt', 'updatedAt']) &&
+               data.itemId is string && isValidId(data.itemId) &&
+               data.quantityRequested is number && data.quantityRequested > 0 &&
+               data.status in ['Pending', 'Approved', 'Ordered', 'Received', 'Cancelled'] &&
+               data.requestedBy == request.auth.uid;
       }
 
       allow read: if isSignedIn();
-      
-      allow create: if isSignedIn() && isValidSample(incoming()) && 
-                    incoming().keys().hasAll(['jobId', 'sampleId', 'status', 'submittedById', 'sampleType', 'createdAt', 'updatedAt', 'priority', 'history', 'source']);
-
-      allow update: if isSignedIn() && (
-        // Lab technicians updating status, elements, calculations
-        (isTechnician() || isAdmin()) && (
-          incoming().diff(existing()).affectedKeys().hasAny(['status', 'updatedAt', 'history', 'elements', 'method', 'methodData', 'physicalProperties']) &&
-          incoming().history.size() > existing().history.size()
-        ) ||
-        // Owners updating notes
-        (isOwner(existing().submittedById) && incoming().diff(existing()).affectedKeys().hasOnly(['notes', 'updatedAt', 'history']) &&
-         incoming().history.size() > existing().history.size())
+      allow create: if isSignedIn() && isValidRequisition(incoming());
+      allow update: if isTechnician() && (
+        incoming().requestedBy == existing().requestedBy &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt'])
       );
-
       allow delete: if isAdmin();
+    }
+
+    // Invoices
+    match /invoices/{invoiceId} {
+      function isValidInvoice(data) {
+        return data.keys().hasAll(['invoiceNumber', 'clientId', 'clientName', 'date', 'dueDate', 'status', 'items', 'subtotal', 'tax', 'total']) &&
+               data.invoiceNumber is string && data.invoiceNumber.size() < 20 &&
+               data.status in ['Draft', 'Sent', 'Paid', 'Overdue', 'Cancelled'] &&
+               data.total is number && data.total >= 0;
+      }
+
+      allow get: if isSignedIn() && (isAdmin() || existing().clientName == getUserData().displayName);
+      allow list: if isSignedIn() && (isAdmin() || resource.data.clientName == getUserData().displayName);
+      
+      allow create: if isAdmin() && isValidInvoice(incoming());
+      allow update: if isAdmin() && isValidInvoice(incoming());
+      allow delete: if isAdmin();
+    }
+
+    // Inventory
+    match /inventory/{itemId} {
+      allow read: if isSignedIn();
+      allow write: if isTechnician();
+    }
+
+    // Marketing Assets
+    match /hero_config/{imgId} {
+      allow read: if true; // Publicly accessible for the landing page
+      allow write: if isAdmin();
     }
   }
 }

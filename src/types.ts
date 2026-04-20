@@ -97,6 +97,7 @@ export interface UserProfile {
   email: string;
   displayName: string;
   role: UserRole;
+  company?: string;
 }
 
 export type InstrumentType = 'Balance' | 'AAS' | 'XRF' | 'InductionFurnace';
@@ -159,4 +160,36 @@ export interface Requisition {
   createdAt: string;
   updatedAt: string;
   notes?: string;
+}
+
+export type InvoiceStatus = 'Draft' | 'Sent' | 'Paid' | 'Overdue' | 'Cancelled';
+
+export interface InvoiceLineItem {
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  total: number;
+}
+
+export interface Invoice {
+  id: string;
+  invoiceNumber: string;
+  clientId: string;
+  clientName: string;
+  date: string;
+  dueDate: string;
+  status: InvoiceStatus;
+  items: InvoiceLineItem[];
+  subtotal: number;
+  tax: number;
+  total: number;
+  notes?: string;
+  paidAt?: string;
+}
+
+export interface ClientProfile extends UserProfile {
+  companyName: string;
+  address: string;
+  contactNumber: string;
+  billingEmail: string;
 }

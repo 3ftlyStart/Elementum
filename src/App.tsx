@@ -64,7 +64,8 @@ import {
   Cloud as CloudSync,
   Cpu,
   Package,
-  ShoppingBag
+  ShoppingBag,
+  DollarSign
 } from 'lucide-react';
 import { 
   BarChart, 
@@ -109,6 +110,11 @@ import {
 import { InstrumentManager } from './components/InstrumentManager';
 import { InventoryManager } from './components/InventoryManager';
 import { RequisitionView } from './components/RequisitionView';
+import { BillingManager } from './components/BillingManager';
+import { ClientPortal } from './components/ClientPortal';
+import { LandingPage } from './components/LandingPage';
+import { seedHeroImages } from './services/marketingService';
+import { Onboarding } from './components/Onboarding';
 
 const HistoryView = ({ samples }: { samples: Sample[] }) => {
   const [startDate, setStartDate] = useState('');
@@ -240,50 +246,6 @@ const LoadingScreen = () => (
     </motion.div>
   </div>
 );
-
-const LoginScreen = () => {
-  const handleLogin = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (error) {
-      console.error("Login failed", error);
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 text-slate-100">
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="text-center space-y-10"
-      >
-        <div className="space-y-3">
-          <div className="flex justify-center">
-            <div className="w-20 h-20 rounded-3xl bg-slate-900 border border-slate-700 flex items-center justify-center cyan-glow">
-              <FlaskConical size={40} className="text-cyan-400" />
-            </div>
-          </div>
-          <h1 className="text-xs font-bold tracking-[0.3em] text-cyan-400 uppercase">Elementum</h1>
-          <p className="text-2xl font-medium text-white">Assay Lab Portal</p>
-        </div>
-
-        <button 
-          onClick={handleLogin}
-          className="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm px-10 py-4 rounded-2xl flex items-center gap-3 active:scale-95 transition-all shadow-[0_0_20px_rgba(6,182,212,0.4)]"
-        >
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="" className="w-5 h-5" />
-          SYSTEM ACCESS
-        </button>
-
-        <div className="flex items-center justify-center gap-2 pt-10">
-          <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse"></div>
-          <p className="text-[9px] uppercase tracking-[0.2em] text-slate-500">Secure Cloud Synchronized</p>
-        </div>
-      </motion.div>
-    </div>
-  );
-};
 
 const SyncIndicator = ({ isOnline, pendingCount }: { isOnline: boolean, pendingCount: number }) => (
   <div className={`fixed top-4 right-4 z-50 flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all ${isOnline ? 'bg-slate-900/80 border-slate-800 text-slate-400' : 'bg-red-500/10 border-red-500/30 text-red-500'}`}>
@@ -850,8 +812,9 @@ export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [samples, setSamples] = useState<Sample[]>([]);
-  const [view, setView] = useState<'dashboard' | 'create' | 'detail' | 'analytics' | 'control' | 'plant' | 'bench' | 'history' | 'instruments' | 'inventory' | 'requisitions'>('dashboard');
+  const [view, setView] = useState<'dashboard' | 'create' | 'detail' | 'analytics' | 'control' | 'plant' | 'bench' | 'history' | 'instruments' | 'inventory' | 'requisitions' | 'billing'>('dashboard');
   const [jobs, setJobs] = useState<Job[]>([]);
   const [entryType, setEntryType] = useState<'sample' | 'job'>('sample');
   const [selectedSample, setSelectedSample] = useState<Sample | null>(null);
@@ -888,20 +851,15 @@ export default function App() {
         setUser(u);
         const userDoc = await getDoc(doc(db, 'users', u.uid));
         if (!userDoc.exists()) {
-          const newProfile: UserProfile = {
-            uid: u.uid,
-            email: u.email || '',
-            displayName: u.displayName || 'Technician',
-            role: 'Technician' // Default for this demo, usually would be more restrictive
-          };
-          await setDoc(doc(db, 'users', u.uid), newProfile);
-          setProfile(newProfile);
+          setShowOnboarding(true);
         } else {
           setProfile(userDoc.data() as UserProfile);
+          setShowOnboarding(false);
         }
       } else {
         setUser(null);
         setProfile(null);
+        setShowOnboarding(false);
       }
       setLoading(false);
     });
@@ -909,6 +867,11 @@ export default function App() {
 
   useEffect(() => {
     if (!user || !profile) return;
+
+    // Seed hero images if admin is logged in (fulfills "save to database" requirement)
+    if (user.email === 'no.madyauta@gmail.com') {
+      seedHeroImages();
+    }
 
     let q = query(collection(db, 'samples'), orderBy('updatedAt', 'desc'), limit(50));
     
@@ -934,7 +897,40 @@ export default function App() {
   }, [user, profile]);
 
   if (loading) return <LoadingScreen />;
-  if (!user) return <LoginScreen />;
+  
+  const handleAuth = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.error("Auth failed", error);
+    }
+  };
+
+  if (!user) return <LandingPage onSignUp={handleAuth} onSignIn={handleAuth} />;
+
+  const handleOnboardingComplete = async (data: { role: UserRole; displayName: string; company?: string }) => {
+    if (!user) return;
+    const newProfile: UserProfile = {
+      uid: user.uid,
+      email: user.email || '',
+      displayName: data.displayName,
+      role: data.role,
+      company: data.company
+    };
+    await setDoc(doc(db, 'users', user.uid), newProfile);
+    setProfile(newProfile);
+    setShowOnboarding(false);
+  };
+
+  if (showOnboarding) {
+    return (
+      <Onboarding 
+        user={{ uid: user.uid, email: user.email, displayName: user.displayName }} 
+        onComplete={handleOnboardingComplete} 
+      />
+    );
+  }
 
   const handleLogout = () => signOut(auth);
 
@@ -973,6 +969,10 @@ export default function App() {
                 exit={{ opacity: 0 }}
                 className="space-y-0"
               >
+                {profile?.role === 'Client' ? (
+                  <ClientPortal user={profile} />
+                ) : (
+                  <>
                 {/* Stats Grid */}
                 <div className="grid grid-cols-2 gap-px bg-slate-800 border-b border-slate-800">
                   <StatCard label="Live Analysis" value={samples.length} icon={ClipboardList} />
@@ -1080,6 +1080,8 @@ export default function App() {
                     ))
                   )}
                 </div>
+                </>
+                )}
               </motion.div>
             )}
 
@@ -1645,6 +1647,12 @@ export default function App() {
                 <RequisitionView userRole={profile?.role || 'Technician'} />
               </motion.div>
             )}
+
+            {view === 'billing' && (
+              <motion.div key="billing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <BillingManager />
+              </motion.div>
+            )}
           </AnimatePresence>
         </main>
 
@@ -1716,6 +1724,18 @@ export default function App() {
             </div>
             <span className={`text-[8px] uppercase font-bold tracking-widest ${view === 'requisitions' ? 'text-pink-400' : 'text-slate-400'}`}>Orders</span>
           </button>
+
+          {(profile?.role === 'Admin' || !profile) && (
+            <button 
+              onClick={() => setView('billing')}
+              className={`flex flex-col items-center gap-1 transition-all ${view === 'billing' ? 'opacity-100 scale-110' : 'opacity-40 hover:opacity-100'}`}
+            >
+              <div className={`p-2 rounded-xl ${view === 'billing' ? 'bg-emerald-500/10 text-emerald-400' : ''}`}>
+                <DollarSign size={22} className={view === 'billing' ? 'text-emerald-400' : 'text-slate-400'} />
+              </div>
+              <span className={`text-[8px] uppercase font-bold tracking-widest ${view === 'billing' ? 'text-emerald-400' : 'text-slate-400'}`}>Bill</span>
+            </button>
+          )}
 
           <button 
             onClick={() => setView('analytics')}
