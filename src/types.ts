@@ -98,3 +98,65 @@ export interface UserProfile {
   displayName: string;
   role: UserRole;
 }
+
+export type InstrumentType = 'Balance' | 'AAS' | 'XRF' | 'InductionFurnace';
+export type InstrumentStatus = 'Connected' | 'Idle' | 'Busy' | 'CalibrationRequired';
+
+export interface Instrument {
+  id: string;
+  name: string;
+  type: InstrumentType;
+  model: string;
+  status: InstrumentStatus;
+  lastCalibration?: string;
+  connectionType: 'USB' | 'Network' | 'Bluetooth';
+}
+
+export interface InstrumentReading {
+  timestamp: string;
+  value: number;
+  unit: string;
+  parameter: string;
+}
+
+export type InventoryCategory = 'Reagent' | 'Consumable' | 'Standard' | 'Safety';
+export type UnitOfMeasure = 'kg' | 'L' | 'units' | 'g' | 'tray';
+
+export interface InventoryItem {
+  id: string;
+  name: string;
+  category: InventoryCategory;
+  currentStock: number;
+  minStockLevel: number;
+  unit: UnitOfMeasure;
+  location: string;
+  lastRestocked?: string;
+  supplier?: string;
+}
+
+export interface StockTransaction {
+  id: string;
+  itemId: string;
+  type: 'In' | 'Out';
+  quantity: number;
+  timestamp: string;
+  userId: string;
+  userName: string;
+  reason?: string;
+}
+
+export type RequisitionStatus = 'Pending' | 'Approved' | 'Ordered' | 'Received' | 'Cancelled';
+
+export interface Requisition {
+  id: string;
+  itemId: string;
+  itemName: string;
+  quantityRequested: number;
+  unit: UnitOfMeasure;
+  status: RequisitionStatus;
+  requestedBy: string;
+  requestedByUserName: string;
+  createdAt: string;
+  updatedAt: string;
+  notes?: string;
+}

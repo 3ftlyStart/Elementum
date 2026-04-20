@@ -1,12 +1,23 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, doc, getDocFromServer } from 'firebase/firestore';
+import { getFirestore, doc, getDocFromServer, enableIndexedDbPersistence } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json';
 
 const app = initializeApp(firebaseConfig);
 // Using the firestoreDatabaseId from the config
 export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
 export const auth = getAuth(app);
+
+// Enable offline persistence
+if (typeof window !== 'undefined') {
+  enableIndexedDbPersistence(db).catch((err) => {
+    if (err.code === 'failed-precondition') {
+      console.warn('Persistence failed: Multiple tabs open');
+    } else if (err.code === 'unimplemented-state') {
+      console.warn('Persistence failed: Browser not supported');
+    }
+  });
+}
 
 // Connectivity check as per guidelines
 async function testConnection() {

@@ -58,7 +58,13 @@ import {
   Compass,
   ArrowRightLeft,
   Scale,
-  Monitor
+  Monitor,
+  Wifi,
+  WifiOff,
+  Cloud as CloudSync,
+  Cpu,
+  Package,
+  ShoppingBag
 } from 'lucide-react';
 import { 
   BarChart, 
@@ -81,6 +87,12 @@ import {
 
 import { auth, db } from './lib/firebase';
 import { 
+  getSyncQueue, 
+  addToSyncQueue, 
+  processSyncQueue, 
+  PendingSyncItem 
+} from './lib/syncManager';
+import { 
   Sample, 
   SampleStatus, 
   SampleType, 
@@ -90,8 +102,110 @@ import {
   Job,
   AssayMethod,
   SourceCategory,
-  AssayElements
+  AssayElements,
+  InstrumentReading,
+  InventoryItem
 } from './types.ts';
+import { InstrumentManager } from './components/InstrumentManager';
+import { InventoryManager } from './components/InventoryManager';
+import { RequisitionView } from './components/RequisitionView';
+
+const HistoryView = ({ samples }: { samples: Sample[] }) => {
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+
+  const filteredSamples = samples.filter(s => {
+    if (!startDate && !endDate) return true;
+    const date = new Date(s.collectedAt);
+    const start = startDate ? new Date(startDate) : new Date(0);
+    const end = endDate ? new Date(endDate) : new Date();
+    // Inclusive end date
+    if (endDate) {
+      const eDate = new Date(endDate);
+      eDate.setHours(23, 59, 59, 999);
+      return date >= start && date <= eDate;
+    }
+    return date >= start && date <= end;
+  }).sort((a, b) => new Date(b.collectedAt).getTime() - new Date(a.collectedAt).getTime());
+
+  const handleExport = () => {
+    const dataStr = JSON.stringify(filteredSamples, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `elementum_history_${startDate || 'all'}_to_${endDate || 'all'}.json`;
+    link.click();
+  };
+
+  return (
+    <div className="p-6 space-y-8">
+      <div className="space-y-2">
+        <h2 className="text-3xl font-medium text-white tracking-tight">Data Archive</h2>
+        <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Historical Sample Records</p>
+      </div>
+
+      <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">From Date</label>
+            <input 
+              type="date" 
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-cyan-500/50" 
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">To Date</label>
+            <input 
+              type="date" 
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-cyan-500/50" 
+            />
+          </div>
+        </div>
+        <button 
+          onClick={handleExport}
+          disabled={filteredSamples.length === 0}
+          className="w-full bg-cyan-500 disabled:opacity-20 hover:bg-cyan-400 text-slate-950 font-bold text-[10px] uppercase tracking-widest py-3 rounded-xl transition-all shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-2"
+        >
+          <Download size={14} /> Export Results ({filteredSamples.length})
+        </button>
+      </div>
+
+      <div className="space-y-3">
+        {filteredSamples.length === 0 ? (
+          <div className="p-12 text-center opacity-40 font-mono text-xs uppercase">
+            No records for this range
+          </div>
+        ) : (
+          filteredSamples.map(s => (
+            <div key={s.id} className="bg-slate-900/50 border border-slate-800 p-4 rounded-xl flex items-center justify-between">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{s.jobId}</span>
+                  <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold uppercase ${s.status === 'Finalized' ? 'bg-green-500/10 text-green-500' : 'bg-slate-800 text-slate-400'}`}>
+                    {s.status}
+                  </span>
+                </div>
+                <div className="text-sm font-medium text-white">{s.clientName}</div>
+                <div className="text-[9px] text-slate-500 font-mono italic">
+                  {new Date(s.collectedAt).toLocaleString()}
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-xs font-bold text-cyan-400">{s.sampleType}</div>
+                <div className="text-[9px] text-slate-500 uppercase tracking-wider">{s.source}</div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+};
 
 // --- Utilities ---
 const calculateHeadGrade = (beadWeight?: number, sampleMass?: number) => {
@@ -171,6 +285,18 @@ const LoginScreen = () => {
   );
 };
 
+const SyncIndicator = ({ isOnline, pendingCount }: { isOnline: boolean, pendingCount: number }) => (
+  <div className={`fixed top-4 right-4 z-50 flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all ${isOnline ? 'bg-slate-900/80 border-slate-800 text-slate-400' : 'bg-red-500/10 border-red-500/30 text-red-500'}`}>
+    {isOnline ? (pendingCount > 0 ? <CloudSync size={12} className="text-cyan-400 animate-pulse" /> : <Wifi size={12} className="text-cyan-400" />) : <WifiOff size={12} />}
+    <span className="text-[10px] font-bold uppercase tracking-widest">
+      {isOnline ? (pendingCount > 0 ? `Syncing ${pendingCount}...` : 'Live') : 'Offline'}
+    </span>
+    {pendingCount > 0 && (
+      <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+    )}
+  </div>
+);
+
 const StatCard = ({ label, value, icon: Icon, colorClass }: any) => (
   <div className="bg-slate-900/50 border border-slate-700/30 p-5 rounded-2xl flex flex-col gap-3">
     <div className="flex items-center justify-between opacity-50">
@@ -235,12 +361,25 @@ const ControlRoom = ({ samples }: { samples: Sample[] }) => {
   );
 };
 
-const LabBench = ({ sample, onUpdate }: { sample: Sample, onUpdate: (data: Partial<Sample>) => void }) => {
+const LabBench = ({ sample, onUpdate, currentReading }: { 
+  sample: Sample, 
+  onUpdate: (data: Partial<Sample>) => void,
+  currentReading: InstrumentReading | null 
+}) => {
   const [method, setMethod] = useState<AssayMethod>(sample.method || 'FireAssay');
   const [mass, setMass] = useState(sample.physicalProperties?.mass || 50);
   const [bead, setBead] = useState(0);
   const [abs, setAbs] = useState(0);
   const [dilution, setDilution] = useState(10);
+  
+  const handleCapture = () => {
+    if (!currentReading) return;
+    if (method === 'FireAssay') {
+      setBead(currentReading.value);
+    } else {
+      setAbs(currentReading.value);
+    }
+  };
   
   const calculatedAu = method === 'FireAssay' ? calculateHeadGrade(bead, mass) : (abs * dilution);
 
@@ -325,14 +464,25 @@ const LabBench = ({ sample, onUpdate }: { sample: Sample, onUpdate: (data: Parti
                  <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <label className="text-[10px] font-bold text-slate-500 uppercase">Bead Weight (mg)</label>
-                      <input 
-                        type="number"
-                        step="0.001"
-                        value={bead}
-                        onChange={(e) => setBead(Number(e.target.value))}
-                        className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-cyan-400 font-mono text-lg" 
-                        placeholder="1.23"
-                      />
+                      <div className="relative group">
+                         <input 
+                           type="number"
+                           step="0.001"
+                           value={bead}
+                           onChange={(e) => setBead(Number(e.target.value))}
+                           className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-cyan-400 font-mono text-lg outline-none focus:border-cyan-500/50 pr-12" 
+                           placeholder="1.23"
+                         />
+                         {currentReading && (
+                           <button 
+                             onClick={handleCapture}
+                             className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500 hover:text-slate-950 transition-all"
+                             title="Capture from Balance"
+                           >
+                             <Zap size={14} />
+                           </button>
+                         )}
+                      </div>
                     </div>
                     <div className="space-y-2">
                       <label className="text-[10px] font-bold text-slate-500 uppercase">Calculated Au (g/t)</label>
@@ -349,10 +499,27 @@ const LabBench = ({ sample, onUpdate }: { sample: Sample, onUpdate: (data: Parti
                  <div className="space-y-2">
                     <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center block">Raw Absorbance Reading</label>
                     <div className="flex items-center justify-center py-4 gap-4">
-                      <button onClick={()=>setAbs(Math.max(0, abs - 0.001))} className="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400">-</button>
-                      <span className="text-5xl font-mono font-bold text-cyan-400">{abs.toFixed(3)}</span>
-                      <button onClick={()=>setAbs(abs + 0.001)} className="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400">+</button>
+                      {currentReading && (
+                         <button 
+                           onClick={handleCapture}
+                           className="px-4 py-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2"
+                         >
+                           <Activity size={14} /> Capture from AAS
+                         </button>
+                      )}
+                      {!currentReading && (
+                        <>
+                          <button onClick={()=>setAbs(Math.max(0, abs - 0.001))} className="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400">-</button>
+                          <span className="text-5xl font-mono font-bold text-cyan-400">{abs.toFixed(3)}</span>
+                          <button onClick={()=>setAbs(abs + 0.001)} className="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400">+</button>
+                        </>
+                      )}
                     </div>
+                    {currentReading && (
+                       <div className="text-center font-mono text-2xl text-white animate-pulse">
+                         {currentReading.value.toFixed(3)}
+                       </div>
+                    )}
                  </div>
                  <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
@@ -684,10 +851,36 @@ export default function App() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [samples, setSamples] = useState<Sample[]>([]);
-  const [view, setView] = useState<'dashboard' | 'create' | 'detail' | 'analytics' | 'control' | 'plant' | 'bench'>('dashboard');
+  const [view, setView] = useState<'dashboard' | 'create' | 'detail' | 'analytics' | 'control' | 'plant' | 'bench' | 'history' | 'instruments' | 'inventory' | 'requisitions'>('dashboard');
   const [jobs, setJobs] = useState<Job[]>([]);
   const [entryType, setEntryType] = useState<'sample' | 'job'>('sample');
   const [selectedSample, setSelectedSample] = useState<Sample | null>(null);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [pendingSyncCount, setPendingSyncCount] = useState(0);
+  const [globalReading, setGlobalReading] = useState<InstrumentReading | null>(null);
+  const [statusFilter, setStatusFilter] = useState<SampleStatus | 'All'>('All');
+  const [priorityFilter, setPriorityFilter] = useState<Priority | 'All'>('All');
+  const [typeFilter, setTypeFilter] = useState<SampleType | 'All'>('All');
+
+  // Sync Manager Effect
+  useEffect(() => {
+    const handleStatusChange = () => {
+      setIsOnline(navigator.onLine);
+      if (navigator.onLine) processSyncQueue().then(() => setPendingSyncCount(getSyncQueue().length));
+    };
+
+    window.addEventListener('online', handleStatusChange);
+    window.addEventListener('offline', handleStatusChange);
+    
+    // Initial sync check
+    setPendingSyncCount(getSyncQueue().length);
+    if (navigator.onLine) processSyncQueue().then(() => setPendingSyncCount(getSyncQueue().length));
+
+    return () => {
+      window.removeEventListener('online', handleStatusChange);
+      window.removeEventListener('offline', handleStatusChange);
+    };
+  }, []);
 
   useEffect(() => {
     return onAuthStateChanged(auth, async (u) => {
@@ -745,9 +938,16 @@ export default function App() {
 
   const handleLogout = () => signOut(auth);
 
+  const filteredSamples = samples.filter(s => {
+    return (statusFilter === 'All' || s.status === statusFilter) &&
+           (priorityFilter === 'All' || s.priority === priorityFilter) &&
+           (typeFilter === 'All' || s.sampleType === typeFilter);
+  });
+
   return (
     <AuthContext.Provider value={{ user, profile, loading }}>
-      <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
+      <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-cyan-500/30 max-w-lg mx-auto border-x border-slate-900 shadow-2xl relative overflow-x-hidden">
+        <SyncIndicator isOnline={isOnline} pendingCount={pendingSyncCount} />
         
         {/* Header */}
         <header className="border-b border-slate-800 p-4 pt-8 flex items-center justify-between sticky top-0 bg-slate-950/80 backdrop-blur-md z-10 transition-all">
@@ -757,7 +957,7 @@ export default function App() {
           </div>
           <div className="flex items-center gap-4">
             <button className="w-10 h-10 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <div className={`w-2 h-2 rounded-full animate-pulse ${isOnline ? 'bg-green-400' : 'bg-red-500'}`}></div>
             </button>
             <button onClick={handleLogout} className="opacity-40 hover:opacity-100 transition-opacity"><LogOut size={20} /></button>
           </div>
@@ -805,20 +1005,69 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* List Header */}
-                <div className="px-6 py-5 flex justify-between items-center bg-slate-950/50">
-                  <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">Recent Samples</h2>
-                  <span className="text-[10px] text-cyan-500 cursor-pointer hover:text-cyan-400 transition-colors uppercase tracking-wider font-bold">Registry</span>
+                {/* List Header & Filters */}
+                <div className="px-6 py-5 bg-slate-950/50 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">Recent Samples</h2>
+                    <div className="flex items-center gap-2">
+                       <Filter size={14} className="text-slate-500" />
+                       <span className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">Filters</span>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-3 gap-2">
+                    <select 
+                      value={statusFilter} 
+                      onChange={(e) => setStatusFilter(e.target.value as any)}
+                      className="bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-[9px] font-bold uppercase text-slate-300 outline-none focus:border-cyan-500/50"
+                    >
+                      <option value="All">Status: All</option>
+                      <option value="Received">Received</option>
+                      <option value="Preparation">Preparation</option>
+                      <option value="Analysis">Analysis</option>
+                      <option value="Finalized">Finalized</option>
+                      <option value="Cancelled">Cancelled</option>
+                    </select>
+                    
+                    <select 
+                      value={priorityFilter} 
+                      onChange={(e) => setPriorityFilter(e.target.value as any)}
+                      className="bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-[9px] font-bold uppercase text-slate-300 outline-none focus:border-cyan-500/50"
+                    >
+                      <option value="All">Priority: All</option>
+                      <option value="Low">Low</option>
+                      <option value="Standard">Standard</option>
+                      <option value="High">High</option>
+                      <option value="Emergency">Emergency</option>
+                    </select>
+
+                    <select 
+                      value={typeFilter} 
+                      onChange={(e) => setTypeFilter(e.target.value as any)}
+                      className="bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-[9px] font-bold uppercase text-slate-300 outline-none focus:border-cyan-500/50"
+                    >
+                      <option value="All">Type: All</option>
+                      <option value="Ore">Ore</option>
+                      <option value="Concentrate">Concentrate</option>
+                      <option value="Tailings">Tailings</option>
+                      <option value="Bullion">Bullion</option>
+                      <option value="Waste">Waste</option>
+                      <option value="Cyanidation">Cyanidation</option>
+                      <option value="Pulp">Pulp</option>
+                      <option value="Solution">Solution</option>
+                      <option value="Carbon">Carbon</option>
+                    </select>
+                  </div>
                 </div>
 
                 {/* Sample List */}
                 <div className="px-6 space-y-3">
-                  {samples.length === 0 ? (
+                  {filteredSamples.length === 0 ? (
                     <div className="p-12 text-center opacity-40 font-mono text-xs uppercase">
-                      No assay data available
+                      No matching samples
                     </div>
                   ) : (
-                    samples.map(s => (
+                    filteredSamples.map(s => (
                       <div key={s.id}>
                         <SampleItem 
                           sample={s} 
@@ -926,7 +1175,52 @@ export default function App() {
                   </div>
                 </div>
 
-                  {/* Expanded Table for Chain of Custody / Workflow */}
+                {/* Physical & QA/QC Metadata */}
+                <div className="grid grid-cols-2 gap-4">
+                  {selectedSample.physicalProperties && (
+                    <div className="space-y-3">
+                      <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500 border-b border-slate-800 pb-2">Physical Specs</div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center text-[10px]">
+                          <span className="text-slate-500 uppercase tracking-wider">Form</span>
+                          <span className="font-mono text-white uppercase">{selectedSample.physicalProperties.form}</span>
+                        </div>
+                        <div className="flex justify-between items-center text-[10px]">
+                          <span className="text-slate-500 uppercase tracking-wider">Mass</span>
+                          <span className="font-mono text-white">{selectedSample.physicalProperties.mass ?? '—'} <span className="text-slate-600">g</span></span>
+                        </div>
+                        <div className="flex justify-between items-center text-[10px]">
+                          <span className="text-slate-500 uppercase tracking-wider">Moisture</span>
+                          <span className="font-mono text-white">{selectedSample.physicalProperties.moistureContent ?? '—'} <span className="text-slate-600">%</span></span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedSample.qaqc && (
+                    <div className="space-y-3">
+                      <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500 border-b border-slate-800 pb-2">QA/QC Flags</div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center text-[10px]">
+                          <span className="text-slate-500 uppercase tracking-wider">CRM/Std</span>
+                          <span className={`font-bold ${selectedSample.qaqc.isStandard ? 'text-green-500' : 'text-slate-700'}`}>{selectedSample.qaqc.isStandard ? 'YES' : 'NO'}</span>
+                        </div>
+                        <div className="flex justify-between items-center text-[10px]">
+                          <span className="text-slate-500 uppercase tracking-wider">Duplicate</span>
+                          <span className={`font-bold ${selectedSample.qaqc.isDuplicate ? 'text-orange-500' : 'text-slate-700'}`}>{selectedSample.qaqc.isDuplicate ? 'YES' : 'NO'}</span>
+                        </div>
+                        {selectedSample.qaqc.standardReference && (
+                          <div className="flex justify-between items-center text-[10px]">
+                            <span className="text-slate-500 uppercase tracking-wider">Ref ID</span>
+                            <span className="font-mono text-cyan-400">{selectedSample.qaqc.standardReference}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Expanded Table for Chain of Custody / Workflow */}
                 <div className="space-y-4 pt-4">
                   <div className="flex justify-between items-center border-b border-slate-800 pb-3">
                     <div className="text-xs font-bold uppercase tracking-widest text-slate-400">
@@ -1111,7 +1405,14 @@ export default function App() {
                     updatedAt: new Date().toISOString(),
                     createdAt: new Date().toISOString()
                   };
-                  await addDoc(collection(db, 'samples'), newSample);
+                  
+                  if (navigator.onLine) {
+                    await addDoc(collection(db, 'samples'), newSample);
+                  } else {
+                    addToSyncQueue('sample', newSample);
+                    setPendingSyncCount(getSyncQueue().length);
+                  }
+                  
                   setView('dashboard');
                 }}>
                             {/* Source Categorization */}
@@ -1230,7 +1531,14 @@ export default function App() {
                       updatedAt: new Date().toISOString(),
                       createdBy: user!.uid
                     };
-                    await addDoc(collection(db, 'jobs'), newJob);
+                    
+                    if (navigator.onLine) {
+                      await addDoc(collection(db, 'jobs'), newJob);
+                    } else {
+                      addToSyncQueue('job', newJob);
+                      setPendingSyncCount(getSyncQueue().length);
+                    }
+                    
                     setEntryType('sample');
                   }}>
                     <div className="space-y-2">
@@ -1277,6 +1585,7 @@ export default function App() {
               <motion.div key="bench" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <LabBench 
                   sample={selectedSample} 
+                  currentReading={globalReading}
                   onUpdate={(data) => {
                     const historyEntry = {
                       timestamp: new Date().toISOString(),
@@ -1305,6 +1614,35 @@ export default function App() {
                 exit={{ opacity: 0 }}
               >
                 <AnalyticsView samples={samples} />
+              </motion.div>
+            )}
+
+            {view === 'history' && (
+              <motion.div 
+                key="history"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <HistoryView samples={samples} />
+              </motion.div>
+            )}
+
+            {view === 'instruments' && (
+              <motion.div key="instruments" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <InstrumentManager onCapture={(r) => setGlobalReading(r)} />
+              </motion.div>
+            )}
+
+            {view === 'inventory' && (
+              <motion.div key="inventory" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <InventoryManager />
+              </motion.div>
+            )}
+
+            {view === 'requisitions' && (
+              <motion.div key="requisitions" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <RequisitionView userRole={profile?.role || 'Technician'} />
               </motion.div>
             )}
           </AnimatePresence>
@@ -1350,6 +1688,36 @@ export default function App() {
           </button>
 
           <button 
+            onClick={() => setView('instruments')}
+            className={`flex flex-col items-center gap-1 transition-all ${view === 'instruments' ? 'opacity-100 scale-110' : 'opacity-40 hover:opacity-100'}`}
+          >
+            <div className={`p-2 rounded-xl ${view === 'instruments' ? 'bg-cyan-500/10 text-cyan-400' : ''}`}>
+              <Cpu size={22} className={view === 'instruments' ? 'text-cyan-400' : 'text-slate-400'} />
+            </div>
+            <span className={`text-[8px] uppercase font-bold tracking-widest ${view === 'instruments' ? 'text-cyan-400' : 'text-slate-400'}`}>Hub</span>
+          </button>
+
+          <button 
+            onClick={() => setView('inventory')}
+            className={`flex flex-col items-center gap-1 transition-all ${view === 'inventory' ? 'opacity-100 scale-110' : 'opacity-40 hover:opacity-100'}`}
+          >
+            <div className={`p-2 rounded-xl ${view === 'inventory' ? 'bg-orange-500/10 text-orange-400' : ''}`}>
+              <Package size={22} className={view === 'inventory' ? 'text-orange-400' : 'text-slate-400'} />
+            </div>
+            <span className={`text-[8px] uppercase font-bold tracking-widest ${view === 'inventory' ? 'text-orange-400' : 'text-slate-400'}`}>Stock</span>
+          </button>
+
+          <button 
+            onClick={() => setView('requisitions')}
+            className={`flex flex-col items-center gap-1 transition-all ${view === 'requisitions' ? 'opacity-100 scale-110' : 'opacity-40 hover:opacity-100'}`}
+          >
+            <div className={`p-2 rounded-xl ${view === 'requisitions' ? 'bg-pink-500/10 text-pink-400' : ''}`}>
+              <ShoppingBag size={22} className={view === 'requisitions' ? 'text-pink-400' : 'text-slate-400'} />
+            </div>
+            <span className={`text-[8px] uppercase font-bold tracking-widest ${view === 'requisitions' ? 'text-pink-400' : 'text-slate-400'}`}>Orders</span>
+          </button>
+
+          <button 
             onClick={() => setView('analytics')}
             className={`flex flex-col items-center gap-1 transition-all ${view === 'analytics' ? 'opacity-100 scale-110' : 'opacity-40 hover:opacity-100'}`}
           >
@@ -1357,6 +1725,16 @@ export default function App() {
               <BarChart3 size={22} className={view === 'analytics' ? 'text-cyan-400' : 'text-slate-400'} />
             </div>
             <span className={`text-[8px] uppercase font-bold tracking-widest ${view === 'analytics' ? 'text-cyan-400' : 'text-slate-400'}`}>Data</span>
+          </button>
+
+          <button 
+            onClick={() => setView('history')}
+            className={`flex flex-col items-center gap-1 transition-all ${view === 'history' ? 'opacity-100 scale-110' : 'opacity-40 hover:opacity-100'}`}
+          >
+            <div className={`p-2 rounded-xl ${view === 'history' ? 'bg-indigo-500/10 text-indigo-400' : ''}`}>
+              <History size={22} className={view === 'history' ? 'text-indigo-400' : 'text-slate-400'} />
+            </div>
+            <span className={`text-[8px] uppercase font-bold tracking-widest ${view === 'history' ? 'text-indigo-400' : 'text-slate-400'}`}>Log</span>
           </button>
         </nav>
       </div>
