@@ -136,5 +136,11 @@ service cloud.firestore {
       allow read: if true; // Publicly accessible for the landing page
       allow write: if isAdmin();
     }
+
+    // Stock Transactions
+    match /stock_transactions/{txId} {
+      allow read: if isTechnician();
+      allow create: if isTechnician();
+    }
   }
 }

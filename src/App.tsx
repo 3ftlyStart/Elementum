@@ -147,56 +147,56 @@ const HistoryView = ({ samples }: { samples: Sample[] }) => {
   return (
     <div className="p-6 space-y-8">
       <div className="space-y-2">
-        <h2 className="text-3xl font-medium text-white tracking-tight">Data Archive</h2>
-        <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Historical Sample Records</p>
-      </div>
-
-      <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">From Date</label>
-            <input 
-              type="date" 
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-cyan-500/50" 
-            />
-          </div>
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">To Date</label>
-            <input 
-              type="date" 
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-cyan-500/50" 
-            />
-          </div>
-        </div>
-        <button 
-          onClick={handleExport}
-          disabled={filteredSamples.length === 0}
-          className="w-full bg-cyan-500 disabled:opacity-20 hover:bg-cyan-400 text-slate-950 font-bold text-[10px] uppercase tracking-widest py-3 rounded-xl transition-all shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-2"
-        >
-          <Download size={14} /> Export Results ({filteredSamples.length})
-        </button>
-      </div>
-
-      <div className="space-y-3">
-        {filteredSamples.length === 0 ? (
-          <div className="p-12 text-center opacity-40 font-mono text-xs uppercase">
-            No records for this range
-          </div>
-        ) : (
-          filteredSamples.map(s => (
-            <div key={s.id} className="bg-slate-900/50 border border-slate-800 p-4 rounded-xl flex items-center justify-between">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{s.jobId}</span>
-                  <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold uppercase ${s.status === 'Finalized' ? 'bg-green-500/10 text-green-500' : 'bg-slate-800 text-slate-400'}`}>
-                    {s.status}
-                  </span>
+                <h2 className="text-3xl font-medium text-[#0A3044] tracking-tight">Data Archive</h2>
+                <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Historical Sample Records</p>
+              </div>
+        
+              <div className="bg-white border border-[#0A3044]/10 p-5 rounded-2xl space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#0A3044]/40">From Date</label>
+                    <input 
+                      type="date" 
+                      value={startDate}
+                      onChange={(e) => setStartDate(e.target.value)}
+                      className="w-full bg-[#F9F7F5] border border-[#0A3044]/10 rounded-xl px-4 py-3 text-xs text-[#0A3044] outline-none focus:border-[#3DC39E]/50" 
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#0A3044]/40">To Date</label>
+                    <input 
+                      type="date" 
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                      className="w-full bg-[#F9F7F5] border border-[#0A3044]/10 rounded-xl px-4 py-3 text-xs text-[#0A3044] outline-none focus:border-[#3DC39E]/50" 
+                    />
+                  </div>
                 </div>
-                <div className="text-sm font-medium text-white">{s.clientName}</div>
+                <button 
+                  onClick={handleExport}
+                  disabled={filteredSamples.length === 0}
+                  className="w-full bg-[#3DC39E] disabled:opacity-20 hover:bg-[#32A888] text-[#0A3044] font-bold text-[10px] uppercase tracking-widest py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
+                >
+                  <Download size={14} /> Export Results ({filteredSamples.length})
+                </button>
+              </div>
+        
+              <div className="space-y-3">
+                {filteredSamples.length === 0 ? (
+                  <div className="p-12 text-center opacity-40 font-mono text-xs uppercase text-[#0A3044]">
+                    No records for this range
+                  </div>
+                ) : (
+                  filteredSamples.map(s => (
+                    <div key={s.id} className="bg-white border border-[#0A3044]/10 p-4 rounded-xl flex items-center justify-between">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{s.jobId}</span>
+                          <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold uppercase ${s.status === 'Finalized' ? 'bg-[#3DC39E]/10 text-[#3DC39E]' : 'bg-[#F9F7F5] text-slate-500'}`}>
+                            {s.status}
+                          </span>
+                        </div>
+                        <div className="text-sm font-bold text-[#0A3044]">{s.clientName}</div>
                 <div className="text-[9px] text-slate-500 font-mono italic">
                   {new Date(s.collectedAt).toLocaleString()}
                 </div>
@@ -260,13 +260,19 @@ const SyncIndicator = ({ isOnline, pendingCount }: { isOnline: boolean, pendingC
 );
 
 const StatCard = ({ label, value, icon: Icon, colorClass }: any) => (
-  <div className="bg-slate-900/50 border border-slate-700/30 p-5 rounded-2xl flex flex-col gap-3">
-    <div className="flex items-center justify-between opacity-50">
-      <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">{label}</span>
-      <Icon size={14} className={colorClass || 'text-cyan-400'} />
+  <motion.div 
+    whileHover={{ scale: 1.02 }}
+    className="futuristic-card p-5 flex flex-col gap-3 relative group"
+  >
+    <div className="absolute inset-0 bg-gradient-to-br from-[#3DC39E]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+    <div className="flex items-center justify-between relative z-10">
+      <span className="text-[10px] uppercase tracking-widest text-[#0A3044]/40 font-bold">{label}</span>
+      <div className={`p-1.5 rounded-lg bg-slate-50 transition-colors group-hover:bg-[#3DC39E]/10`}>
+        <Icon size={14} className={colorClass || 'text-[#3DC39E]'} />
+      </div>
     </div>
-    <div className="text-2xl font-mono font-bold text-white tracking-tight">{value}</div>
-  </div>
+    <div className="text-3xl font-bold text-[#0A3044] tracking-tight relative z-10 leading-none">{value}</div>
+  </motion.div>
 );
 
 const ControlRoom = ({ samples }: { samples: Sample[] }) => {
@@ -824,6 +830,7 @@ export default function App() {
   const [statusFilter, setStatusFilter] = useState<SampleStatus | 'All'>('All');
   const [priorityFilter, setPriorityFilter] = useState<Priority | 'All'>('All');
   const [typeFilter, setTypeFilter] = useState<SampleType | 'All'>('All');
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   // Sync Manager Effect
   useEffect(() => {
@@ -942,20 +949,23 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={{ user, profile, loading }}>
-      <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-cyan-500/30 max-w-lg mx-auto border-x border-slate-900 shadow-2xl relative overflow-x-hidden">
+      <div className="min-h-screen mesh-gradient text-[#0A3044] font-sans selection:bg-[#3DC39E]/30 max-w-lg mx-auto shadow-[0_0_100px_rgba(10,48,68,0.1)] relative overflow-x-hidden border-x border-[#0A3044]/5 bg-white/20">
         <SyncIndicator isOnline={isOnline} pendingCount={pendingSyncCount} />
         
         {/* Header */}
-        <header className="border-b border-slate-800 p-4 pt-8 flex items-center justify-between sticky top-0 bg-slate-950/80 backdrop-blur-md z-10 transition-all">
-          <div className="flex flex-col cursor-pointer" onClick={() => setView('dashboard')}>
-            <span className="text-[10px] font-bold tracking-[0.2em] text-cyan-400 uppercase">Elementum</span>
-            <span className="text-lg font-medium text-white leading-tight">Assay Lab Portal</span>
+        <header className="border-b border-[#0A3044]/5 p-4 pt-8 flex items-center justify-between sticky top-0 bg-white/40 backdrop-blur-2xl z-20 transition-all shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+          <div className="flex flex-col cursor-pointer group" onClick={() => setView('dashboard')}>
+            <span className="text-[10px] font-bold tracking-[0.3em] text-[#3DC39E] uppercase group-hover:tracking-[0.4em] transition-all">Elementum</span>
+            <span className="text-xl font-bold text-[#0A3044] leading-tight">Assay Lab Portal</span>
           </div>
           <div className="flex items-center gap-4">
-            <button className="w-10 h-10 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center">
-              <div className={`w-2 h-2 rounded-full animate-pulse ${isOnline ? 'bg-green-400' : 'bg-red-500'}`}></div>
-            </button>
-            <button onClick={handleLogout} className="opacity-40 hover:opacity-100 transition-opacity"><LogOut size={20} /></button>
+            <motion.button 
+              whileHover={{ scale: 1.05 }}
+              className="w-10 h-10 rounded-2xl bg-white border border-[#0A3044]/5 flex items-center justify-center shadow-sm"
+            >
+              <div className={`w-2.5 h-2.5 rounded-full ${isOnline ? 'bg-[#3DC39E] mint-glow' : 'bg-red-500 animate-pulse'}`}></div>
+            </motion.button>
+            <button onClick={handleLogout} className="text-[#0A3044]/20 hover:text-[#0A3044] transition-colors p-2"><LogOut size={20} /></button>
           </div>
         </header>
 
@@ -974,34 +984,39 @@ export default function App() {
                 ) : (
                   <>
                 {/* Stats Grid */}
-                <div className="grid grid-cols-2 gap-px bg-slate-800 border-b border-slate-800">
+                <div className="p-6 grid grid-cols-2 gap-4">
                   <StatCard label="Live Analysis" value={samples.length} icon={ClipboardList} />
                   <StatCard 
                     label="Finalized" 
                     value={samples.filter(s => s.status === 'Finalized').length} 
                     icon={CheckCircle2} 
-                    colorClass="text-green-400" 
+                    colorClass="text-[#3DC39E]" 
                   />
                   <div className="col-span-2">
                     {/* Featured Stat like the mockup */}
-                    <div className="bg-gradient-to-br from-slate-850 to-slate-900 p-6 border-b border-slate-800 shadow-xl overflow-hidden relative">
-                      <div className="flex justify-between items-start mb-4">
-                        <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Concentrate Purity Index</span>
-                        <span className="px-2 py-0.5 bg-cyan-500/10 text-cyan-400 text-[10px] rounded border border-cyan-500/20 font-mono">XRF-GEN-3</span>
+                    <motion.div 
+                      whileHover={{ y: -4 }}
+                      className="futuristic-card p-6 overflow-hidden relative group"
+                    >
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#3DC39E]/10 to-transparent rounded-full blur-3xl -mr-10 -mt-10" />
+                      <div className="flex justify-between items-start mb-4 relative z-10">
+                        <span className="text-[10px] uppercase tracking-widest text-[#0A3044]/40 font-bold">Concentrate Purity Index</span>
+                        <span className="px-2 py-0.5 bg-[#3DC39E]/10 text-[#3DC39E] text-[10px] rounded-lg border border-[#3DC39E]/20 font-mono font-bold">XRF-GEN-3</span>
                       </div>
-                      <div className="flex items-end gap-2 mb-1">
-                        <span className="text-5xl font-light text-white leading-none">99.98</span>
-                        <span className="text-xl font-medium text-yellow-500 pb-1">Au</span>
+                      <div className="flex items-end gap-2 mb-1 relative z-10">
+                        <span className="text-6xl font-bold text-[#0A3044] leading-none tracking-tighter">99.98</span>
+                        <span className="text-xl font-bold text-[#3DC39E] pb-1 italic">Au</span>
                       </div>
-                      <p className="text-[10px] text-slate-500 italic">Global Benchmark Standard • Real-time Stream</p>
-                      <div className="mt-6 h-1.5 w-full bg-slate-950 rounded-full overflow-hidden">
+                      <p className="text-[10px] text-slate-400 font-medium tracking-wide relative z-10">Global Benchmark Standard • Real-time Stream</p>
+                      <div className="mt-8 h-2 w-full bg-slate-50 rounded-full overflow-hidden relative z-10">
                         <motion.div 
                           initial={{ width: 0 }}
-                          animate={{ width: "75%" }}
-                          className="h-full bg-cyan-500 rounded-full shadow-[0_0_10px_rgba(6,182,212,0.6)]"
-                        ></motion.div>
+                          animate={{ width: '99.98%' }}
+                          transition={{ duration: 1.5, ease: "easeOut" }}
+                          className="h-full bg-gradient-to-r from-[#3DC39E] to-[#3DC39E]/60 mint-glow"
+                        />
                       </div>
-                    </div>
+                    </motion.div>
                   </div>
                 </div>
 
@@ -1377,46 +1392,74 @@ export default function App() {
 
                 {entryType === 'sample' ? (
                   <form className="space-y-8" onSubmit={async (e) => {
-                  e.preventDefault();
-                  const formData = new FormData(e.currentTarget);
-                  const priority = formData.get('priority') as Priority;
-                  const historyEntry = {
-                    timestamp: new Date().toISOString(),
-                    action: 'System Registration',
-                    userId: user!.uid,
-                    userName: profile!.displayName,
-                    notes: 'Sample registered at facility entrance.'
-                  };
-                  const newSample = {
-                    jobId: formData.get('jobId') || 'ELM-UNASSIGNED',
-                    sampleId: formData.get('sampleId') || `S-${Date.now()}`,
-                    clientName: formData.get('clientName') || 'Internal Operations',
-                    source: formData.get('source') || 'Mining',
-                    sampleType: formData.get('sampleType') || 'Ore',
-                    priority: priority || 'Standard',
-                    status: 'Received',
-                    collectedAt: new Date().toISOString(),
-                    submittedById: user!.uid,
-                    elements: {},
-                    qaqc: {
-                      isStandard: formData.get('qaqcType') === 'crm',
-                      isDuplicate: formData.get('qaqcType') === 'duplicate',
-                    },
-                    history: [historyEntry],
-                    notes: formData.get('notes') || '',
-                    updatedAt: new Date().toISOString(),
-                    createdAt: new Date().toISOString()
-                  };
-                  
-                  if (navigator.onLine) {
-                    await addDoc(collection(db, 'samples'), newSample);
-                  } else {
-                    addToSyncQueue('sample', newSample);
-                    setPendingSyncCount(getSyncQueue().length);
-                  }
-                  
-                  setView('dashboard');
-                }}>
+                    e.preventDefault();
+                    setFormErrors({});
+                    const formData = new FormData(e.currentTarget);
+                    const errors: Record<string, string> = {};
+
+                    // Validation
+                    const sampleId = formData.get('sampleId') as string;
+                    if (!sampleId || !/^S-\d{5,15}$/.test(sampleId)) {
+                      errors.sampleId = "Sample ID must follow format S-12345 (prefix S- followed by 5-15 digits)";
+                    }
+
+                    const clientName = formData.get('clientName') as string;
+                    if (!clientName || clientName.trim().length < 2) {
+                      errors.clientName = "Client Name is required (min 2 chars)";
+                    }
+
+                    const mass = formData.get('mass') as string;
+                    if (!mass || isNaN(Number(mass)) || Number(mass) <= 0) {
+                      errors.mass = "Initial mass must be a positive number";
+                    }
+
+                    if (Object.keys(errors).length > 0) {
+                      setFormErrors(errors);
+                      return;
+                    }
+
+                    const priority = formData.get('priority') as Priority;
+                    const historyEntry = {
+                      timestamp: new Date().toISOString(),
+                      action: 'System Registration',
+                      userId: user!.uid,
+                      userName: profile!.displayName,
+                      notes: 'Sample registered at facility entrance.'
+                    };
+                    const newSample = {
+                      jobId: formData.get('jobId') || 'ELM-UNASSIGNED',
+                      sampleId: sampleId,
+                      clientName: clientName,
+                      source: formData.get('source') || 'Mining',
+                      sampleType: formData.get('sampleType') || 'Ore',
+                      priority: priority || 'Standard',
+                      status: 'Received',
+                      collectedAt: new Date().toISOString(),
+                      submittedById: user!.uid,
+                      elements: {},
+                      physicalProperties: {
+                        mass: Number(mass),
+                        form: 'rock'
+                      },
+                      qaqc: {
+                        isStandard: formData.get('qaqcType') === 'crm',
+                        isDuplicate: formData.get('qaqcType') === 'duplicate',
+                      },
+                      history: [historyEntry],
+                      notes: formData.get('notes') || '',
+                      updatedAt: new Date().toISOString(),
+                      createdAt: new Date().toISOString()
+                    };
+                    
+                    if (navigator.onLine) {
+                      await addDoc(collection(db, 'samples'), newSample);
+                    } else {
+                      addToSyncQueue('sample', newSample);
+                      setPendingSyncCount(getSyncQueue().length);
+                    }
+                    
+                    setView('dashboard');
+                  }}>
                             {/* Source Categorization */}
                             <div className="space-y-2">
                               <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Source Point</label>
@@ -1451,41 +1494,48 @@ export default function App() {
                                 <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Internal Code (QR)</label>
                                 <input 
                                   name="sampleId"
-                                  required
                                   defaultValue={`S-${Math.floor(10000 + Math.random() * 90000)}`}
-                                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-cyan-400 font-mono text-sm outline-none focus:border-cyan-500/50"
+                                  className={`w-full bg-slate-900 border ${formErrors.sampleId ? 'border-red-500' : 'border-slate-800'} rounded-xl px-4 py-3 text-cyan-400 font-mono text-sm outline-none focus:border-cyan-500/50`}
                                 />
+                                {formErrors.sampleId && <p className="text-[10px] text-red-500 font-medium">{formErrors.sampleId}</p>}
                               </div>
                             </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Sample Classification</label>
-                      <select 
-                        name="sampleType"
-                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 outline-none focus:border-cyan-500/50 transition-colors"
-                      >
-                        <option value="Ore">Ore</option>
-                        <option value="Concentrate">Concentrate</option>
-                        <option value="Tailings">Tailings</option>
-                        <option value="Bullion">Bullion</option>
-                        <option value="Cyanidation">Cyanidation</option>
-                      </select>
-                    </div>
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Client / Department</label>
+                              <input 
+                                name="clientName"
+                                placeholder="Client name or internal dept..."
+                                className={`w-full bg-slate-900 border ${formErrors.clientName ? 'border-red-500' : 'border-slate-800'} rounded-xl px-4 py-3 text-slate-100 outline-none focus:border-cyan-500/50 transition-colors`}
+                              />
+                              {formErrors.clientName && <p className="text-[10px] text-red-500 font-medium">{formErrors.clientName}</p>}
+                            </div>
 
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Processing Priority</label>
-                      <select 
-                        name="priority"
-                        defaultValue="Standard"
-                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 outline-none focus:border-cyan-500/50 transition-colors"
-                      >
-                        <option value="Low">Low</option>
-                        <option value="Standard">Standard</option>
-                        <option value="High">High</option>
-                        <option value="Emergency">Emergency</option>
-                      </select>
-                    </div>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Sample Mass (g)</label>
+                                <input 
+                                  name="mass"
+                                  type="number"
+                                  placeholder="Initial weight"
+                                  className={`w-full bg-white border ${formErrors.mass ? 'border-red-500' : 'border-[#0A3044]/10'} rounded-2xl px-4 py-3 text-[#0A3044] outline-none focus:border-[#3DC39E]/50 font-bold`}
+                                />
+                                {formErrors.mass && <p className="text-[10px] text-red-500 font-medium">{formErrors.mass}</p>}
+                              </div>
+
+                              <div className="space-y-2">
+                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Processing Priority</label>
+                                <select 
+                                  name="priority"
+                                  defaultValue="Standard"
+                                  className="w-full bg-white border border-[#0A3044]/10 rounded-2xl px-4 py-3 text-[#0A3044] outline-none focus:border-[#3DC39E]/50 transition-colors font-bold"
+                                >
+                                  <option value="Low">Low</option>
+                                  <option value="Standard">Standard</option>
+                                  <option value="High">High</option>
+                                  <option value="Emergency">Emergency</option>
+                                </select>
+                              </div>
                   </div>
 
                             <div className="grid grid-cols-2 gap-4">
@@ -1493,7 +1543,7 @@ export default function App() {
                                 <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">QA/QC Type</label>
                                 <select 
                                   name="qaqcType"
-                                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 outline-none focus:border-cyan-500/50"
+                                  className="w-full bg-white border border-[#0A3044]/10 rounded-2xl px-4 py-3 text-[#0A3044] outline-none focus:border-[#3DC39E]/50 font-bold"
                                 >
                                   <option value="none">Standard Sample</option>
                                   <option value="crm">Certified Reference (CRM)</option>
@@ -1507,14 +1557,14 @@ export default function App() {
                                 <input 
                                   name="notes"
                                   placeholder="Physical obs..."
-                                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 outline-none focus:border-cyan-500/50 placeholder:text-slate-700"
+                                  className="w-full bg-white border border-[#0A3044]/10 rounded-2xl px-4 py-3 text-[#0A3044] outline-none focus:border-[#3DC39E]/50 placeholder:text-slate-300 font-bold"
                                 />
                               </div>
                             </div>
 
                   <button 
                     type="submit"
-                    className="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm py-4 rounded-xl active:scale-95 transition-all shadow-lg"
+                    className="w-full bg-[#3DC39E] hover:bg-[#32A888] text-[#0A3044] font-bold text-sm py-5 rounded-full active:scale-95 transition-all shadow-xl shadow-[#3DC39E]/20"
                   >
                     REGISTER TO SYSTEM
                   </button>
@@ -1656,105 +1706,51 @@ export default function App() {
           </AnimatePresence>
         </main>
 
-        {/* Global Nav */}
-        <nav className="fixed bottom-0 left-0 right-0 bg-slate-950/80 backdrop-blur-lg border-t border-slate-800 flex justify-around p-4 z-10 max-w-lg mx-auto rounded-t-[32px]">
+      {/* Global Nav */}
+        <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white/40 backdrop-blur-3xl border border-white/40 flex items-center justify-around p-3 z-30 w-[95%] max-w-lg rounded-[40px] shadow-[0_20px_50px_rgba(10,48,68,0.1)] transition-all">
           <button 
             onClick={() => setView('dashboard')}
-            className={`flex flex-col items-center gap-1 transition-all ${view === 'dashboard' ? 'opacity-100 scale-110' : 'opacity-40 hover:opacity-100'}`}
+            className={`flex flex-col items-center gap-1 transition-all flex-1 ${view === 'dashboard' ? 'scale-110' : 'opacity-30 hover:opacity-100'}`}
           >
-            <div className={`p-2 rounded-xl ${view === 'dashboard' ? 'bg-cyan-500/10 text-cyan-400' : ''}`}>
-              <ClipboardList size={22} />
+            <div className={`p-2.5 rounded-2xl ${view === 'dashboard' ? 'bg-[#3DC39E]/10 text-[#3DC39E] mint-glow' : 'text-slate-400'}`}>
+              <ClipboardList size={20} strokeWidth={view === 'dashboard' ? 2.5 : 2} />
             </div>
-            <span className={`text-[8px] uppercase font-bold tracking-widest ${view === 'dashboard' ? 'text-cyan-400' : 'text-slate-400'}`}>Lab</span>
           </button>
 
           <button 
             onClick={() => setView('control')}
-            className={`flex flex-col items-center gap-1 transition-all ${view === 'control' ? 'opacity-100 scale-110' : 'opacity-40 hover:opacity-100'}`}
+            className={`flex flex-col items-center gap-1 transition-all flex-1 ${view === 'control' ? 'scale-110' : 'opacity-30 hover:opacity-100'}`}
           >
-            <div className={`p-2 rounded-xl ${view === 'control' ? 'bg-orange-500/10 text-orange-400' : ''}`}>
-              <Zap size={22} />
+            <div className={`p-2.5 rounded-2xl ${view === 'control' ? 'bg-[#FF9F9F]/10 text-[#FF9F9F]' : 'text-slate-400'}`}>
+              <Zap size={20} strokeWidth={view === 'control' ? 2.5 : 2} />
             </div>
-            <span className={`text-[8px] uppercase font-bold tracking-widest ${view === 'control' ? 'text-orange-400' : 'text-slate-400'}`}>Ops</span>
           </button>
           
-          <button 
+          <motion.button 
+            whileHover={{ scale: 1.1, rotate: 90 }}
+            whileTap={{ scale: 0.9 }}
             onClick={() => setView('create')}
-            className={`flex flex-col items-center gap-1 bg-cyan-500 text-slate-950 p-4 rounded-2xl shadow-[0_0_20px_rgba(6,182,212,0.4)] -mt-10 border-4 border-slate-950 active:scale-90 transition-all ${view === 'create' ? 'rotate-45 bg-white' : ''}`}
+            className={`flex items-center justify-center bg-gradient-to-br from-[#3DC39E] to-[#2DA886] text-white w-14 h-14 rounded-2xl shadow-xl shadow-[#3DC39E]/30 relative z-40 transition-all ${view === 'create' ? 'rotate-45' : ''}`}
           >
-            <Plus size={24} />
-          </button>
+            <Plus size={28} strokeWidth={3} />
+          </motion.button>
 
           <button 
             onClick={() => setView('plant')}
-            className={`flex flex-col items-center gap-1 transition-all ${view === 'plant' ? 'opacity-100 scale-110' : 'opacity-40 hover:opacity-100'}`}
+            className={`flex flex-col items-center gap-1 transition-all flex-1 ${view === 'plant' ? 'scale-110' : 'opacity-30 hover:opacity-100'}`}
           >
-            <div className={`p-2 rounded-xl ${view === 'plant' ? 'bg-yellow-500/10 text-yellow-500' : ''}`}>
-              <Monitor size={22} />
+            <div className={`p-2.5 rounded-2xl ${view === 'plant' ? 'bg-yellow-500/10 text-yellow-500' : 'text-slate-400'}`}>
+              <Monitor size={20} strokeWidth={view === 'plant' ? 2.5 : 2} />
             </div>
-            <span className={`text-[8px] uppercase font-bold tracking-widest ${view === 'plant' ? 'text-yellow-500' : 'text-slate-400'}`}>Plant</span>
           </button>
-
-          <button 
-            onClick={() => setView('instruments')}
-            className={`flex flex-col items-center gap-1 transition-all ${view === 'instruments' ? 'opacity-100 scale-110' : 'opacity-40 hover:opacity-100'}`}
-          >
-            <div className={`p-2 rounded-xl ${view === 'instruments' ? 'bg-cyan-500/10 text-cyan-400' : ''}`}>
-              <Cpu size={22} className={view === 'instruments' ? 'text-cyan-400' : 'text-slate-400'} />
-            </div>
-            <span className={`text-[8px] uppercase font-bold tracking-widest ${view === 'instruments' ? 'text-cyan-400' : 'text-slate-400'}`}>Hub</span>
-          </button>
-
-          <button 
-            onClick={() => setView('inventory')}
-            className={`flex flex-col items-center gap-1 transition-all ${view === 'inventory' ? 'opacity-100 scale-110' : 'opacity-40 hover:opacity-100'}`}
-          >
-            <div className={`p-2 rounded-xl ${view === 'inventory' ? 'bg-orange-500/10 text-orange-400' : ''}`}>
-              <Package size={22} className={view === 'inventory' ? 'text-orange-400' : 'text-slate-400'} />
-            </div>
-            <span className={`text-[8px] uppercase font-bold tracking-widest ${view === 'inventory' ? 'text-orange-400' : 'text-slate-400'}`}>Stock</span>
-          </button>
-
-          <button 
-            onClick={() => setView('requisitions')}
-            className={`flex flex-col items-center gap-1 transition-all ${view === 'requisitions' ? 'opacity-100 scale-110' : 'opacity-40 hover:opacity-100'}`}
-          >
-            <div className={`p-2 rounded-xl ${view === 'requisitions' ? 'bg-pink-500/10 text-pink-400' : ''}`}>
-              <ShoppingBag size={22} className={view === 'requisitions' ? 'text-pink-400' : 'text-slate-400'} />
-            </div>
-            <span className={`text-[8px] uppercase font-bold tracking-widest ${view === 'requisitions' ? 'text-pink-400' : 'text-slate-400'}`}>Orders</span>
-          </button>
-
-          {(profile?.role === 'Admin' || !profile) && (
-            <button 
-              onClick={() => setView('billing')}
-              className={`flex flex-col items-center gap-1 transition-all ${view === 'billing' ? 'opacity-100 scale-110' : 'opacity-40 hover:opacity-100'}`}
-            >
-              <div className={`p-2 rounded-xl ${view === 'billing' ? 'bg-emerald-500/10 text-emerald-400' : ''}`}>
-                <DollarSign size={22} className={view === 'billing' ? 'text-emerald-400' : 'text-slate-400'} />
-              </div>
-              <span className={`text-[8px] uppercase font-bold tracking-widest ${view === 'billing' ? 'text-emerald-400' : 'text-slate-400'}`}>Bill</span>
-            </button>
-          )}
 
           <button 
             onClick={() => setView('analytics')}
-            className={`flex flex-col items-center gap-1 transition-all ${view === 'analytics' ? 'opacity-100 scale-110' : 'opacity-40 hover:opacity-100'}`}
+            className={`flex flex-col items-center gap-1 transition-all flex-1 ${view === 'analytics' ? 'scale-110' : 'opacity-30 hover:opacity-100'}`}
           >
-            <div className={`p-2 rounded-xl ${view === 'analytics' ? 'bg-cyan-500/10 text-cyan-400' : ''}`}>
-              <BarChart3 size={22} className={view === 'analytics' ? 'text-cyan-400' : 'text-slate-400'} />
+            <div className={`p-2.5 rounded-2xl ${view === 'analytics' ? 'bg-[#3DC39E]/10 text-[#3DC39E] mint-glow' : 'text-slate-400'}`}>
+              <BarChart3 size={20} strokeWidth={view === 'analytics' ? 2.5 : 2} />
             </div>
-            <span className={`text-[8px] uppercase font-bold tracking-widest ${view === 'analytics' ? 'text-cyan-400' : 'text-slate-400'}`}>Data</span>
-          </button>
-
-          <button 
-            onClick={() => setView('history')}
-            className={`flex flex-col items-center gap-1 transition-all ${view === 'history' ? 'opacity-100 scale-110' : 'opacity-40 hover:opacity-100'}`}
-          >
-            <div className={`p-2 rounded-xl ${view === 'history' ? 'bg-indigo-500/10 text-indigo-400' : ''}`}>
-              <History size={22} className={view === 'history' ? 'text-indigo-400' : 'text-slate-400'} />
-            </div>
-            <span className={`text-[8px] uppercase font-bold tracking-widest ${view === 'history' ? 'text-indigo-400' : 'text-slate-400'}`}>Log</span>
           </button>
         </nav>
       </div>

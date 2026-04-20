@@ -5,7 +5,8 @@ import {
   orderBy, 
   onSnapshot, 
   doc, 
-  updateDoc 
+  updateDoc,
+  addDoc
 } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
@@ -19,10 +20,13 @@ import {
   User as UserIcon,
   Calendar,
   AlertCircle,
-  Archive
+  Archive,
+  PlusCircle,
+  X,
+  ClipboardList
 } from 'lucide-react';
-import { db } from '../lib/firebase';
-import { Requisition, RequisitionStatus, UserRole } from '../types';
+import { db, auth } from '../lib/firebase';
+import { Requisition, RequisitionStatus, UserRole, UnitOfMeasure } from '../types';
 
 interface RequisitionViewProps {
   userRole: UserRole;
@@ -32,6 +36,7 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
   const [requisitions, setRequisitions] = useState<Requisition[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<RequisitionStatus | 'All'>('All');
+  const [showAddModal, setShowAddModal] = useState(false);
 
   useEffect(() => {
     const q = query(collection(db, 'requisitions'), orderBy('createdAt', 'desc'));
@@ -95,9 +100,17 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
 
   return (
     <div className="p-6 space-y-8 pb-32">
-      <div className="space-y-2">
-        <h2 className="text-3xl font-medium text-white tracking-tight">Procurement Pipe</h2>
-        <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Requisition Lifecycle Management</p>
+      <div className="flex justify-between items-start">
+        <div className="space-y-2">
+          <h2 className="text-3xl font-medium text-white tracking-tight">Procurement Pipe</h2>
+          <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Requisition Lifecycle Management</p>
+        </div>
+        <button 
+          onClick={() => setShowAddModal(true)}
+          className="bg-white text-slate-950 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all shadow-lg"
+        >
+          <PlusCircle size={14} /> New Request
+        </button>
       </div>
 
       {/* Filter Bar */}
@@ -155,6 +168,12 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
                 </div>
               </div>
 
+              {req.notes && (
+                <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/50">
+                  <p className="text-[9px] text-slate-500 italic">"{req.notes}"</p>
+                </div>
+              )}
+
               {/* Action Buttons for Admins/Technicians */}
               {(userRole === 'Admin' || userRole === 'Technician') && req.status === 'Pending' && (
                 <div className="grid grid-cols-2 gap-3 pt-2">
@@ -195,6 +214,95 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
           ))
         )}
       </div>
+
+      {/* Add Requisition Modal */}
+      <AnimatePresence>
+        {showAddModal && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-6">
+            <motion.div 
+               initial={{ opacity: 0 }}
+               animate={{ opacity: 1 }}
+               exit={{ opacity: 0 }}
+               onClick={() => setShowAddModal(false)}
+               className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-slate-900 border border-slate-800 rounded-[32px] w-full max-w-md p-8 relative z-10 space-y-6"
+            >
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                   <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-white">
+                      <ShoppingBag size={20} />
+                   </div>
+                   <h3 className="text-xl font-bold text-white font-serif">Purchase Request</h3>
+                </div>
+                <button onClick={() => setShowAddModal(false)} className="text-slate-500 hover:text-white transition-colors">
+                  <X size={20} />
+                </button>
+              </div>
+
+              <form className="space-y-4" onSubmit={async (e) => {
+                e.preventDefault();
+                const fd = new FormData(e.currentTarget);
+                const user = auth.currentUser;
+                
+                const newReq = {
+                  itemId: 'AD-HOC',
+                  itemName: fd.get('itemName') as string,
+                  quantityRequested: Number(fd.get('quantity')),
+                  unit: fd.get('unit') as UnitOfMeasure,
+                  status: 'Pending',
+                  requestedBy: user?.uid || 'system',
+                  requestedByUserName: user?.displayName || user?.email || 'Anonymous',
+                  notes: fd.get('notes') as string,
+                  createdAt: new Date().toISOString(),
+                  updatedAt: new Date().toISOString()
+                };
+                
+                try {
+                  await addDoc(collection(db, 'requisitions'), newReq);
+                  setShowAddModal(false);
+                } catch (err) {
+                  console.error("Failed to add requisition:", err);
+                }
+              }}>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Item Required</label>
+                  <input name="itemName" required placeholder="e.g. Hydrochloric Acid 37%" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan-500/50" />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Quantity</label>
+                    <input name="quantity" type="number" required defaultValue="1" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan-500/50" />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Unit</label>
+                    <select name="unit" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none">
+                      <option value="kg">kg</option>
+                      <option value="L">L</option>
+                      <option value="g">g</option>
+                      <option value="units">units</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Justification / Details</label>
+                  <textarea name="notes" placeholder="Why is this item needed?" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan-500/50 h-24 resize-none" />
+                </div>
+
+                <button type="submit" className="w-full bg-white text-slate-950 font-bold py-4 rounded-2xl shadow-lg hover:opacity-90 active:scale-95 transition-all">
+                  SUBMIT REQUISITION
+                </button>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, createContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Box, 
@@ -8,101 +8,63 @@ import {
   Plus, 
   Minus, 
   History,
-  Archive,
-  BarChart2,
-  Droplets,
-  Zap,
-  ShieldCheck,
   Search,
   ShoppingCart,
   CheckCircle2,
   Loader2,
   ChevronDown,
   ChevronUp,
-  User as UserIcon
+  User as UserIcon,
+  X,
+  PlusCircle,
+  Trash2
 } from 'lucide-react';
-import { collection, addDoc, serverTimestamp, query, where, onSnapshot } from 'firebase/firestore';
+import { collection, addDoc, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, increment, where, limit } from 'firebase/firestore';
 import { db, auth } from '../lib/firebase';
-import { InventoryItem, InventoryCategory, UnitOfMeasure, Requisition, StockTransaction } from '../types';
+import { InventoryItem, InventoryCategory, UnitOfMeasure, StockTransaction } from '../types';
 
-// Simple context helper if needed, but we'll use auth directly for now
 export const InventoryManager = () => {
-  const [items, setItems] = useState<InventoryItem[]>([
-    // ... existing items ...
-    {
-      id: 'INV-001',
-      name: 'Sodium Cyanide',
-      category: 'Reagent',
-      currentStock: 1250,
-      minStockLevel: 500,
-      unit: 'kg',
-      location: 'Chemical Store A',
-      lastRestocked: '2024-03-15',
-      supplier: 'MiningReagents Ltd'
-    },
-    {
-      id: 'INV-002',
-      name: 'Fire Assay Flux',
-      category: 'Consumable',
-      currentStock: 450,
-      minStockLevel: 1000,
-      unit: 'kg',
-      location: 'Furnace Room B',
-      lastRestocked: '2024-02-10',
-      supplier: 'Metallurgy Supplies'
-    },
-    {
-      id: 'INV-003',
-      name: 'Porcelain Crucibles',
-      category: 'Consumable',
-      currentStock: 24,
-      minStockLevel: 50,
-      unit: 'units',
-      location: 'Preparation Room',
-      lastRestocked: '2024-03-01',
-      supplier: 'LabChoice'
-    },
-    {
-      id: 'INV-004',
-      name: 'Gold Standard (5.0g/t)',
-      category: 'Standard',
-      currentStock: 15,
-      minStockLevel: 10,
-      unit: 'tray',
-      location: 'QA/QC Safe',
-      lastRestocked: '2024-03-20',
-      supplier: 'Global Standards'
-    }
-  ]);
-
+  const [items, setItems] = useState<InventoryItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState<InventoryCategory | 'All'>('All');
   const [orderLoading, setOrderLoading] = useState<string | null>(null);
   const [orderSuccess, setOrderSuccess] = useState<string | null>(null);
-  const [activeRequestCount, setActiveRequestCount] = useState(0);
   const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
-
-  // Mock transactions for better auditability demo
-  const [transactions] = useState<Record<string, StockTransaction[]>>({
-    'INV-001': [
-      { id: 'T1', itemId: 'INV-001', type: 'In', quantity: 500, timestamp: '2024-03-15T10:00:00Z', userId: 'U1', userName: 'A. Smith', reason: 'Restock' },
-      { id: 'T2', itemId: 'INV-001', type: 'Out', quantity: 50, timestamp: '2024-03-20T14:30:00Z', userId: 'U2', userName: 'J. Doe', reason: 'Assay run #442' }
-    ],
-    'INV-003': [
-      { id: 'T3', itemId: 'INV-003', type: 'Out', quantity: 12, timestamp: '2024-03-18T09:15:00Z', userId: 'U1', userName: 'A. Smith', reason: 'Furnace accident' }
-    ]
-  });
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [transactions, setTransactions] = useState<Record<string, StockTransaction[]>>({});
 
   useEffect(() => {
-    const q = query(
-      collection(db, 'requisitions'), 
-      where('status', 'in', ['Pending', 'Approved', 'Ordered'])
-    );
+    const q = query(collection(db, 'inventory'), orderBy('name', 'asc'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      setActiveRequestCount(snapshot.size);
+      const data = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as InventoryItem[];
+      setItems(data);
+      setLoading(false);
     });
     return () => unsubscribe();
   }, []);
+
+  // Fetch transactions for expanded items
+  useEffect(() => {
+    if (!expandedItemId) return;
+
+    const q = query(
+      collection(db, 'stock_transactions'), 
+      where('itemId', '==', expandedItemId),
+      orderBy('timestamp', 'desc'),
+      limit(10)
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const txs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as StockTransaction[];
+      setTransactions(prev => ({ ...prev, [expandedItemId]: txs }));
+    });
+
+    return () => unsubscribe();
+  }, [expandedItemId]);
 
   const filteredItems = items.filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -113,11 +75,37 @@ export const InventoryManager = () => {
 
   const lowStockItems = items.filter(item => item.currentStock < item.minStockLevel);
 
+  const handleAdjustStock = async (item: InventoryItem, adjustment: number, reason: string) => {
+    try {
+      const user = auth.currentUser;
+      const ref = doc(db, 'inventory', item.id);
+      
+      // Update stock
+      await updateDoc(ref, {
+        currentStock: Math.max(0, item.currentStock + adjustment),
+        lastRestocked: adjustment > 0 ? new Date().toISOString() : item.lastRestocked || new Date().toISOString()
+      });
+
+      // Log transaction
+      await addDoc(collection(db, 'stock_transactions'), {
+        itemId: item.id,
+        type: adjustment > 0 ? 'In' : 'Out',
+        quantity: Math.abs(adjustment),
+        timestamp: new Date().toISOString(),
+        userId: user?.uid || 'system',
+        userName: user?.displayName || user?.email || 'System',
+        reason
+      });
+    } catch (error) {
+      console.error("Stock adjustment failed:", error);
+    }
+  };
+
   const handleReorder = async (item: InventoryItem) => {
     setOrderLoading(item.id);
     try {
       const user = auth.currentUser;
-      const quantityNeeded = (item.minStockLevel * 2) - item.currentStock;
+      const quantityNeeded = Math.max(item.minStockLevel, (item.minStockLevel * 2) - item.currentStock);
       
       await addDoc(collection(db, 'requisitions'), {
         itemId: item.id,
@@ -140,11 +128,31 @@ export const InventoryManager = () => {
     }
   };
 
+  const handleDelete = async (id: string) => {
+    if (confirm('Delete this item from inventory? This cannot be undone.')) {
+      try {
+        await deleteDoc(doc(db, 'inventory', id));
+      } catch (error) {
+        console.error("Delete failed:", error);
+      }
+    }
+  };
+
+  const activeRequestCount = items.filter(i => i.currentStock < i.minStockLevel).length;
+
   return (
     <div className="p-6 space-y-8 pb-32">
-      <div className="space-y-2">
-        <h2 className="text-3xl font-medium text-white tracking-tight">Inventory Control</h2>
-        <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Consumables & Reagent Lifecycle</p>
+      <div className="flex justify-between items-start">
+        <div className="space-y-2">
+          <h2 className="text-3xl font-medium text-white tracking-tight">Inventory Control</h2>
+          <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Consumables & Reagent Lifecycle</p>
+        </div>
+        <button 
+          onClick={() => setShowAddModal(true)}
+          className="bg-cyan-500 text-slate-950 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-cyan-500/20"
+        >
+          <PlusCircle size={14} /> Add SKU
+        </button>
       </div>
 
       {/* Quick Alerts */}
@@ -170,8 +178,8 @@ export const InventoryManager = () => {
           <div className="text-2xl font-mono font-bold text-white tracking-tighter">{items.length}</div>
         </div>
         <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-1">
-          <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Active Requests</p>
-          <div className="text-2xl font-mono font-bold text-cyan-400 tracking-tighter">
+          <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Low Stock SKUs</p>
+          <div className="text-2xl font-mono font-bold text-red-400 tracking-tighter">
             {activeRequestCount.toString().padStart(2, '0')}
           </div>
         </div>
@@ -203,6 +211,13 @@ export const InventoryManager = () => {
         </div>
       </div>
 
+      {/* Loading State */}
+      {loading && (
+        <div className="flex justify-center py-12">
+          <Loader2 size={32} className="text-slate-700 animate-spin" />
+        </div>
+      )}
+
       {/* Item List */}
       <div className="space-y-3">
         {filteredItems.map(item => {
@@ -215,16 +230,24 @@ export const InventoryManager = () => {
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <h3 className="text-sm font-bold text-white">{item.name}</h3>
-                    <span className="text-[8px] font-mono bg-slate-800 px-1.5 py-0.5 rounded text-slate-500">{item.id}</span>
+                    <span className="text-[8px] font-mono bg-slate-800 px-1.5 py-0.5 rounded text-slate-500">{item.id.slice(0, 8)}</span>
                   </div>
                   <p className="text-[9px] text-slate-500 uppercase tracking-widest font-medium">LOC: {item.location}</p>
                 </div>
-                <div className="text-right">
-                  <div className={`text-sm font-mono font-bold ${isLow ? 'text-red-500' : 'text-cyan-400'}`}>
-                    {item.currentStock} 
-                    <span className="text-[10px] text-slate-600 ml-1 uppercase">{item.unit}</span>
+                <div className="flex flex-col items-end gap-1">
+                   <button 
+                     onClick={() => handleDelete(item.id)}
+                     className="text-slate-700 hover:text-red-500 p-1"
+                   >
+                     <Trash2 size={12} />
+                   </button>
+                  <div className="text-right">
+                    <div className={`text-sm font-mono font-bold ${isLow ? 'text-red-500' : 'text-cyan-400'}`}>
+                      {item.currentStock} 
+                      <span className="text-[10px] text-slate-600 ml-1 uppercase">{item.unit}</span>
+                    </div>
+                    <p className="text-[8px] text-slate-600 uppercase font-bold tracking-tighter">Min Level: {item.minStockLevel}</p>
                   </div>
-                  <p className="text-[8px] text-slate-600 uppercase font-bold tracking-tighter">Min Level: {item.minStockLevel}</p>
                 </div>
               </div>
 
@@ -259,7 +282,9 @@ export const InventoryManager = () => {
                    ) : (
                      <div className="flex items-center gap-1 opacity-40">
                        <History size={10} className="text-slate-500" />
-                       <span className="text-[8px] font-mono text-slate-500">LAST RESTOCK: {item.lastRestocked}</span>
+                       <span className="text-[8px] font-mono text-slate-500 uppercase tracking-tighter">
+                         Restocked: {item.lastRestocked ? new Date(item.lastRestocked).toLocaleDateString() : 'N/A'}
+                       </span>
                      </div>
                    )}
                    <div className="flex items-center gap-2">
@@ -269,8 +294,18 @@ export const InventoryManager = () => {
                       >
                         {expandedItemId === item.id ? <ChevronUp size={10} /> : <ChevronDown size={10} />}
                       </button>
-                      <button className="w-6 h-6 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 transition-all"><Minus size={10} /></button>
-                      <button className="w-6 h-6 rounded-md bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 hover:bg-cyan-500 hover:text-slate-950 transition-all"><Plus size={10} /></button>
+                      <button 
+                        onClick={() => handleAdjustStock(item, -1, 'Manual adjustment (Decrease)')}
+                        className="w-6 h-6 rounded-md bg-slate-800 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-slate-700 transition-all"
+                      >
+                        <Minus size={10} />
+                      </button>
+                      <button 
+                        onClick={() => handleAdjustStock(item, 1, 'Manual adjustment (Increase)')}
+                        className="w-6 h-6 rounded-md bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 hover:bg-cyan-500 hover:text-slate-950 transition-all"
+                      >
+                        <Plus size={10} />
+                      </button>
                    </div>
                 </div>
               </div>
@@ -285,8 +320,7 @@ export const InventoryManager = () => {
                     className="overflow-hidden border-t border-slate-800 pt-4 mt-4 space-y-3"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Transaction Audit</span>
-                      <span className="text-[8px] font-mono text-slate-600 uppercase">Last 3 Months</span>
+                      <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Transaction Audit (Last 10)</span>
                     </div>
                     
                     <div className="space-y-2">
@@ -323,11 +357,107 @@ export const InventoryManager = () => {
         })}
       </div>
 
-      {/* Quick Action */}
-      <button className="fixed bottom-24 right-6 w-14 h-14 rounded-full bg-cyan-500 text-slate-950 shadow-xl shadow-cyan-500/40 flex items-center justify-center active:scale-95 transition-all z-20 overflow-hidden">
-        <Package size={24} />
-        <div className="absolute inset-0 bg-white/20 opacity-0 active:opacity-100 transition-opacity"></div>
-      </button>
+      {/* Add Item Modal */}
+      <AnimatePresence>
+        {showAddModal && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-6">
+            <motion.div 
+               initial={{ opacity: 0 }}
+               animate={{ opacity: 1 }}
+               exit={{ opacity: 0 }}
+               onClick={() => setShowAddModal(false)}
+               className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-slate-900 border border-slate-800 rounded-[32px] w-full max-w-md p-8 relative z-10 space-y-6 overflow-y-auto max-h-[90vh]"
+            >
+              <div className="flex justify-between items-center">
+                <h3 className="text-xl font-bold text-white font-serif">New Inventory SKU</h3>
+                <button onClick={() => setShowAddModal(false)} className="text-slate-500 hover:text-white transition-colors">
+                  <X size={20} />
+                </button>
+              </div>
+
+              <form className="space-y-4" onSubmit={async (e) => {
+                e.preventDefault();
+                const fd = new FormData(e.currentTarget);
+                const newItem = {
+                  name: fd.get('name') as string,
+                  category: fd.get('category') as InventoryCategory,
+                  currentStock: Number(fd.get('currentStock')),
+                  minStockLevel: Number(fd.get('minStockLevel')),
+                  unit: fd.get('unit') as UnitOfMeasure,
+                  location: fd.get('location') as string,
+                  supplier: fd.get('supplier') as string,
+                  lastRestocked: new Date().toISOString()
+                };
+                
+                try {
+                  await addDoc(collection(db, 'inventory'), newItem);
+                  setShowAddModal(false);
+                } catch (err) {
+                  console.error("Failed to add SKU:", err);
+                }
+              }}>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Item Name</label>
+                  <input name="name" required className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan-500/50" />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Category</label>
+                    <select name="category" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none">
+                      <option value="Reagent">Reagent</option>
+                      <option value="Consumable">Consumable</option>
+                      <option value="Standard">Standard</option>
+                      <option value="Safety">Safety</option>
+                    </select>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Unit</label>
+                    <select name="unit" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none">
+                      <option value="kg">kg</option>
+                      <option value="L">L</option>
+                      <option value="g">g</option>
+                      <option value="units">units</option>
+                      <option value="tray">tray</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Initial Stock</label>
+                    <input name="currentStock" type="number" defaultValue="0" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan-500/50" />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Warning Level</label>
+                    <input name="minStockLevel" type="number" defaultValue="10" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan-500/50" />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Storage Location</label>
+                  <input name="location" required placeholder="e.g. Rack B-1" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan-500/50" />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Preferred Supplier</label>
+                  <input name="supplier" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan-500/50" />
+                </div>
+
+                <button type="submit" className="w-full bg-cyan-500 text-slate-950 font-bold py-4 rounded-2xl shadow-lg shadow-cyan-500/30 hover:bg-cyan-400 active:scale-95 transition-all">
+                  REGISTER SKU
+                </button>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

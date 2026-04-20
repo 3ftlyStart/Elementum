@@ -38,14 +38,14 @@ export const Onboarding = ({ user, onComplete }: OnboardingProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFCF6] flex flex-col items-center justify-center p-6 text-[#1A2F23]">
+    <div className="min-h-screen bg-[#F9F7F5] flex flex-col items-center justify-center p-6 text-[#0A3044]">
       <div className="max-w-md w-full space-y-12">
         {/* Progress Bar */}
         <div className="flex gap-2 justify-center">
           {[1, 2, 3].map((s) => (
             <div 
               key={s} 
-              className={`h-1 rounded-full transition-all duration-500 ${step >= s ? 'w-8 bg-[#1A2F23]' : 'w-4 bg-[#1A2F23]/10'}`} 
+              className={`h-1.5 rounded-full transition-all duration-500 ${step >= s ? 'w-10 bg-[#3DC39E]' : 'w-4 bg-[#0A3044]/10'}`} 
             />
           ))}
         </div>
@@ -59,39 +59,42 @@ export const Onboarding = ({ user, onComplete }: OnboardingProps) => {
               exit={{ opacity: 0, x: -20 }}
               className="space-y-8"
             >
-              <div className="text-center space-y-2">
-                <h2 className="font-serif text-3xl font-bold">Welcome to Elementum</h2>
-                <p className="text-[#1A2F23]/60">How will you be using the portal?</p>
+              <div className="text-center space-y-3">
+                <div className="w-16 h-16 bg-[#3DC39E]/10 rounded-[28px] mx-auto flex items-center justify-center text-[#3DC39E]">
+                   <FlaskConical size={32} />
+                </div>
+                <h2 className="font-serif text-3xl font-bold tracking-tight">Welcome to Elementum</h2>
+                <p className="text-[#0A3044]/60 font-medium">How will you be using the portal?</p>
               </div>
 
               <div className="space-y-4">
                 <button
                   onClick={() => { setRole('Technician'); handleNext(); }}
-                  className={`w-full p-6 text-left rounded-[24px] border-2 transition-all group ${role === 'Technician' ? 'border-[#1A2F23] bg-[#1A2F23]/5' : 'border-transparent bg-white shadow-sm hover:border-[#1A2F23]/20'}`}
+                  className={`w-full p-6 text-left rounded-[32px] border-2 transition-all group ${role === 'Technician' ? 'border-[#3DC39E] bg-[#3DC39E]/5' : 'border-transparent bg-white shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:border-[#3DC39E]/20'}`}
                 >
                   <div className="flex justify-between items-center">
                     <div className="space-y-1">
-                      <div className="flex items-center gap-2 font-bold uppercase tracking-widest text-[10px]">
-                         <FlaskConical size={14} /> Laboratory Team
+                      <div className="flex items-center gap-2 font-bold uppercase tracking-widest text-[10px] text-[#3DC39E]">
+                         Laboratory Team
                       </div>
-                      <div className="text-sm font-medium">Assay Specialist or Lab Admin</div>
+                      <div className="text-sm font-bold text-[#0A3044]">Assay Specialist or Lab Admin</div>
                     </div>
-                    <ChevronRight size={20} className="opacity-20 group-hover:opacity-100 transition-opacity" />
+                    <ChevronRight size={20} className="text-[#0A3044]/20 group-hover:text-[#3DC39E] transition-colors" />
                   </div>
                 </button>
 
                 <button
                   onClick={() => { setRole('Client'); handleNext(); }}
-                  className={`w-full p-6 text-left rounded-[24px] border-2 transition-all group ${role === 'Client' ? 'border-[#1A2F23] bg-[#1A2F23]/5' : 'border-transparent bg-white shadow-sm hover:border-[#1A2F23]/20'}`}
+                  className={`w-full p-6 text-left rounded-[32px] border-2 transition-all group ${role === 'Client' ? 'border-[#3DC39E] bg-[#3DC39E]/5' : 'border-transparent bg-white shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:border-[#3DC39E]/20'}`}
                 >
                   <div className="flex justify-between items-center">
                     <div className="space-y-1">
-                      <div className="flex items-center gap-2 font-bold uppercase tracking-widest text-[10px]">
-                         <Building2 size={14} /> Mining Stakeholder 
+                      <div className="flex items-center gap-2 font-bold uppercase tracking-widest text-[10px] text-[#3DC39E]">
+                         Mining Stakeholder 
                       </div>
-                      <div className="text-sm font-medium">View Results & Manage Billing</div>
+                      <div className="text-sm font-bold text-[#0A3044]">View Results & Manage Billing</div>
                     </div>
-                    <ChevronRight size={20} className="opacity-20 group-hover:opacity-100 transition-opacity" />
+                    <ChevronRight size={20} className="text-[#0A3044]/20 group-hover:text-[#3DC39E] transition-colors" />
                   </div>
                 </button>
               </div>
@@ -107,40 +110,40 @@ export const Onboarding = ({ user, onComplete }: OnboardingProps) => {
               className="space-y-8"
             >
               <div className="text-center space-y-2">
-                <h2 className="font-serif text-3xl font-bold">Personalize your profile</h2>
-                <p className="text-[#1A2F23]/60">How should colleagues address you?</p>
+                <h2 className="font-serif text-3xl font-bold tracking-tight">Personalize your profile</h2>
+                <p className="text-[#0A3044]/60 font-medium">How should colleagues address you?</p>
               </div>
 
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#1A2F23]/40">Full Name</label>
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#0A3044]/40">Full Name</label>
                   <input 
                     type="text"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     placeholder="Enter your name"
-                    className="w-full bg-white border border-[#1A2F23]/10 rounded-xl px-4 py-3 outline-none focus:border-[#1A2F23] transition-colors"
+                    className="w-full bg-white border border-[#0A3044]/10 rounded-2xl px-5 py-4 outline-none focus:border-[#3DC39E] transition-colors text-sm font-bold"
                   />
                 </div>
                 {role === 'Client' && (
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#1A2F23]/40">Mining Site / Company</label>
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#0A3044]/40">Mining Site / Company</label>
                     <input 
                       type="text"
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       placeholder="e.g. Western Goldfields"
-                      className="w-full bg-white border border-[#1A2F23]/10 rounded-xl px-4 py-3 outline-none focus:border-[#1A2F23] transition-colors"
+                      className="w-full bg-white border border-[#0A3044]/10 rounded-2xl px-5 py-4 outline-none focus:border-[#3DC39E] transition-colors text-sm font-bold"
                     />
                   </div>
                 )}
                 
                 <div className="pt-4 flex gap-3">
-                  <button onClick={handleBack} className="flex-1 px-6 py-3 rounded-xl font-bold text-sm bg-white border border-[#1A2F23]/5 shadow-sm">Back</button>
+                  <button onClick={handleBack} className="flex-1 px-6 py-4 rounded-full font-bold text-sm bg-white border border-[#0A3044]/5 shadow-sm text-[#0A3044]/60 hover:text-[#0A3044] transition-colors">Back</button>
                   <button 
                     onClick={handleNext} 
                     disabled={!displayName || (role === 'Client' && !company)}
-                    className="flex-[2] bg-[#1A2F23] text-white px-6 py-3 rounded-xl font-bold text-sm hover:opacity-90 disabled:opacity-20 transition-all flex items-center justify-center gap-2"
+                    className="flex-[2] bg-[#0A3044] text-white px-6 py-4 rounded-full font-bold text-sm hover:bg-[#114B5F] disabled:opacity-20 transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#0A3044]/10"
                   >
                     Continue <ArrowRight size={16} />
                   </button>
@@ -158,25 +161,25 @@ export const Onboarding = ({ user, onComplete }: OnboardingProps) => {
               className="space-y-8"
             >
               <div className="text-center space-y-4">
-                <div className="w-16 h-16 bg-[#1A2F23]/5 rounded-3xl mx-auto flex items-center justify-center text-[#1A2F23]">
-                  <Check size={32} />
+                <div className="w-20 h-20 bg-[#3DC39E]/10 rounded-[32px] mx-auto flex items-center justify-center text-[#3DC39E]">
+                  <Check size={40} strokeWidth={3} />
                 </div>
-                <h2 className="font-serif text-3xl font-bold">You're all set!</h2>
-                <p className="text-[#1A2F23]/60">Your access to the {role} portal is being provisioned.</p>
+                <h2 className="font-serif text-3xl font-bold tracking-tight">You're all set!</h2>
+                <p className="text-[#0A3044]/60 font-medium">Your access to the {role} portal is being provisioned.</p>
               </div>
 
-              <div className="bg-white p-6 rounded-[24px] shadow-sm space-y-4 border border-[#1A2F23]/5">
+              <div className="bg-white p-6 rounded-[32px] shadow-sm space-y-4 border border-[#0A3044]/5">
                 <div className="flex justify-between items-center text-sm">
-                  <span className="opacity-40">Role</span>
+                  <span className="opacity-40 font-medium">Role</span>
                   <span className="font-bold">{role}</span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
-                  <span className="opacity-40">Identity</span>
+                  <span className="opacity-40 font-medium">Identity</span>
                   <span className="font-bold">{displayName}</span>
                 </div>
                 {company && (
                   <div className="flex justify-between items-center text-sm">
-                    <span className="opacity-40">Site</span>
+                    <span className="opacity-40 font-medium">Site</span>
                     <span className="font-bold">{company}</span>
                   </div>
                 )}
@@ -185,7 +188,7 @@ export const Onboarding = ({ user, onComplete }: OnboardingProps) => {
               <button 
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="w-full bg-[#1A2F23] text-white py-5 rounded-full font-bold text-lg hover:scale-105 transition-all shadow-xl shadow-[#1A2F23]/20 flex items-center justify-center gap-3"
+                className="w-full bg-[#3DC39E] text-[#0A3044] py-5 rounded-full font-bold text-lg hover:scale-105 transition-all shadow-xl shadow-[#3DC39E]/20 flex items-center justify-center gap-3"
               >
                 {isSubmitting ? (
                   <Loader2 size={24} className="animate-spin" />
