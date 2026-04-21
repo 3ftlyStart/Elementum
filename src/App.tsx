@@ -65,7 +65,8 @@ import {
   Cpu,
   Package,
   ShoppingBag,
-  DollarSign
+  DollarSign,
+  LayoutGrid
 } from 'lucide-react';
 import { 
   BarChart, 
@@ -140,70 +141,70 @@ const HistoryView = ({ samples }: { samples: Sample[] }) => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `elementum_history_${startDate || 'all'}_to_${endDate || 'all'}.json`;
+    link.download = `MetLeo_History_${startDate || 'all'}_to_${endDate || 'all'}.json`;
     link.click();
   };
 
   return (
     <div className="p-6 space-y-8">
       <div className="space-y-2">
-                <h2 className="text-3xl font-medium text-[#0A3044] tracking-tight">Data Archive</h2>
-                <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Historical Sample Records</p>
-              </div>
-        
-              <div className="bg-white border border-[#0A3044]/10 p-5 rounded-2xl space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#0A3044]/40">From Date</label>
-                    <input 
-                      type="date" 
-                      value={startDate}
-                      onChange={(e) => setStartDate(e.target.value)}
-                      className="w-full bg-[#F9F7F5] border border-[#0A3044]/10 rounded-xl px-4 py-3 text-xs text-[#0A3044] outline-none focus:border-[#3DC39E]/50" 
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#0A3044]/40">To Date</label>
-                    <input 
-                      type="date" 
-                      value={endDate}
-                      onChange={(e) => setEndDate(e.target.value)}
-                      className="w-full bg-[#F9F7F5] border border-[#0A3044]/10 rounded-xl px-4 py-3 text-xs text-[#0A3044] outline-none focus:border-[#3DC39E]/50" 
-                    />
-                  </div>
+        <h2 className="text-3xl font-display font-medium text-thriva-navy tracking-tight">Data Archive</h2>
+        <p className="text-[10px] text-thriva-navy/40 uppercase tracking-widest font-bold">Historical Sample Records</p>
+      </div>
+
+      <div className="bg-white border border-thriva-navy/5 p-6 rounded-[32px] shadow-thriva space-y-6">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">From Date</label>
+            <input 
+              type="date" 
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="w-full bg-[#FCFAF7] border border-thriva-navy/10 rounded-xl px-4 py-3 text-xs text-thriva-navy outline-none focus:border-thriva-mint/50" 
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">To Date</label>
+            <input 
+              type="date" 
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="w-full bg-[#FCFAF7] border border-thriva-navy/10 rounded-xl px-4 py-3 text-xs text-thriva-navy outline-none focus:border-thriva-mint/50" 
+            />
+          </div>
+        </div>
+        <button 
+          onClick={handleExport}
+          disabled={filteredSamples.length === 0}
+          className="w-full bg-thriva-navy disabled:opacity-20 hover:bg-thriva-banner text-white font-bold text-[10px] uppercase tracking-widest py-4 rounded-full transition-all shadow-xl shadow-thriva-navy/20 flex items-center justify-center gap-2"
+        >
+          <Download size={14} /> Export Results ({filteredSamples.length})
+        </button>
+      </div>
+
+      <div className="space-y-3">
+        {filteredSamples.length === 0 ? (
+          <div className="p-12 text-center opacity-40 font-mono text-[10px] uppercase tracking-widest text-thriva-navy">
+            No records for this range
+          </div>
+        ) : (
+          filteredSamples.map(s => (
+            <div key={s.id} className="bg-white border border-thriva-navy/5 p-5 rounded-2xl shadow-sm flex items-center justify-between group hover:shadow-thriva transition-all duration-300">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-widest">{s.jobId}</span>
+                  <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold uppercase ${s.status === 'Finalized' ? 'bg-thriva-mint/10 text-thriva-mint' : 'bg-[#FCFAF7] text-thriva-navy/40 border border-thriva-navy/5'}`}>
+                    {s.status}
+                  </span>
                 </div>
-                <button 
-                  onClick={handleExport}
-                  disabled={filteredSamples.length === 0}
-                  className="w-full bg-[#3DC39E] disabled:opacity-20 hover:bg-[#32A888] text-[#0A3044] font-bold text-[10px] uppercase tracking-widest py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
-                >
-                  <Download size={14} /> Export Results ({filteredSamples.length})
-                </button>
-              </div>
-        
-              <div className="space-y-3">
-                {filteredSamples.length === 0 ? (
-                  <div className="p-12 text-center opacity-40 font-mono text-xs uppercase text-[#0A3044]">
-                    No records for this range
-                  </div>
-                ) : (
-                  filteredSamples.map(s => (
-                    <div key={s.id} className="bg-white border border-[#0A3044]/10 p-4 rounded-xl flex items-center justify-between">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{s.jobId}</span>
-                          <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold uppercase ${s.status === 'Finalized' ? 'bg-[#3DC39E]/10 text-[#3DC39E]' : 'bg-[#F9F7F5] text-slate-500'}`}>
-                            {s.status}
-                          </span>
-                        </div>
-                        <div className="text-sm font-bold text-[#0A3044]">{s.clientName}</div>
-                <div className="text-[9px] text-slate-500 font-mono italic">
+                <div className="text-sm font-bold text-thriva-navy">{s.clientName}</div>
+                <div className="text-[9px] text-thriva-navy/40 font-mono">
                   {new Date(s.collectedAt).toLocaleString()}
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-xs font-bold text-cyan-400">{s.sampleType}</div>
-                <div className="text-[9px] text-slate-500 uppercase tracking-wider">{s.source}</div>
+                <div className="text-xs font-bold text-thriva-navy/60">{s.sampleType}</div>
+                <div className="text-[9px] text-thriva-navy/30 uppercase tracking-widest font-bold">{s.source}</div>
               </div>
             </div>
           ))
@@ -259,53 +260,63 @@ const SyncIndicator = ({ isOnline, pendingCount }: { isOnline: boolean, pendingC
   </div>
 );
 
-const StatCard = ({ label, value, icon: Icon, colorClass }: any) => (
+const StatCard = ({ label, value, icon: Icon }: any) => (
   <motion.div 
-    whileHover={{ scale: 1.02 }}
-    className="futuristic-card p-5 flex flex-col gap-3 relative group"
+    whileHover={{ y: -4 }}
+    className="bg-white p-6 rounded-[32px] shadow-thriva border border-thriva-navy/5 flex flex-col gap-4 relative group transition-all hover:shadow-thriva-hover"
   >
-    <div className="absolute inset-0 bg-gradient-to-br from-[#3DC39E]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-    <div className="flex items-center justify-between relative z-10">
-      <span className="text-[10px] uppercase tracking-widest text-[#0A3044]/40 font-bold">{label}</span>
-      <div className={`p-1.5 rounded-lg bg-slate-50 transition-colors group-hover:bg-[#3DC39E]/10`}>
-        <Icon size={14} className={colorClass || 'text-[#3DC39E]'} />
+    <div className="flex items-center justify-between">
+      <span className="text-[9px] uppercase tracking-[0.2em] text-thriva-navy/40 font-bold">{label}</span>
+      <div className="w-8 h-8 rounded-full bg-thriva-mint/10 flex items-center justify-center text-thriva-mint">
+        <Icon size={14} />
       </div>
     </div>
-    <div className="text-3xl font-bold text-[#0A3044] tracking-tight relative z-10 leading-none">{value}</div>
+    <div className="text-4xl font-display font-medium text-thriva-navy tracking-tight leading-none">{value}</div>
   </motion.div>
 );
 
 const ControlRoom = ({ samples }: { samples: Sample[] }) => {
   const buckets = [
-    { label: 'Drying', status: 'Received', color: 'text-cyan-400', icon: Clock },
-    { label: 'Smelting', status: 'Preparation', color: 'text-orange-500', icon: Flame },
-    { label: 'Analysis', status: 'Analysis', color: 'text-yellow-500', icon: Monitor },
-    { label: 'Reporting', status: 'Finalized', color: 'text-green-500', icon: CheckCircle2 },
+    { label: 'Drying', status: 'Received', color: 'text-thriva-mint', icon: Clock },
+    { label: 'Smelting', status: 'Preparation', color: 'text-thriva-coral', icon: Flame },
+    { label: 'Analysis', status: 'Analysis', color: 'text-thriva-mint', icon: Monitor },
+    { label: 'Reporting', status: 'Finalized', color: 'text-thriva-navy', icon: CheckCircle2 },
   ];
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-8">
+      <div className="space-y-2">
+        <h2 className="text-3xl font-display font-medium text-thriva-navy tracking-tight">Control Room</h2>
+        <p className="text-[10px] text-thriva-navy/40 uppercase tracking-widest font-bold">Real-time Operations Throughput</p>
+      </div>
+
       <div className="grid grid-cols-2 gap-4">
         {buckets.map(bucket => (
-          <div key={bucket.label} className="bg-slate-900/50 border border-slate-800 rounded-3xl p-5 relative overflow-hidden">
-            <div className="flex justify-between items-start">
-              <bucket.icon size={18} className={bucket.color} />
-              <span className="text-[20px] font-mono font-bold text-white">
+          <div key={bucket.label} className="bg-white border border-thriva-navy/5 shadow-thriva rounded-[32px] p-6 relative overflow-hidden group hover:shadow-thriva-hover transition-all duration-500">
+            <div className="flex justify-between items-start relative z-10">
+              <div className={`w-10 h-10 rounded-2xl flex items-center justify-center bg-[#FCFAF7] border border-thriva-navy/5 ${bucket.color}`}>
+                <bucket.icon size={18} />
+              </div>
+              <span className="text-3xl font-display font-medium text-thriva-navy">
                 {samples.filter(s => s.status === bucket.status).length}
               </span>
             </div>
-            <p className="mt-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">{bucket.label}</p>
-            <div className={`absolute bottom-0 left-0 h-1 bg-current opacity-20 ${bucket.color}`} style={{ width: '40%' }}></div>
+            <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.2em] text-thriva-navy/40 relative z-10">{bucket.label}</p>
+            <div className={`absolute bottom-0 left-0 h-1 bg-current opacity-20 ${bucket.color}`} style={{ width: '100%' }}></div>
           </div>
         ))}
       </div>
 
-      <div className="bg-slate-900/80 border border-slate-800 rounded-[32px] p-6 space-y-4">
-        <div className="flex justify-between items-center">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-white">Plant Efficiency</h3>
-          <span className="text-[10px] text-green-400 font-mono">LIVE + 94.2%</span>
+      <div className="bg-[#0D0D2D] rounded-[48px] p-8 space-y-6 shadow-2xl relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-thriva-mint/10 rounded-full blur-[100px] -mr-32 -mt-32" />
+        <div className="flex justify-between items-center relative z-10">
+          <div className="space-y-1">
+            <h3 className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/40">Plant Efficiency</h3>
+            <p className="text-xs font-medium text-white/60">Automated Throughput Metric</p>
+          </div>
+          <span className="text-xs text-thriva-mint font-bold px-3 py-1 bg-thriva-mint/10 rounded-full border border-thriva-mint/20">LIVE + 94.2%</span>
         </div>
-        <div className="h-40">
+        <div className="h-44 relative z-10">
            <ResponsiveContainer width="100%" height="100%">
              <AreaChart data={[
                { time: '08:00', val: 92 },
@@ -316,11 +327,11 @@ const ControlRoom = ({ samples }: { samples: Sample[] }) => {
              ]}>
                <defs>
                  <linearGradient id="colorVal" x1="0" y1="0" x2="0" y2="1">
-                   <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.3}/>
-                   <stop offset="95%" stopColor="#06b6d4" stopOpacity={0}/>
+                   <stop offset="5%" stopColor="#39D3C0" stopOpacity={0.4}/>
+                   <stop offset="95%" stopColor="#39D3C0" stopOpacity={0}/>
                  </linearGradient>
                </defs>
-               <Area type="monotone" dataKey="val" stroke="#06b6d4" fillOpacity={1} fill="url(#colorVal)" />
+               <Area type="monotone" dataKey="val" stroke="#39D3C0" strokeWidth={3} fillOpacity={1} fill="url(#colorVal)" />
              </AreaChart>
            </ResponsiveContainer>
         </div>
@@ -355,24 +366,24 @@ const LabBench = ({ sample, onUpdate, currentReading }: {
     <div className="p-6 space-y-8 pb-32">
        <div className="flex justify-between items-start">
          <div className="space-y-1">
-           <h2 className="text-3xl font-medium text-white">{sample.jobId}</h2>
-           <p className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
+           <h2 className="text-3xl font-display font-medium text-thriva-navy tracking-tight">{sample.jobId}</h2>
+           <p className="text-[10px] font-bold text-thriva-mint uppercase tracking-widest flex items-center gap-2">
              <Layers size={12} /> Laboratory Bench Workflow
            </p>
          </div>
-         <div className="px-3 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-mono text-slate-400 uppercase">
+         <div className="px-3 py-1 bg-white border border-thriva-navy/5 rounded-full text-[9px] font-bold text-thriva-navy/40 uppercase tracking-widest shadow-sm">
            {sample.source} Point
          </div>
        </div>
 
        {/* Guidance Indicator */}
-       <div className="bg-cyan-500/10 border border-cyan-500/30 p-4 rounded-2xl flex gap-4 items-center">
-         <div className="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">
-           <Compass size={20} />
+       <div className="bg-thriva-mint/5 border border-thriva-mint/10 p-5 rounded-[24px] flex gap-4 items-center shadow-sm">
+         <div className="w-12 h-12 rounded-2xl bg-thriva-mint/10 flex items-center justify-center text-thriva-mint shadow-inner">
+           <Compass size={24} />
          </div>
          <div className="flex-1">
-           <p className="text-xs font-bold text-cyan-400 uppercase tracking-wider">Protocol Guidance</p>
-           <p className="text-[10px] text-slate-400">
+           <p className="text-[10px] font-bold text-thriva-mint uppercase tracking-[0.2em]">Protocol Guidance</p>
+           <p className="text-[11px] text-thriva-navy/60 font-medium leading-relaxed">
              {sample.source === 'Mining' ? 'Primary Ore detected. Protocol: 50g Fire Assay with Silver inquart.' : 
               sample.source === 'CIL' ? 'Solution detected. Protocol: AAS Direct Aspiration (Au/Ag).' :
               'Standard metallurgical processing protocol active.'}
@@ -381,25 +392,25 @@ const LabBench = ({ sample, onUpdate, currentReading }: {
        </div>
 
        <div className="space-y-6">
-         <div className="space-y-3">
-           <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Physical Properties</label>
+         <div className="space-y-4">
+           <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-thriva-navy/30 ml-2">Physical Properties</label>
            <div className="grid grid-cols-2 gap-4">
-             <div className="bg-slate-900/50 border border-slate-800 p-4 rounded-2xl flex flex-col gap-1">
-               <span className="text-[8px] font-bold text-slate-600 uppercase">Analysis Mass (g)</span>
+             <div className="bg-white border border-thriva-navy/5 p-5 rounded-[24px] shadow-thriva flex flex-col gap-2 group hover:border-thriva-mint/30 transition-colors">
+               <span className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-widest">Analysis Mass (g)</span>
                <input 
                  type="number" 
                  value={mass}
                  onChange={(e) => setMass(Number(e.target.value))}
-                 className="bg-transparent text-white font-mono text-xl outline-none"
+                 className="bg-transparent text-thriva-navy font-display text-2xl outline-none"
                  placeholder="0.00"
                />
              </div>
-             <div className="bg-slate-900/50 border border-slate-800 p-4 rounded-2xl flex flex-col gap-1">
-               <span className="text-[8px] font-bold text-slate-600 uppercase">Moisture (%)</span>
+             <div className="bg-white border border-thriva-navy/5 p-5 rounded-[24px] shadow-thriva flex flex-col gap-2 group hover:border-thriva-mint/30 transition-colors">
+               <span className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-widest">Moisture (%)</span>
                <input 
                  type="number" 
                  defaultValue={sample.physicalProperties?.moistureContent || 0}
-                 className="bg-transparent text-white font-mono text-xl outline-none"
+                 className="bg-transparent text-thriva-navy font-display text-2xl outline-none"
                  placeholder="0.0"
                />
              </div>
@@ -407,13 +418,13 @@ const LabBench = ({ sample, onUpdate, currentReading }: {
          </div>
 
          <div className="space-y-4">
-           <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Analytical Method</label>
-           <div className="flex gap-2 overflow-x-auto pb-2 noscroll">
+           <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-thriva-navy/30 ml-2">Analytical Method</label>
+           <div className="flex gap-2 overflow-x-auto pb-2 noscroll px-1">
              {(['FireAssay', 'AAS', 'CarbonAnalysis'] as AssayMethod[]).map(m => (
                <button 
                  key={m}
                  onClick={() => setMethod(m)}
-                 className={`px-4 py-3 rounded-xl font-mono text-[10px] uppercase border whitespace-nowrap transition-all ${method === m ? 'bg-cyan-500 border-cyan-500 text-slate-950 font-bold' : 'bg-slate-900 border-slate-800 text-slate-500'}`}
+                 className={`px-5 py-3 rounded-full text-[10px] font-bold uppercase tracking-wider border whitespace-nowrap transition-all ${method === m ? 'bg-thriva-navy border-thriva-navy text-white shadow-lg' : 'bg-white border-thriva-navy/5 text-thriva-navy/40 hover:text-thriva-navy'}`}
                >
                  {m.replace(/([A-Z])/g, ' $1').trim()}
                </button>
@@ -422,29 +433,29 @@ const LabBench = ({ sample, onUpdate, currentReading }: {
          </div>
 
          {/* Method Specific Inputs */}
-         <div className="bg-slate-900/80 border border-slate-800 rounded-[32px] p-6 space-y-6">
+         <div className="bg-[#FCFAF7] border border-thriva-navy/5 rounded-[40px] p-8 space-y-8 shadow-inner">
             {method === 'FireAssay' && (
-              <div className="grid grid-cols-1 gap-6">
+              <div className="grid grid-cols-1 gap-8">
                  <div className="space-y-2">
-                   <label className="text-[10px] font-bold text-slate-500 uppercase">Crucible Serial</label>
-                   <input className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white font-mono uppercase" placeholder="CR-000" />
+                   <label className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-widest ml-2">Crucible Serial</label>
+                   <input className="w-full bg-white border border-thriva-navy/10 rounded-xl p-4 text-thriva-navy font-bold shadow-sm uppercase placeholder:text-thriva-navy/20" placeholder="CR-000" />
                  </div>
-                 <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-bold text-slate-500 uppercase">Bead Weight (mg)</label>
-                      <div className="relative group">
+                 <div className="grid grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-widest ml-2">Bead Weight (mg)</label>
+                      <div className="relative">
                          <input 
                            type="number"
                            step="0.001"
                            value={bead}
                            onChange={(e) => setBead(Number(e.target.value))}
-                           className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-cyan-400 font-mono text-lg outline-none focus:border-cyan-500/50 pr-12" 
+                           className="w-full bg-white border border-thriva-navy/10 rounded-2xl p-4 text-thriva-mint font-display text-2xl outline-none focus:border-thriva-mint shadow-sm pr-12" 
                            placeholder="1.23"
                          />
                          {currentReading && (
                            <button 
                              onClick={handleCapture}
-                             className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500 hover:text-slate-950 transition-all"
+                             className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-xl bg-thriva-mint/10 text-thriva-mint hover:bg-thriva-mint hover:text-white transition-all shadow-sm"
                              title="Capture from Balance"
                            >
                              <Zap size={14} />
@@ -452,9 +463,9 @@ const LabBench = ({ sample, onUpdate, currentReading }: {
                          )}
                       </div>
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-bold text-slate-500 uppercase">Calculated Au (g/t)</label>
-                      <div className="w-full bg-slate-950/50 border border-slate-800 rounded-xl p-3 text-yellow-500 font-mono text-lg flex items-center justify-center font-bold">
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-widest ml-2">Calculated Au (g/t)</label>
+                      <div className="w-full h-full bg-thriva-navy rounded-2xl p-4 text-thriva-mint font-display text-2xl flex items-center justify-center font-medium shadow-xl">
                         {calculatedAu.toFixed(3)}
                       </div>
                     </div>
@@ -463,45 +474,45 @@ const LabBench = ({ sample, onUpdate, currentReading }: {
             )}
 
             {method === 'AAS' && (
-              <div className="grid grid-cols-1 gap-6">
-                 <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center block">Raw Absorbance Reading</label>
-                    <div className="flex items-center justify-center py-4 gap-4">
+              <div className="grid grid-cols-1 gap-8">
+                 <div className="space-y-4">
+                    <label className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em] text-center block">Raw Absorbance Reading</label>
+                    <div className="flex items-center justify-center py-6 gap-6">
                       {currentReading && (
                          <button 
                            onClick={handleCapture}
-                           className="px-4 py-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2"
+                           className="px-6 py-3 rounded-full bg-thriva-mint text-thriva-navy text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-thriva-mint/20 hover:scale-105 active:scale-95 transition-all"
                          >
-                           <Activity size={14} /> Capture from AAS
+                           <Activity size={16} /> Capture AAS
                          </button>
                       )}
                       {!currentReading && (
                         <>
-                          <button onClick={()=>setAbs(Math.max(0, abs - 0.001))} className="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400">-</button>
-                          <span className="text-5xl font-mono font-bold text-cyan-400">{abs.toFixed(3)}</span>
-                          <button onClick={()=>setAbs(abs + 0.001)} className="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400">+</button>
+                          <button onClick={()=>setAbs(Math.max(0, abs - 0.001))} className="w-12 h-12 rounded-full border border-thriva-navy/10 flex items-center justify-center text-thriva-navy/40 hover:bg-white hover:text-thriva-navy transition-all shadow-sm">-</button>
+                          <span className="text-6xl font-display font-medium text-thriva-navy tracking-tighter">{abs.toFixed(3)}</span>
+                          <button onClick={()=>setAbs(abs + 0.001)} className="w-12 h-12 rounded-full border border-thriva-navy/10 flex items-center justify-center text-thriva-navy/40 hover:bg-white hover:text-thriva-navy transition-all shadow-sm">+</button>
                         </>
                       )}
                     </div>
                     {currentReading && (
-                       <div className="text-center font-mono text-2xl text-white animate-pulse">
+                       <div className="text-center font-display text-4xl text-thriva-navy animate-pulse">
                          {currentReading.value.toFixed(3)}
                        </div>
                     )}
                  </div>
-                 <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-bold text-slate-500 uppercase">Dilution Factor</label>
+                 <div className="grid grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-widest ml-2">Dilution Factor</label>
                       <input 
                         type="number" 
                         value={dilution}
                         onChange={(e) => setDilution(Number(e.target.value))}
-                        className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white font-mono" 
+                        className="w-full bg-white border border-thriva-navy/10 rounded-xl p-4 text-thriva-navy font-bold shadow-sm" 
                       />
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-bold text-slate-500 uppercase">Final Au (ppm)</label>
-                      <div className="w-full bg-slate-950/50 border border-slate-800 rounded-xl p-3 text-cyan-400 font-mono text-lg flex items-center justify-center font-bold">
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-widest ml-2">Final Au (ppm)</label>
+                      <div className="w-full bg-thriva-mint rounded-xl p-4 text-thriva-navy font-display text-2xl flex items-center justify-center font-medium shadow-lg">
                         {calculatedAu.toFixed(3)}
                       </div>
                     </div>
@@ -517,9 +528,9 @@ const LabBench = ({ sample, onUpdate, currentReading }: {
              elements: { ...sample.elements, gold: calculatedAu },
              physicalProperties: { ...sample.physicalProperties, mass, form: 'pulp' }
            })}
-           className="w-full bg-cyan-500 text-slate-950 font-bold py-4 rounded-2xl shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-2 active:scale-95 transition-all"
+           className="w-full bg-thriva-navy text-white font-bold py-6 rounded-full shadow-2xl shadow-thriva-navy/20 flex items-center justify-center gap-3 hover:bg-thriva-banner active:scale-[0.98] transition-all text-sm tracking-widest uppercase"
           >
-           <ShieldCheck size={18} />
+           <ShieldCheck size={20} />
            RECORD SECURE OBSERVATION
          </button>
        </div>
@@ -543,46 +554,52 @@ const PlantProfile = ({ samples }: { samples: Sample[] }) => {
   return (
     <div className="p-6 space-y-8 pb-32">
       <div className="space-y-1">
-        <h2 className="text-3xl font-medium text-white">Plant Profile</h2>
-        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Real-time Adsorption Monitoring</p>
+        <h2 className="text-3xl font-display font-medium text-thriva-navy tracking-tight">Plant Profile</h2>
+        <p className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em]">Real-time Adsorption Monitoring</p>
       </div>
 
       {alerts.length > 0 && (
         <motion.div 
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          className="bg-red-500/10 border border-red-500/30 p-4 rounded-2xl flex gap-3 items-center"
+          className="bg-thriva-coral/5 border border-thriva-coral/10 p-5 rounded-[24px] flex gap-4 items-center shadow-lg shadow-thriva-coral/5"
         >
-          <AlertTriangle className="text-red-500" size={20} />
+          <div className="w-12 h-12 rounded-2xl bg-thriva-coral/10 flex items-center justify-center text-thriva-coral shadow-inner">
+            <AlertTriangle size={24} />
+          </div>
           <div>
-            <p className="text-xs font-bold text-red-500 uppercase tracking-wider">Inefficiency Alert</p>
-            <p className="text-[10px] text-slate-400">Gold concentration spike detected in recovery circuit. Check Carbon activity.</p>
+            <p className="text-[10px] font-bold text-thriva-coral uppercase tracking-[0.2em]">Inefficiency Alert</p>
+            <p className="text-[11px] text-thriva-navy/60 font-medium font-inter">Gold concentration spike detected. Check Carbon activity.</p>
           </div>
         </motion.div>
       )}
 
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 h-80">
+      <div className="bg-white border border-thriva-navy/5 rounded-[40px] p-8 h-80 shadow-thriva relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-thriva-mint/5 rounded-full blur-[100px] -mr-32 -mt-32" />
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={adsorptionData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-            <XAxis dataKey="tank" stroke="#64748b" fontSize={8} />
-            <YAxis stroke="#64748b" fontSize={8} />
-            <Tooltip contentStyle={{ backgroundColor: '#0f172a', border: 'none' }} />
-            <Line type="stepAfter" dataKey="au" stroke="#eab308" strokeWidth={3} dot={{ r: 6, fill: '#eab308' }} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#0D0D2D08" vertical={false} />
+            <XAxis dataKey="tank" stroke="#0D0D2D40" fontSize={9} fontWeight={600} tick={{ fill: '#0D0D2D40' }} axisLine={false} tickLine={false} />
+            <YAxis stroke="#0D0D2D40" fontSize={9} fontWeight={600} tick={{ fill: '#0D0D2D40' }} axisLine={false} tickLine={false} />
+            <Tooltip 
+              contentStyle={{ backgroundColor: '#0D0D2D', border: 'none', borderRadius: '16px', color: '#fff', fontSize: '10px' }} 
+              itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+            />
+            <Line type="monotone" dataKey="au" stroke="#39D3C0" strokeWidth={4} dot={{ r: 6, fill: '#39D3C0', strokeWidth: 4, stroke: '#fff' }} activeDot={{ r: 8, strokeWidth: 0 }} />
           </LineChart>
         </ResponsiveContainer>
       </div>
 
       <div className="grid grid-cols-1 gap-4">
         {adsorptionData.map((d, i) => (
-          <div key={i} className="flex justify-between items-center p-4 bg-slate-900/40 rounded-2xl border border-slate-800">
-             <div className="flex items-center gap-3">
-               <div className="w-8 h-8 rounded-lg bg-yellow-500/10 flex items-center justify-center text-yellow-500 font-mono text-xs">#{i+1}</div>
-               <span className="text-sm font-bold text-white">{d.tank}</span>
+          <div key={i} className="flex justify-between items-center p-5 bg-white rounded-2xl border border-thriva-navy/5 shadow-sm group hover:shadow-thriva transition-all duration-300">
+             <div className="flex items-center gap-4">
+               <div className="w-10 h-10 rounded-xl bg-[#FCFAF7] border border-thriva-navy/5 flex items-center justify-center text-thriva-navy font-display text-base font-medium shadow-inner">{i+1}</div>
+               <span className="text-sm font-bold text-thriva-navy">{d.tank}</span>
              </div>
              <div className="text-right">
-               <span className="text-lg font-mono text-yellow-500 font-bold">{d.au.toFixed(4)}</span>
-               <span className="text-[10px] text-slate-600 ml-1 uppercase">g/t</span>
+               <span className="text-xl font-display text-thriva-navy font-medium">{d.au.toFixed(4)}</span>
+               <span className="text-[10px] text-thriva-navy/30 ml-2 uppercase font-bold tracking-widest">g/t</span>
              </div>
           </div>
         ))}
@@ -593,63 +610,67 @@ const PlantProfile = ({ samples }: { samples: Sample[] }) => {
 
 const SampleItem = ({ sample, onClick }: { sample: Sample, onClick: () => void }) => {
   const statusColors: Record<SampleStatus, string> = {
-    'Received': 'text-cyan-400 bg-cyan-400/10',
-    'Preparation': 'text-orange-400 bg-orange-400/10',
-    'Analysis': 'text-yellow-400 bg-yellow-400/10',
-    'Finalized': 'text-green-400 bg-green-400/10',
+    'Received': 'text-thriva-navy/40 bg-[#FCFAF7]',
+    'Preparation': 'text-thriva-coral bg-thriva-coral/10',
+    'Analysis': 'text-thriva-mint bg-thriva-mint/10',
+    'Finalized': 'text-thriva-mint bg-thriva-mint/10',
     'Cancelled': 'text-red-400 bg-red-400/10'
   };
 
   const priorityColors: Record<string, string> = {
-    'Low': 'text-slate-500 bg-slate-500/10',
-    'Standard': 'text-cyan-400 bg-cyan-400/10',
-    'High': 'text-orange-400 bg-orange-400/10',
-    'Emergency': 'text-red-500 bg-red-500/20 border-red-500/50'
+    'Low': 'text-thriva-navy/30 bg-[#FCFAF7]',
+    'Standard': 'text-thriva-mint bg-thriva-mint/10',
+    'High': 'text-thriva-coral bg-thriva-coral/10',
+    'Emergency': 'text-white bg-thriva-coral'
   };
 
   const typeIconColor: Record<SampleType, string> = {
-    'Ore': 'bg-slate-500/20 text-slate-400',
-    'Concentrate': 'bg-cyan-500/20 text-cyan-400',
-    'Tailings': 'bg-orange-500/20 text-orange-400',
-    'Bullion': 'bg-yellow-500/20 text-yellow-400',
-    'Waste': 'bg-slate-700/20 text-slate-500',
-    'Cyanidation': 'bg-purple-500/20 text-purple-400',
-    'Pulp': 'bg-slate-500/20 text-slate-300',
-    'Solution': 'bg-cyan-500/10 text-cyan-500',
-    'Carbon': 'bg-slate-800/50 text-slate-100'
+    'Ore': 'bg-[#FCFAF7] text-thriva-navy/40',
+    'Concentrate': 'bg-thriva-mint/10 text-thriva-mint',
+    'Tailings': 'bg-thriva-coral/10 text-thriva-coral',
+    'Bullion': 'bg-yellow-500/10 text-yellow-600',
+    'Waste': 'bg-slate-100 text-slate-400',
+    'Cyanidation': 'bg-purple-500/10 text-purple-600',
+    'Pulp': 'bg-slate-500/10 text-slate-400',
+    'Solution': 'bg-thriva-mint/5 text-thriva-mint',
+    'Carbon': 'bg-thriva-navy/5 text-thriva-navy'
   };
 
   return (
     <motion.div 
       onClick={onClick}
-      className={`p-4 bg-slate-900/30 border rounded-2xl flex items-center justify-between active:bg-slate-800/50 transition-all cursor-pointer group ${sample.priority === 'Emergency' ? 'border-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.1)]' : 'border-slate-800/50'}`}
+      whileHover={{ scale: 1.01, y: -2 }}
+      whileTap={{ scale: 0.99 }}
+      className={`p-5 bg-white border rounded-[28px] flex items-center justify-between shadow-sm hover:shadow-thriva transition-all duration-300 cursor-pointer ${sample.priority === 'Emergency' ? 'border-thriva-coral shadow-lg shadow-thriva-coral/10' : 'border-thriva-navy/5'}`}
     >
-      <div className="flex items-center gap-4">
-        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${typeIconColor[sample.sampleType]}`}>
-          {sample.sampleType === 'Cyanidation' ? <Droplets size={18} /> : sample.sampleType === 'Bullion' ? <Flame size={18} /> : <div className="w-3.5 h-3.5 border-2 border-current rounded-sm"></div>}
+      <div className="flex items-center gap-5">
+        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-inner ${typeIconColor[sample.sampleType]}`}>
+          {sample.sampleType === 'Cyanidation' ? <Droplets size={20} /> : sample.sampleType === 'Bullion' ? <Flame size={20} /> : <Box size={20} />}
         </div>
-        <div className="space-y-0.5">
+        <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-white">{sample.clientName}</span>
-            <span className={`text-[8px] font-mono px-1.5 py-0.5 rounded border border-current opacity-70 ${priorityColors[sample.priority || 'Standard'].split(' ')[0]}`}>
+            <span className="text-sm font-bold text-thriva-navy">{sample.clientName}</span>
+            <span className={`text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest ${priorityColors[sample.priority || 'Standard']}`}>
               {sample.priority || 'STD'}
             </span>
-            <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded border border-current opacity-70 ${statusColors[sample.status].split(' ')[0]}`}>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border border-current opacity-40 uppercase tracking-widest ${statusColors[sample.status].split(' ')[0]}`}>
               {sample.jobId}
             </span>
+            <p className="text-[10px] text-thriva-navy/30 font-bold uppercase tracking-widest">
+              {sample.status} • {new Date(sample.collectedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </p>
           </div>
-          <p className="text-[10px] text-slate-500 font-medium">
-            {sample.status} • {new Date(sample.collectedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-          </p>
         </div>
       </div>
       <div className="text-right flex flex-col items-end gap-1">
-        <div className="text-xs font-mono font-bold text-slate-300">
-          {sample.status === 'Finalized' ? `${sample.elements?.gold || 0}% Au` : 'Processing'}
+        <div className="text-base font-display font-medium text-thriva-navy">
+          {sample.status === 'Finalized' ? `${(sample.elements?.gold || 0).toFixed(2)} g/t` : '---'}
         </div>
-        <div className="flex items-center gap-1 opacity-40">
+        <div className="flex items-center gap-1 opacity-20 group-hover:opacity-40 transition-opacity">
           <History size={10} />
-          <span className="text-[8px] font-mono">{sample.history?.length || 0} LOGS</span>
+          <span className="text-[8px] font-bold tracking-[0.2em]">{sample.history?.length || 0} LOGS</span>
         </div>
       </div>
     </motion.div>
@@ -674,10 +695,10 @@ const AnalyticsView = ({ samples }: { samples: Sample[] }) => {
   }));
 
   const metrics = [
-    { id: 'gold', label: 'Gold (Au)', unit: 'g/t', color: '#eab308' },
-    { id: 'silver', label: 'Silver (Ag)', unit: 'g/t', color: '#94a3b8' },
-    { id: 'copper', label: 'Copper (Cu)', unit: '%', color: '#ea580c' },
-    { id: 'iron', label: 'Iron (Fe)', unit: '%', color: '#451a03' },
+    { id: 'gold', label: 'Gold (Au)', unit: 'g/t', color: '#39D3C0' },
+    { id: 'silver', label: 'Silver (Ag)', unit: 'g/t', color: '#2F1B4E' },
+    { id: 'copper', label: 'Copper (Cu)', unit: '%', color: '#F24C6D' },
+    { id: 'iron', label: 'Iron (Fe)', unit: '%', color: '#0D0D2D' },
   ];
 
   const currentMetric = metrics.find(m => m.id === metric)!;
@@ -689,32 +710,32 @@ const AnalyticsView = ({ samples }: { samples: Sample[] }) => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `elementum_assay_export_${new Date().toISOString().split('T')[0]}.json`;
+    link.download = `MetLeo_Assay_Analytics_${new Date().toISOString().split('T')[0]}.json`;
     link.click();
   };
 
   return (
     <div className="p-6 space-y-8">
       <div className="space-y-2">
-        <h2 className="text-3xl font-medium text-white tracking-tight">Assay Analytics</h2>
-        <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Trend Analysis & Correlation</p>
+        <h2 className="text-3xl font-display font-medium text-thriva-navy tracking-tight">Assay Analytics</h2>
+        <p className="text-[10px] text-thriva-navy/40 uppercase tracking-widest font-bold">Trend Analysis & Correlation</p>
       </div>
 
       {/* Parameter Controls */}
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <label className="text-[9px] font-bold uppercase tracking-widest text-slate-500">Primary Attribute</label>
+          <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-thriva-navy/30 ml-2">Primary Attribute</label>
           <select 
             value={metric} 
             onChange={(e) => setMetric(e.target.value as any)}
-            className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2 text-xs text-slate-100 outline-none"
+            className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-3 text-xs text-thriva-navy outline-none shadow-sm"
           >
             {metrics.map(m => <option key={m.id} value={m.id}>{m.label}</option>)}
           </select>
         </div>
         <div className="space-y-2">
-          <label className="text-[9px] font-bold uppercase tracking-widest text-slate-500">Visualization Engine</label>
-          <div className="flex bg-slate-900 border border-slate-800 rounded-xl p-1">
+          <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-thriva-navy/30 ml-2">Visualization Engine</label>
+          <div className="flex bg-white border border-thriva-navy/10 rounded-xl p-1 shadow-sm">
             {[
               { id: 'line', icon: LineChartIcon },
               { id: 'bar', icon: BarChartIcon },
@@ -723,7 +744,7 @@ const AnalyticsView = ({ samples }: { samples: Sample[] }) => {
               <button
                 key={type.id}
                 onClick={() => setChartType(type.id as any)}
-                className={`flex-1 flex justify-center py-1 rounded-lg transition-all ${chartType === type.id ? 'bg-cyan-500 text-slate-950 shadow-lg' : 'text-slate-500'}`}
+                className={`flex-1 flex justify-center py-2 rounded-lg transition-all ${chartType === type.id ? 'bg-thriva-navy text-white shadow-md' : 'text-thriva-navy/30 hover:text-thriva-navy'}`}
               >
                 <type.icon size={16} />
               </button>
@@ -733,56 +754,57 @@ const AnalyticsView = ({ samples }: { samples: Sample[] }) => {
       </div>
 
       {/* Main Visualization Area */}
-      <div className="bg-slate-900/40 border border-slate-800 rounded-[32px] p-6 shadow-2xl relative">
-        <div className="h-72 w-full mt-4">
+      <div className="bg-white border border-thriva-navy/5 rounded-[40px] p-8 shadow-thriva relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-thriva-mint/5 rounded-full blur-[100px] -mr-32 -mt-32" />
+        <div className="h-72 w-full mt-4 relative z-10">
           <ResponsiveContainer width="100%" height="100%">
             {chartType === 'line' ? (
               <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                <XAxis dataKey="date" stroke="#64748b" fontSize={8} tick={{ fontFamily: 'monospace' }} />
-                <YAxis stroke="#64748b" fontSize={8} tick={{ fontFamily: 'monospace' }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#0D0D2D08" vertical={false} />
+                <XAxis dataKey="date" stroke="#0D0D2D40" fontSize={8} tick={{ fontWeight: 600 }} axisLine={false} tickLine={false} />
+                <YAxis stroke="#0D0D2D40" fontSize={8} tick={{ fontWeight: 600 }} axisLine={false} tickLine={false} />
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '12px', fontSize: '10px' }}
+                  contentStyle={{ backgroundColor: '#0D0D2D', border: 'none', borderRadius: '16px', color: '#fff', fontSize: '10px' }}
                 />
-                <Legend iconType="circle" wrapperStyle={{ fontSize: '10px', paddingTop: '20px' }} />
-                <Line type="monotone" dataKey={metric} stroke={currentMetric.color} strokeWidth={3} dot={{ r: 4, fill: currentMetric.color }} name={currentMetric.label} />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: '10px', paddingTop: '20px', fontWeight: 'bold' }} />
+                <Line type="monotone" dataKey={metric} stroke={currentMetric.color} strokeWidth={4} dot={{ r: 4, fill: currentMetric.color, strokeWidth: 2, stroke: '#fff' }} name={currentMetric.label} />
               </LineChart>
             ) : chartType === 'bar' ? (
               <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                <XAxis dataKey="name" stroke="#64748b" fontSize={8} tick={{ fontFamily: 'monospace' }} />
-                <YAxis stroke="#64748b" fontSize={8} tick={{ fontFamily: 'monospace' }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#0D0D2D08" vertical={false} />
+                <XAxis dataKey="name" stroke="#0D0D2D40" fontSize={8} tick={{ fontWeight: 600 }} axisLine={false} tickLine={false} />
+                <YAxis stroke="#0D0D2D40" fontSize={8} tick={{ fontWeight: 600 }} axisLine={false} tickLine={false} />
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '12px', fontSize: '10px' }}
+                  contentStyle={{ backgroundColor: '#0D0D2D', border: 'none', borderRadius: '16px', color: '#fff', fontSize: '10px' }}
                 />
-                <Bar dataKey={metric} fill={currentMetric.color} radius={[4, 4, 0, 0]} name={currentMetric.label} />
+                <Bar dataKey={metric} fill={currentMetric.color} radius={[6, 6, 0, 0]} name={currentMetric.label} />
               </BarChart>
             ) : (
               <ScatterChart>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                <XAxis type="number" dataKey={metric} name={currentMetric.label} unit={currentMetric.unit} stroke="#64748b" fontSize={8} />
-                <YAxis type="number" dataKey={comparisonMetric} name={currentCompMetric.label} unit={currentCompMetric.unit} stroke="#64748b" fontSize={8} />
-                <ZAxis type="number" range={[60, 400]} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#0D0D2D08" />
+                <XAxis type="number" dataKey={metric} name={currentMetric.label} unit={currentMetric.unit} stroke="#0D0D2D40" fontSize={8} axisLine={false} tickLine={false} />
+                <YAxis type="number" dataKey={comparisonMetric} name={currentCompMetric.label} unit={currentCompMetric.unit} stroke="#0D0D2D40" fontSize={8} axisLine={false} tickLine={false} />
+                <ZAxis type="number" range={[100, 500]} />
                 <Tooltip 
                   cursor={{ strokeDasharray: '3 3' }}
-                  contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '12px', fontSize: '10px' }}
+                  contentStyle={{ backgroundColor: '#0D0D2D', border: 'none', borderRadius: '16px', color: '#fff', fontSize: '10px' }}
                 />
-                <Legend iconType="circle" wrapperStyle={{ fontSize: '10px', paddingTop: '20px' }} />
-                <Scatter name={`Correlation: ${currentMetric.label} vs ${currentCompMetric.label}`} data={chartData} fill="#06b6d4" />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: '10px', paddingTop: '20px', fontWeight: 'bold' }} />
+                <Scatter name={`Correlation: ${currentMetric.label} vs ${currentCompMetric.label}`} data={chartData} fill="#39D3C0" />
               </ScatterChart>
             )}
           </ResponsiveContainer>
         </div>
 
         {chartType === 'scatter' && (
-          <div className="mt-6 space-y-2">
-            <label className="text-[9px] font-bold uppercase tracking-widest text-slate-500">Correlation Axis (Y)</label>
-            <div className="flex gap-2">
+          <div className="mt-8 space-y-4 relative z-10">
+            <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-thriva-navy/30 ml-2">Correlation Axis (Y)</label>
+            <div className="flex flex-wrap gap-2">
               {metrics.map(m => (
                 <button
                   key={m.id}
                   onClick={() => setComparisonMetric(m.id as any)}
-                  className={`px-3 py-1.5 rounded-full text-[10px] font-bold border transition-all ${comparisonMetric === m.id ? 'bg-cyan-500/10 border-cyan-500 text-cyan-400' : 'bg-slate-900 border-slate-800 text-slate-500'}`}
+                  className={`px-4 py-2 rounded-full text-[10px] font-bold border transition-all shadow-sm ${comparisonMetric === m.id ? 'bg-thriva-navy border-thriva-navy text-white shadow-lg' : 'bg-[#FCFAF7] border-thriva-navy/5 text-thriva-navy/40 hover:text-thriva-navy'}`}
                 >
                   {m.id.toUpperCase()}
                 </button>
@@ -796,18 +818,20 @@ const AnalyticsView = ({ samples }: { samples: Sample[] }) => {
       <div className="pt-4">
         <button 
           onClick={handleExport}
-          className="w-full bg-slate-900 border border-slate-800 p-5 rounded-2xl flex items-center justify-between group hover:border-cyan-500/30 transition-all font-mono"
+          className="w-full bg-white border border-thriva-navy/5 p-6 rounded-[32px] flex items-center justify-between group hover:shadow-thriva transition-all duration-500 shadow-sm"
         >
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-slate-500 group-hover:text-cyan-400">
-              <Download size={20} />
-            </div>
-            <div className="text-left">
-              <p className="text-xs font-bold text-white uppercase tracking-wider">Export Laboratory Data</p>
-              <p className="text-[10px] text-slate-500 uppercase">JSON Format • All Finalized Samples</p>
-            </div>
+             <div className="w-12 h-12 rounded-2xl bg-[#FCFAF7] border border-thriva-navy/5 flex items-center justify-center text-thriva-navy shadow-inner group-hover:bg-thriva-mint group-hover:text-white transition-all">
+               <Download size={20} />
+             </div>
+             <div className="text-left">
+               <p className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em]">Data Pipeline</p>
+               <p className="text-sm font-bold text-thriva-navy">Export Integrated Dataset</p>
+             </div>
           </div>
-          <ChevronRight size={20} className="text-slate-700 group-hover:text-cyan-400 transition-all" />
+          <div className="w-10 h-10 rounded-full bg-[#FCFAF7] border border-thriva-navy/5 flex items-center justify-center group-hover:translate-x-2 transition-transform">
+             <ChevronRight size={18} className="text-thriva-navy/20" />
+          </div>
         </button>
       </div>
     </div>
@@ -949,25 +973,52 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={{ user, profile, loading }}>
-      <div className="min-h-screen mesh-gradient text-[#0A3044] font-sans selection:bg-[#3DC39E]/30 max-w-lg mx-auto shadow-[0_0_100px_rgba(10,48,68,0.1)] relative overflow-x-hidden border-x border-[#0A3044]/5 bg-white/20">
+      <div className="min-h-screen bg-[#FCFAF7] text-[#0D0D2D] font-sans selection:bg-[#39D3C0]/30 max-w-lg mx-auto shadow-[0_0_100px_rgba(13,13,45,0.05)] relative overflow-x-hidden border-x border-[#0D0D2D]/5">
         <SyncIndicator isOnline={isOnline} pendingCount={pendingSyncCount} />
         
         {/* Header */}
-        <header className="border-b border-[#0A3044]/5 p-4 pt-8 flex items-center justify-between sticky top-0 bg-white/40 backdrop-blur-2xl z-20 transition-all shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+        <header className="border-b border-[#0D0D2D]/5 p-4 pt-8 flex items-center justify-between sticky top-0 bg-white/60 backdrop-blur-3xl z-[60] transition-all shadow-[0_4px_20px_rgba(0,0,0,0.01)] max-w-lg mx-auto">
           <div className="flex flex-col cursor-pointer group" onClick={() => setView('dashboard')}>
-            <span className="text-[10px] font-bold tracking-[0.3em] text-[#3DC39E] uppercase group-hover:tracking-[0.4em] transition-all">Elementum</span>
-            <span className="text-xl font-bold text-[#0A3044] leading-tight">Assay Lab Portal</span>
+            <span className="text-[10px] font-bold tracking-[0.3em] text-[#39D3C0] uppercase group-hover:tracking-[0.4em] transition-all leading-none mb-1">MetLeo</span>
+            <span className="text-xl font-bold text-[#0D0D2D] leading-tight flex items-center gap-1">Portal <Activity size={16} className="text-[#39D3C0]" /></span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <motion.button 
               whileHover={{ scale: 1.05 }}
-              className="w-10 h-10 rounded-2xl bg-white border border-[#0A3044]/5 flex items-center justify-center shadow-sm"
+              className="w-10 h-10 rounded-full bg-white border border-[#0D0D2D]/5 flex items-center justify-center shadow-sm"
             >
-              <div className={`w-2.5 h-2.5 rounded-full ${isOnline ? 'bg-[#3DC39E] mint-glow' : 'bg-red-500 animate-pulse'}`}></div>
+              <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-[#39D3C0] mint-glow' : 'bg-red-500'}`}></div>
             </motion.button>
-            <button onClick={handleLogout} className="text-[#0A3044]/20 hover:text-[#0A3044] transition-colors p-2"><LogOut size={20} /></button>
+            <button onClick={handleLogout} className="text-[#0D0D2D]/40 hover:text-[#0D0D2D] transition-colors p-2"><LogOut size={18} /></button>
           </div>
         </header>
+
+        {/* Top Navigation Menu (Thriva style) */}
+        <nav className="sticky top-[89px] bg-white/40 backdrop-blur-2xl border-b border-[#0D0D2D]/5 z-50 overflow-x-auto noscroll max-w-lg mx-auto">
+          <div className="flex items-center px-4 py-3 gap-2 min-w-max">
+            {[
+              { id: 'dashboard', label: 'Summary', icon: LayoutGrid },
+              { id: 'create', label: 'Register', icon: Plus },
+              { id: 'analytics', label: 'Insights', icon: BarChart3 },
+              { id: 'history', label: 'Archive', icon: History },
+              { id: 'inventory', label: 'Supplies', icon: Box },
+              { id: 'billing', label: 'Finance', icon: DollarSign },
+              { id: 'control', label: 'Live', icon: Activity },
+              { id: 'plant', label: 'Profile', icon: Monitor },
+              { id: 'instruments', label: 'Sensors', icon: Cpu },
+              { id: 'requisitions', label: 'Requests', icon: ClipboardList },
+            ].map(item => (
+              <button
+                key={item.id}
+                onClick={() => setView(item.id as any)}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all whitespace-nowrap ${view === item.id ? 'bg-[#0D0D2D] text-white shadow-lg' : 'bg-white/50 text-[#0D0D2D]/60 hover:bg-white'}`}
+              >
+                {view === item.id && <item.icon size={12} />}
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </nav>
 
         <main className="pb-24">
           <AnimatePresence mode="wait">
@@ -990,43 +1041,55 @@ export default function App() {
                     label="Finalized" 
                     value={samples.filter(s => s.status === 'Finalized').length} 
                     icon={CheckCircle2} 
-                    colorClass="text-[#3DC39E]" 
                   />
                   <div className="col-span-2">
-                    {/* Featured Stat like the mockup */}
+                    {/* Refined Health/Met-style card */}
                     <motion.div 
                       whileHover={{ y: -4 }}
-                      className="futuristic-card p-6 overflow-hidden relative group"
+                      className="bg-white p-8 rounded-[48px] shadow-thriva border border-thriva-navy/5 relative overflow-hidden group"
                     >
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#3DC39E]/10 to-transparent rounded-full blur-3xl -mr-10 -mt-10" />
-                      <div className="flex justify-between items-start mb-4 relative z-10">
-                        <span className="text-[10px] uppercase tracking-widest text-[#0A3044]/40 font-bold">Concentrate Purity Index</span>
-                        <span className="px-2 py-0.5 bg-[#3DC39E]/10 text-[#3DC39E] text-[10px] rounded-lg border border-[#3DC39E]/20 font-mono font-bold">XRF-GEN-3</span>
+                      <div className="absolute top-0 right-0 w-48 h-48 bg-thriva-mint/5 rounded-full blur-[80px] -mr-16 -mt-16" />
+                      <div className="flex justify-between items-start mb-6 relative z-10">
+                        <div className="space-y-1">
+                          <span className="text-[9px] uppercase tracking-[0.2em] text-thriva-navy/40 font-bold">Gold Purity Index</span>
+                          <p className="text-xs font-semibold text-thriva-navy/60">Sector Alpha Standard</p>
+                        </div>
+                        <div className="px-3 py-1 bg-thriva-mint/10 text-thriva-mint text-[9px] rounded-full border border-thriva-mint/20 font-bold uppercase tracking-widest">
+                          Live Stream
+                        </div>
                       </div>
-                      <div className="flex items-end gap-2 mb-1 relative z-10">
-                        <span className="text-6xl font-bold text-[#0A3044] leading-none tracking-tighter">99.98</span>
-                        <span className="text-xl font-bold text-[#3DC39E] pb-1 italic">Au</span>
+                      <div className="flex items-end gap-3 mb-8 relative z-10">
+                        <span className="text-7xl font-display font-medium text-thriva-navy leading-none tracking-tight">99.98</span>
+                        <span className="text-2xl font-bold text-thriva-mint pb-2 tracking-tighter">Au</span>
                       </div>
-                      <p className="text-[10px] text-slate-400 font-medium tracking-wide relative z-10">Global Benchmark Standard • Real-time Stream</p>
-                      <div className="mt-8 h-2 w-full bg-slate-50 rounded-full overflow-hidden relative z-10">
-                        <motion.div 
-                          initial={{ width: 0 }}
-                          animate={{ width: '99.98%' }}
-                          transition={{ duration: 1.5, ease: "easeOut" }}
-                          className="h-full bg-gradient-to-r from-[#3DC39E] to-[#3DC39E]/60 mint-glow"
-                        />
+                      <div className="space-y-3 relative z-10">
+                        <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                          <motion.div 
+                            initial={{ width: 0 }}
+                            animate={{ width: '99.98%' }}
+                            transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+                            className="h-full bg-thriva-mint shadow-[0_0_15px_rgba(57,211,192,0.5)]"
+                          />
+                        </div>
+                        <div className="flex justify-between text-[10px] font-bold text-slate-300 uppercase tracking-widest">
+                          <span>Reference 99.90</span>
+                          <span>Clinical Grade Reach</span>
+                        </div>
                       </div>
                     </motion.div>
                   </div>
                 </div>
 
                 {/* List Header & Filters */}
-                <div className="px-6 py-5 bg-slate-950/50 space-y-4">
-                  <div className="flex justify-between items-center">
-                    <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">Recent Samples</h2>
-                    <div className="flex items-center gap-2">
-                       <Filter size={14} className="text-slate-500" />
-                       <span className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">Filters</span>
+                <div className="px-6 py-6 pb-2 space-y-4">
+                  <div className="flex justify-between items-center px-2">
+                    <div className="space-y-1">
+                      <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-thriva-navy/40">Lab Records</h2>
+                      <p className="text-xs font-bold text-thriva-navy">Recent Samples</p>
+                    </div>
+                    <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-thriva-navy/5 rounded-full shadow-sm">
+                       <Filter size={12} className="text-thriva-mint" />
+                       <span className="text-[9px] text-thriva-navy/40 uppercase tracking-widest font-bold">Filters</span>
                     </div>
                   </div>
                   
@@ -1034,7 +1097,7 @@ export default function App() {
                     <select 
                       value={statusFilter} 
                       onChange={(e) => setStatusFilter(e.target.value as any)}
-                      className="bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-[9px] font-bold uppercase text-slate-300 outline-none focus:border-cyan-500/50"
+                      className="bg-white border border-thriva-navy/10 rounded-xl px-2 py-2 text-[9px] font-bold uppercase text-thriva-navy/60 outline-none focus:border-thriva-mint transition-colors shadow-sm"
                     >
                       <option value="All">Status: All</option>
                       <option value="Received">Received</option>
@@ -1047,7 +1110,7 @@ export default function App() {
                     <select 
                       value={priorityFilter} 
                       onChange={(e) => setPriorityFilter(e.target.value as any)}
-                      className="bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-[9px] font-bold uppercase text-slate-300 outline-none focus:border-cyan-500/50"
+                      className="bg-white border border-thriva-navy/10 rounded-xl px-2 py-2 text-[9px] font-bold uppercase text-thriva-navy/60 outline-none focus:border-thriva-mint transition-colors shadow-sm"
                     >
                       <option value="All">Priority: All</option>
                       <option value="Low">Low</option>
@@ -1059,7 +1122,7 @@ export default function App() {
                     <select 
                       value={typeFilter} 
                       onChange={(e) => setTypeFilter(e.target.value as any)}
-                      className="bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-[9px] font-bold uppercase text-slate-300 outline-none focus:border-cyan-500/50"
+                      className="bg-white border border-thriva-navy/10 rounded-xl px-2 py-2 text-[9px] font-bold uppercase text-thriva-navy/60 outline-none focus:border-thriva-mint transition-colors shadow-sm"
                     >
                       <option value="All">Type: All</option>
                       <option value="Ore">Ore</option>
@@ -1076,9 +1139,9 @@ export default function App() {
                 </div>
 
                 {/* Sample List */}
-                <div className="px-6 space-y-3">
+                <div className="px-6 space-y-4 pb-12">
                   {filteredSamples.length === 0 ? (
-                    <div className="p-12 text-center opacity-40 font-mono text-xs uppercase">
+                    <div className="p-16 text-center opacity-40 font-bold text-[10px] uppercase tracking-[0.3em] text-thriva-navy">
                       No matching samples
                     </div>
                   ) : (
@@ -1106,284 +1169,159 @@ export default function App() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className="p-6 space-y-8"
+                className="p-6 space-y-8 pb-32"
               >
                 <button 
                   onClick={() => setView('dashboard')}
-                  className="font-mono text-[10px] uppercase tracking-widest opacity-40 flex items-center gap-1"
+                  className="font-bold text-[9px] uppercase tracking-[0.3em] text-thriva-navy/30 flex items-center gap-2 hover:text-thriva-navy transition-colors mb-4"
                 >
-                  ← Back to Lab Index
+                  <Search size={14} /> Back to Laboratory
                 </button>
 
-                <div className="space-y-4">
-                  <div className="font-mono text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-none">JOB REG: {selectedSample.jobId}</div>
-                  <h2 className="text-4xl font-medium text-white tracking-tight leading-none">{selectedSample.clientName}</h2>
-                  <div className="flex items-center gap-2 pt-1">
-                    <span className="px-2 py-0.5 bg-slate-800 text-slate-300 text-[10px] rounded border border-slate-700 tracking-wider font-bold uppercase">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                     <span className="text-4xl font-display font-medium text-thriva-navy tracking-tight">{selectedSample.sampleId}</span>
+                     <span className={`px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest ${selectedSample.priority === 'Emergency' ? 'bg-thriva-coral text-white shadow-lg shadow-thriva-coral/20' : 'bg-thriva-mint/10 text-thriva-mint'}`}>
+                        {selectedSample.priority}
+                     </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 bg-thriva-navy/5 text-thriva-navy/40 text-[9px] rounded-full font-bold uppercase tracking-widest">
                       {selectedSample.sampleType}
                     </span>
-                    <span className="px-2 py-0.5 bg-cyan-500/10 text-cyan-400 text-[10px] rounded border border-cyan-500/20 font-mono font-bold uppercase">
+                    <span className="px-2 py-0.5 bg-thriva-mint/10 text-thriva-mint text-[9px] rounded-full font-bold uppercase tracking-widest">
                       {selectedSample.status}
                     </span>
                   </div>
                 </div>
 
-                {/* Results Visualization (Simple Recharts) */}
-                <div className="space-y-4 pt-4">
-                  <div className="text-xs font-bold uppercase tracking-widest text-slate-400 border-b border-slate-800 pb-3">
-                    Assay Composition
-                  </div>
+                <div className="bg-white border border-thriva-navy/5 rounded-[40px] p-8 shadow-thriva space-y-8 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-thriva-mint/5 rounded-full blur-[100px] -mr-32 -mt-32" />
                   
-                  {selectedSample.status === 'Finalized' ? (
-                    <div className="h-64 mt-4">
+                  <div className="space-y-1 relative z-10">
+                    <p className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em]">Primary Holder</p>
+                    <h2 className="text-2xl font-display font-medium text-thriva-navy">{selectedSample.clientName}</h2>
+                  </div>
+
+                  <div className="h-64 relative z-10">
+                    <div className="flex justify-between items-center mb-4">
+                      <p className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em]">Assay Composition</p>
+                      <Layers size={14} className="text-thriva-navy/20" />
+                    </div>
+                    
+                    {selectedSample.status === 'Finalized' ? (
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={[
-                          { name: 'Au (g/t)', value: selectedSample.elements?.gold || 0, color: '#eab308' },
-                          { name: 'Ag (g/t)', value: selectedSample.elements?.silver || 0, color: '#94a3b8' },
-                          { name: 'Cu (%)', value: selectedSample.elements?.copper || 0, color: '#ea580c' },
-                          { name: 'Fe (%)', value: selectedSample.elements?.iron || 0, color: '#451a03' },
+                          { name: 'Au', value: selectedSample.elements?.gold || 0, color: '#39D3C0' },
+                          { name: 'Ag', value: selectedSample.elements?.silver || 0, color: '#2F1B4E' },
+                          { name: 'Cu', value: selectedSample.elements?.copper || 0, color: '#F24C6D' },
+                          { name: 'Fe', value: selectedSample.elements?.iron || 0, color: '#0D0D2D' },
                         ]}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#141414" opacity={0.1} />
-                          <XAxis dataKey="name" stroke="#141414" fontSize={10} tick={{ fontFamily: 'monospace' }} />
-                          <YAxis stroke="#141414" fontSize={10} tick={{ fontFamily: 'monospace' }} />
+                          <CartesianGrid strokeDasharray="3 3" stroke="#0D0D2D08" vertical={false} />
+                          <XAxis dataKey="name" stroke="#0D0D2D40" fontSize={9} fontWeight={600} axisLine={false} tickLine={false} />
+                          <YAxis stroke="#0D0D2D40" fontSize={9} fontWeight={600} axisLine={false} tickLine={false} />
                           <Tooltip 
-                            contentStyle={{ backgroundColor: '#141414', color: '#E4E3E0', border: 'none', fontFamily: 'monospace', fontSize: '10px' }}
-                            cursor={{ fill: 'rgba(20, 20, 20, 0.05)' }}
+                            contentStyle={{ backgroundColor: '#0D0D2D', border: 'none', borderRadius: '16px', color: '#fff', fontSize: '10px' }}
+                            itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+                            cursor={{ fill: 'rgba(13, 13, 45, 0.02)' }}
                           />
-                          <Bar dataKey="value" radius={[2, 2, 0, 0]}>
-                            {(entry, index) => <Cell key={`cell-${index}`} fill={['#eab308', '#94a3b8', '#ea580c', '#451a03'][index]} />}
+                          <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                            {(entry, index) => <Cell key={`cell-${index}`} fill={['#39D3C0', '#2F1B4E', '#F24C6D', '#0D0D2D'][index]} />}
                           </Bar>
                         </BarChart>
                       </ResponsiveContainer>
-                    </div>
-                  ) : (
-                    <div className="p-12 border border-dashed border-[#141414] opacity-40 text-center space-y-2">
-                      <Clock className="mx-auto" size={24} />
-                      <div className="font-mono text-xs uppercase tracking-widest">
-                        Analysis in Progress
+                    ) : (
+                      <div className="h-full border border-dashed border-thriva-navy/10 rounded-3xl flex flex-col items-center justify-center space-y-3 bg-[#FCFAF7]/50">
+                        <motion.div animate={{ rotate: 360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }}>
+                          <Clock className="text-thriva-navy/20" size={32} />
+                        </motion.div>
+                        <p className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em]">Analysis in Progress</p>
                       </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Raw Data Table */}
-                <div className="space-y-4 pt-4">
-                  <div className="text-xs font-bold uppercase tracking-widest text-slate-400 border-b border-slate-800 pb-3">
-                    Elemental Analysis [X-Ray Flux]
+                    )}
                   </div>
-                  <div className="grid grid-cols-2 rounded-2xl overflow-hidden border border-slate-800 bg-slate-900/40">
-                    <div className="p-4 text-[10px] font-bold text-slate-500 uppercase border-r border-b border-slate-800">Element</div>
-                    <div className="p-4 text-[10px] font-bold text-slate-500 uppercase border-b border-slate-800 text-right">Concentrate</div>
-                    
-                    <div className="p-4 text-xs font-bold text-white border-r border-b border-slate-800">GOLD (Au)</div>
-                    <div className="p-4 font-mono text-sm text-right border-b border-slate-800 text-yellow-500">
-                      {selectedSample.elements?.gold ?? 'PENDING'} <span className="text-[10px] text-slate-500">g/t</span>
-                    </div>
-                    
-                    <div className="p-4 text-xs font-bold text-white border-r border-b border-slate-800">SILVER (Ag)</div>
-                    <div className="p-4 font-mono text-sm text-right border-b border-slate-800 text-slate-300">
-                      {selectedSample.elements?.silver ?? 'PENDING'} <span className="text-[10px] text-slate-500">g/t</span>
-                    </div>
-                    
-                    <div className="p-4 text-xs font-bold text-white border-r border-slate-800">COPPER (Cu)</div>
-                    <div className="p-4 font-mono text-sm text-right text-orange-400">
-                      {selectedSample.elements?.copper ?? 'PENDING'} <span className="text-[10px] text-slate-500">%</span>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Physical & QA/QC Metadata */}
-                <div className="grid grid-cols-2 gap-4">
-                  {selectedSample.physicalProperties && (
-                    <div className="space-y-3">
-                      <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500 border-b border-slate-800 pb-2">Physical Specs</div>
-                      <div className="space-y-2">
-                        <div className="flex justify-between items-center text-[10px]">
-                          <span className="text-slate-500 uppercase tracking-wider">Form</span>
-                          <span className="font-mono text-white uppercase">{selectedSample.physicalProperties.form}</span>
-                        </div>
-                        <div className="flex justify-between items-center text-[10px]">
-                          <span className="text-slate-500 uppercase tracking-wider">Mass</span>
-                          <span className="font-mono text-white">{selectedSample.physicalProperties.mass ?? '—'} <span className="text-slate-600">g</span></span>
-                        </div>
-                        <div className="flex justify-between items-center text-[10px]">
-                          <span className="text-slate-500 uppercase tracking-wider">Moisture</span>
-                          <span className="font-mono text-white">{selectedSample.physicalProperties.moistureContent ?? '—'} <span className="text-slate-600">%</span></span>
-                        </div>
+                  <div className="space-y-4 relative z-10">
+                    <p className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em]">Core Assay Metrics</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="p-4 bg-[#FCFAF7] border border-thriva-navy/5 rounded-2xl shadow-inner group-hover:bg-white transition-colors">
+                        <p className="text-[8px] font-bold text-thriva-navy/30 uppercase tracking-widest mb-1">Gold (Au)</p>
+                        <p className="text-xl font-display text-thriva-mint font-medium">
+                          {selectedSample.elements?.gold?.toFixed(4) || '---'} <span className="text-[10px] text-thriva-navy/20">g/t</span>
+                        </p>
                       </div>
-                    </div>
-                  )}
-
-                  {selectedSample.qaqc && (
-                    <div className="space-y-3">
-                      <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500 border-b border-slate-800 pb-2">QA/QC Flags</div>
-                      <div className="space-y-2">
-                        <div className="flex justify-between items-center text-[10px]">
-                          <span className="text-slate-500 uppercase tracking-wider">CRM/Std</span>
-                          <span className={`font-bold ${selectedSample.qaqc.isStandard ? 'text-green-500' : 'text-slate-700'}`}>{selectedSample.qaqc.isStandard ? 'YES' : 'NO'}</span>
-                        </div>
-                        <div className="flex justify-between items-center text-[10px]">
-                          <span className="text-slate-500 uppercase tracking-wider">Duplicate</span>
-                          <span className={`font-bold ${selectedSample.qaqc.isDuplicate ? 'text-orange-500' : 'text-slate-700'}`}>{selectedSample.qaqc.isDuplicate ? 'YES' : 'NO'}</span>
-                        </div>
-                        {selectedSample.qaqc.standardReference && (
-                          <div className="flex justify-between items-center text-[10px]">
-                            <span className="text-slate-500 uppercase tracking-wider">Ref ID</span>
-                            <span className="font-mono text-cyan-400">{selectedSample.qaqc.standardReference}</span>
-                          </div>
-                        )}
+                      <div className="p-4 bg-[#FCFAF7] border border-thriva-navy/5 rounded-2xl shadow-inner group-hover:bg-white transition-colors">
+                        <p className="text-[8px] font-bold text-thriva-navy/30 uppercase tracking-widest mb-1">Silver (Ag)</p>
+                        <p className="text-xl font-display text-thriva-navy/80 font-medium">
+                          {selectedSample.elements?.silver?.toFixed(3) || '---'} <span className="text-[10px] text-thriva-navy/20">g/t</span>
+                        </p>
                       </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Expanded Table for Chain of Custody / Workflow */}
-                <div className="space-y-4 pt-4">
-                  <div className="flex justify-between items-center border-b border-slate-800 pb-3">
-                    <div className="text-xs font-bold uppercase tracking-widest text-slate-400">
-                      Chain of Custody [Immutable Log]
-                    </div>
-                    <div className="flex items-center gap-1 text-[9px] text-cyan-400 font-mono">
-                      <ShieldCheck size={12} />
-                      CRYPTOGRAPHICALLY SECURED
                     </div>
                   </div>
 
-                  <div className="space-y-3">
-                    {(selectedSample.history || []).slice().reverse().map((entry, idx) => (
-                      <div key={idx} className="flex gap-4 items-start relative pb-4 last:pb-0">
-                        {idx !== (selectedSample.history?.length || 0) - 1 && (
-                          <div className="absolute left-1.5 top-3 bottom-0 w-px bg-slate-800"></div>
-                        )}
-                        <div className="w-3 h-3 rounded-full bg-cyan-500/40 border border-cyan-400 mt-1 z-10"></div>
-                        <div className="flex-1 space-y-1">
-                          <div className="flex justify-between items-center">
-                            <span className="text-[10px] font-bold text-white uppercase tracking-wider">{entry.action}</span>
-                            <span className="text-[9px] font-mono text-slate-500">{new Date(entry.timestamp).toLocaleString()}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                             <div className="w-4 h-4 rounded-full bg-slate-800 flex items-center justify-center">
-                               <UserIcon size={10} className="text-slate-500" />
-                             </div>
-                             <span className="text-[9px] font-medium text-slate-400">{entry.userName}</span>
-                          </div>
-                          {entry.notes && <p className="text-[10px] text-slate-600 bg-slate-900/50 p-2 rounded-lg italic">"{entry.notes}"</p>}
+                  <div className="pt-4 relative z-10">
+                    {(profile?.role === 'Technician' || profile?.role === 'Admin') && selectedSample.status !== 'Finalized' && (
+                      <button 
+                         onClick={() => setView('processing')}
+                         className="w-full bg-thriva-navy hover:bg-thriva-banner text-white font-bold py-6 rounded-full shadow-2xl shadow-thriva-navy/20 active:scale-[0.98] transition-all flex items-center justify-center gap-3 uppercase text-[11px] tracking-widest"
+                      >
+                         <FlaskConical size={18} /> ENTER LAB BENCH
+                      </button>
+                    )}
+                    {selectedSample.status === 'Finalized' && (
+                      <button 
+                         onClick={() => {
+                           alert(`CERTIFICATE OF ANALYSIS\n--------------------------\nSample: ${selectedSample.sampleId}\nClient: ${selectedSample.clientName}\nAu: ${selectedSample.elements?.gold} g/t\nStatus: AUTHENTICATED\nDigital Sign: ${selectedSample.id.slice(0,8)}`);
+                         }}
+                         className="w-full bg-thriva-mint text-thriva-navy font-bold py-6 rounded-full shadow-xl shadow-thriva-mint/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 uppercase text-[11px] tracking-widest"
+                      >
+                         <ShieldCheck size={18} /> DOWNLOAD COA
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  <div className="flex justify-between items-center px-4">
+                    <h3 className="text-[9px] font-bold uppercase tracking-[0.2em] text-thriva-navy/30">Secure Chain of Custody</h3>
+                    <ShieldCheck size={14} className="text-thriva-mint/40" />
+                  </div>
+                  <div className="space-y-4">
+                    {(selectedSample.history || []).slice().reverse().map((h, i) => (
+                      <div key={i} className="flex gap-4 items-start p-5 bg-white border border-thriva-navy/5 rounded-[24px] shadow-sm transform transition-all hover:scale-[1.01]">
+                        <div className="w-10 h-10 rounded-2xl bg-[#FCFAF7] border border-thriva-navy/5 flex items-center justify-center text-thriva-navy/10 shrink-0 shadow-inner">
+                           <History size={18} />
+                        </div>
+                        <div className="space-y-1">
+                           <p className="text-[11px] font-bold text-thriva-navy tracking-tight">{h.action}</p>
+                           <p className="text-[9px] text-thriva-navy/40 font-bold uppercase tracking-widest">{h.userName} • {new Date(h.timestamp).toLocaleString()}</p>
+                           {h.notes && <p className="text-[10px] text-thriva-navy/50 italic bg-[#FCFAF7] p-3 rounded-xl mt-2 border border-thriva-navy/5">"{h.notes}"</p>}
                         </div>
                       </div>
                     ))}
-                    {!selectedSample.history?.length && <div className="text-center py-4 text-[10px] text-slate-500 font-mono uppercase">Origin Log Initialsed</div>}
                   </div>
                 </div>
-
-                {/* Admin Actions */}
-                {(profile?.role === 'Technician' || profile?.role === 'Admin') && (
-                  <div className="pt-8 space-y-4">
-                    <div className="font-mono text-[10px] uppercase tracking-widest font-bold border-b border-red-900 pb-2 text-red-400 flex items-center gap-2">
-                      <AlertTriangle size={14} />
-                      Operator Override [Custody Update Required]
-                    </div>
-
-                    <div className="flex gap-2">
-                       <button 
-                          onClick={() => setView('bench')}
-                          className="flex-1 flex items-center justify-center gap-2 bg-slate-900/50 hover:bg-slate-800 border border-slate-800 p-4 rounded-2xl text-[10px] font-mono font-bold text-white uppercase tracking-widest transition-all"
-                       >
-                          <FlaskConical size={14} className="text-cyan-400" />
-                          LAB BENCH
-                       </button>
-                       {selectedSample.status === 'Finalized' && (
-                         <button 
-                            onClick={() => {
-                              alert(`CERTIFICATE OF ANALYSIS\n--------------------------\nSample: ${selectedSample.sampleId}\nClient: ${selectedSample.clientName}\nAu: ${selectedSample.elements?.gold} g/t\nStatus: AUTHENTICATED\nDigital Sign: ${selectedSample.id.slice(0,8)}`);
-                            }}
-                            className="flex-1 flex items-center justify-center gap-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 p-4 rounded-2xl text-[10px] font-mono font-bold uppercase tracking-widest transition-all"
-                         >
-                            <ShieldCheck size={14} />
-                            GENERATE COA
-                         </button>
-                       )}
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-2">
-                      <button 
-                        onClick={() => {
-                          const status: SampleStatus = 'Analysis';
-                          const historyEntry = {
-                            timestamp: new Date().toISOString(),
-                            action: 'Initiated Lab Analysis',
-                            userId: user!.uid,
-                            userName: profile!.displayName,
-                            previousStatus: selectedSample.status,
-                            newStatus: status
-                          };
-                          updateDoc(doc(db, 'samples', selectedSample.id), { 
-                            status, 
-                            updatedAt: new Date().toISOString(),
-                            history: [...(selectedSample.history || []), historyEntry]
-                          });
-                          setSelectedSample(prev => prev ? { ...prev, status, history: [...(prev.history || []), historyEntry] } : null);
-                        }}
-                        className="bg-slate-900 border border-slate-800 p-3 font-mono text-[10px] uppercase text-slate-300 hover:border-cyan-500/50 rounded-xl"
-                      >
-                        SET ANALYSIS
-                      </button>
-                      <button 
-                         onClick={() => {
-                          const status: SampleStatus = 'Finalized';
-                          const elements = {
-                            gold: Math.floor(Math.random() * 50),
-                            silver: Math.floor(Math.random() * 200),
-                            copper: Math.floor(Math.random() * 100) / 10,
-                            iron: Math.floor(Math.random() * 80),
-                            cyanideFree: selectedSample.sampleType === 'Cyanidation' ? Math.random() * 10 : undefined,
-                            cyanideTotal: selectedSample.sampleType === 'Cyanidation' ? Math.random() * 20 : undefined
-                          };
-                          const historyEntry = {
-                            timestamp: new Date().toISOString(),
-                            action: 'Finalized Results & Released',
-                            userId: user!.uid,
-                            userName: profile!.displayName,
-                            previousStatus: selectedSample.status,
-                            newStatus: status,
-                            notes: `Auto-recorded from XRF Stream: Au ${elements.gold} g/t`
-                          };
-                          updateDoc(doc(db, 'samples', selectedSample.id), { 
-                            status, 
-                            elements,
-                            updatedAt: new Date().toISOString(),
-                            history: [...(selectedSample.history || []), historyEntry]
-                          });
-                          setView('dashboard');
-                        }}
-                        className="bg-cyan-500 text-slate-950 p-3 font-mono text-[10px] uppercase font-bold rounded-xl shadow-[0_0_15px_rgba(6,182,212,0.3)]"
-                      >
-                        RELEASE RESULTS
-                      </button>
-                    </div>
-                  </div>
-                )}
               </motion.div>
             )}
 
             {view === 'create' && (
               <motion.div 
                 key="create"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 className="p-6 space-y-8"
               >
                 <div className="space-y-2">
-                  <h2 className="text-3xl font-medium text-white tracking-tight">Registration</h2>
-                  <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Laboratory Reception & Logging</p>
+                  <h2 className="text-3xl font-display font-medium text-thriva-navy tracking-tight">Registration</h2>
+                  <p className="text-[10px] text-thriva-navy/40 uppercase tracking-widest font-bold">Laboratory Reception & Logging</p>
                 </div>
 
-                <div className="flex p-1 bg-slate-900 border border-slate-800 rounded-2xl">
+                <div className="flex p-1 bg-white border border-thriva-navy/5 shadow-sm rounded-2xl">
                   {['Sample', 'Job'].map(t => (
                     <button 
                       key={t}
                       onClick={() => setEntryType(t.toLowerCase() as 'sample' | 'job')}
-                      className={`flex-1 py-3 rounded-xl text-[10px] font-bold tracking-widest uppercase transition-all ${entryType === t.toLowerCase() ? 'bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/20' : 'text-slate-500 hover:text-white'}`}
+                      className={`flex-1 py-3 rounded-xl text-[10px] font-bold tracking-widest uppercase transition-all ${entryType === t.toLowerCase() ? 'bg-thriva-navy text-white shadow-lg shadow-thriva-navy/10' : 'text-thriva-navy/40 hover:text-thriva-navy'}`}
                     >
                       {t}
                     </button>
@@ -1427,7 +1365,7 @@ export default function App() {
                       notes: 'Sample registered at facility entrance.'
                     };
                     const newSample = {
-                      jobId: formData.get('jobId') || 'ELM-UNASSIGNED',
+                      jobId: formData.get('jobId') || 'PENDING',
                       sampleId: sampleId,
                       clientName: clientName,
                       source: formData.get('source') || 'Mining',
@@ -1462,10 +1400,10 @@ export default function App() {
                   }}>
                             {/* Source Categorization */}
                             <div className="space-y-2">
-                              <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Source Point</label>
+                              <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Source Point</label>
                               <select 
                                 name="source"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 outline-none focus:border-cyan-500/50 transition-colors"
+                                className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-colors shadow-thriva"
                               >
                                 <option value="Mining">Mining (Face/Grab)</option>
                                 <option value="BallMill">Ball Mill (Discharge)</option>
@@ -1478,57 +1416,57 @@ export default function App() {
 
                             <div className="grid grid-cols-2 gap-4">
                               <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Job Reference</label>
+                                <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Job Reference</label>
                                 <select 
                                   name="jobId"
-                                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 outline-none focus:border-cyan-500/50 transition-colors"
+                                  className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-colors shadow-thriva font-bold text-sm"
                                 >
+                                  <option value="PENDING">PENDING BATCH</option>
                                   {jobs.map(j => (
                                     <option key={j.id} value={j.jobId}>{j.name} [{j.jobId}]</option>
                                   ))}
-                                  {jobs.length === 0 && <option value="PENDING">PENDING BATCH</option>}
                                 </select>
                               </div>
 
                               <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Internal Code (QR)</label>
+                                <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Internal Code (QR)</label>
                                 <input 
                                   name="sampleId"
                                   defaultValue={`S-${Math.floor(10000 + Math.random() * 90000)}`}
-                                  className={`w-full bg-slate-900 border ${formErrors.sampleId ? 'border-red-500' : 'border-slate-800'} rounded-xl px-4 py-3 text-cyan-400 font-mono text-sm outline-none focus:border-cyan-500/50`}
+                                  className={`w-full bg-white border ${formErrors.sampleId ? 'border-red-500' : 'border-thriva-navy/10'} rounded-xl px-4 py-4 text-thriva-mint font-mono text-sm outline-none focus:border-thriva-mint shadow-thriva`}
                                 />
-                                {formErrors.sampleId && <p className="text-[10px] text-red-500 font-medium">{formErrors.sampleId}</p>}
+                                {formErrors.sampleId && <p className="text-[9px] text-red-500 font-bold mt-1 ml-2 uppercase">{formErrors.sampleId}</p>}
                               </div>
                             </div>
 
                             <div className="space-y-2">
-                              <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Client / Department</label>
+                              <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Client / Department</label>
                               <input 
                                 name="clientName"
                                 placeholder="Client name or internal dept..."
-                                className={`w-full bg-slate-900 border ${formErrors.clientName ? 'border-red-500' : 'border-slate-800'} rounded-xl px-4 py-3 text-slate-100 outline-none focus:border-cyan-500/50 transition-colors`}
+                                className={`w-full bg-white border ${formErrors.clientName ? 'border-red-500' : 'border-thriva-navy/10'} rounded-xl px-4 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-colors shadow-thriva font-bold text-sm`}
                               />
-                              {formErrors.clientName && <p className="text-[10px] text-red-500 font-medium">{formErrors.clientName}</p>}
+                              {formErrors.clientName && <p className="text-[9px] text-red-500 font-bold mt-1 ml-2 uppercase">{formErrors.clientName}</p>}
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
                               <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Sample Mass (g)</label>
+                                <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Sample Mass (g)</label>
                                 <input 
                                   name="mass"
                                   type="number"
                                   placeholder="Initial weight"
-                                  className={`w-full bg-white border ${formErrors.mass ? 'border-red-500' : 'border-[#0A3044]/10'} rounded-2xl px-4 py-3 text-[#0A3044] outline-none focus:border-[#3DC39E]/50 font-bold`}
+                                  className={`w-full bg-white border ${formErrors.mass ? 'border-red-500' : 'border-thriva-navy/10'} rounded-xl px-4 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-colors shadow-thriva font-bold text-sm`}
                                 />
-                                {formErrors.mass && <p className="text-[10px] text-red-500 font-medium">{formErrors.mass}</p>}
+                                {formErrors.mass && <p className="text-[9px] text-red-500 font-bold mt-1 ml-2 uppercase">{formErrors.mass}</p>}
                               </div>
 
                               <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Processing Priority</label>
+                                <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Processing Priority</label>
                                 <select 
                                   name="priority"
                                   defaultValue="Standard"
-                                  className="w-full bg-white border border-[#0A3044]/10 rounded-2xl px-4 py-3 text-[#0A3044] outline-none focus:border-[#3DC39E]/50 transition-colors font-bold"
+                                  className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-colors shadow-thriva font-bold text-sm"
                                 >
                                   <option value="Low">Low</option>
                                   <option value="Standard">Standard</option>
@@ -1540,10 +1478,10 @@ export default function App() {
 
                             <div className="grid grid-cols-2 gap-4">
                               <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">QA/QC Type</label>
+                                <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">QA/QC Type</label>
                                 <select 
                                   name="qaqcType"
-                                  className="w-full bg-white border border-[#0A3044]/10 rounded-2xl px-4 py-3 text-[#0A3044] outline-none focus:border-[#3DC39E]/50 font-bold"
+                                  className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-colors shadow-thriva font-bold text-sm"
                                 >
                                   <option value="none">Standard Sample</option>
                                   <option value="crm">Certified Reference (CRM)</option>
@@ -1553,71 +1491,81 @@ export default function App() {
                               </div>
 
                               <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Field Notes</label>
+                                <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Field Notes</label>
                                 <input 
                                   name="notes"
                                   placeholder="Physical obs..."
-                                  className="w-full bg-white border border-[#0A3044]/10 rounded-2xl px-4 py-3 text-[#0A3044] outline-none focus:border-[#3DC39E]/50 placeholder:text-slate-300 font-bold"
+                                  className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-4 text-thriva-navy outline-none focus:border-thriva-mint placeholder:text-slate-300 shadow-thriva font-bold text-sm"
                                 />
                               </div>
                             </div>
 
                   <button 
                     type="submit"
-                    className="w-full bg-[#3DC39E] hover:bg-[#32A888] text-[#0A3044] font-bold text-sm py-5 rounded-full active:scale-95 transition-all shadow-xl shadow-[#3DC39E]/20"
+                    className="w-full bg-thriva-mint hover:scale-[1.02] text-thriva-navy font-bold text-sm py-6 rounded-full active:scale-[0.98] transition-all shadow-xl shadow-thriva-mint/20"
                   >
                     REGISTER TO SYSTEM
                   </button>
                 </form>
-                ) : (
-                  <form className="space-y-8" onSubmit={async (e) => {
-                    e.preventDefault();
-                    const formData = new FormData(e.currentTarget);
-                    const newJob = {
-                      jobId: `JOB-${Math.floor(100+Math.random()*900)}`,
-                      name: formData.get('name') || 'Unnamed Batch',
-                      site: formData.get('site') || 'Western Sector',
-                      shift: formData.get('shift') || 'Morning',
-                      status: 'Open',
-                      createdAt: new Date().toISOString(),
-                      updatedAt: new Date().toISOString(),
-                      createdBy: user!.uid
-                    };
-                    
-                    if (navigator.onLine) {
-                      await addDoc(collection(db, 'jobs'), newJob);
-                    } else {
-                      addToSyncQueue('job', newJob);
-                      setPendingSyncCount(getSyncQueue().length);
-                    }
-                    
-                    setEntryType('sample');
-                  }}>
+              ) : (
+                <form className="space-y-8" onSubmit={async (e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  const newJob = {
+                    jobId: `JOB-${Math.floor(100+Math.random()*900)}`,
+                    name: formData.get('name') || 'Unnamed Batch',
+                    site: formData.get('site') || 'Western Sector',
+                    shift: formData.get('shift') || 'Morning',
+                    status: 'Open',
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    createdBy: user!.uid
+                  };
+                  
+                  if (navigator.onLine) {
+                    await addDoc(collection(db, 'jobs'), newJob);
+                  } else {
+                    addToSyncQueue('job', newJob);
+                    setPendingSyncCount(getSyncQueue().length);
+                  }
+                  
+                  setEntryType('sample');
+                }}>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Batch Name / Reference</label>
+                    <input 
+                      name="name" 
+                      required 
+                      placeholder="e.g. Shift B - Ore Feed" 
+                      className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-4 text-thriva-navy outline-none focus:border-thriva-mint shadow-thriva font-bold text-sm" 
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                       <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Batch Name / Reference</label>
-                       <input name="name" required placeholder="e.g. Shift B - Ore Feed" className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan-500/50" />
+                       <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Production Site</label>
+                       <select name="site" className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-4 text-thriva-navy outline-none shadow-thriva font-bold text-sm">
+                          <option value="Western Sector">Western Sector</option>
+                          <option value="Pit Alpha">Pit Alpha</option>
+                          <option value="Level 400">Level 400</option>
+                       </select>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
-                       <div className="space-y-2">
-                          <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Production Site</label>
-                          <select name="site" className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none">
-                             <option value="Western Sector">Western Sector</option>
-                             <option value="Pit Alpha">Pit Alpha</option>
-                             <option value="Level 400">Level 400</option>
-                          </select>
-                       </div>
-                       <div className="space-y-2">
-                          <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Active Shift</label>
-                          <select name="shift" className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none">
-                             <option value="Morning">Morning</option>
-                             <option value="Afternoon">Afternoon</option>
-                             <option value="Night">Night</option>
-                          </select>
-                       </div>
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Active Shift</label>
+                       <select name="shift" className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-4 text-thriva-navy outline-none shadow-thriva font-bold text-sm">
+                          <option value="Morning">Morning</option>
+                          <option value="Afternoon">Afternoon</option>
+                          <option value="Night">Night</option>
+                       </select>
                     </div>
-                    <button type="submit" className="w-full bg-cyan-500 text-slate-950 font-bold py-4 rounded-xl">INITIATE BATCH</button>
-                  </form>
-                )}
+                  </div>
+                  <button 
+                    type="submit"
+                    className="w-full bg-thriva-navy text-white font-bold text-sm py-6 rounded-full hover:bg-thriva-banner transition-all shadow-xl shadow-thriva-navy/20"
+                  >
+                    OPEN NEW BATCH
+                  </button>
+                </form>
+              )}
               </motion.div>
             )}
 
@@ -1706,53 +1654,7 @@ export default function App() {
           </AnimatePresence>
         </main>
 
-      {/* Global Nav */}
-        <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white/40 backdrop-blur-3xl border border-white/40 flex items-center justify-around p-3 z-30 w-[95%] max-w-lg rounded-[40px] shadow-[0_20px_50px_rgba(10,48,68,0.1)] transition-all">
-          <button 
-            onClick={() => setView('dashboard')}
-            className={`flex flex-col items-center gap-1 transition-all flex-1 ${view === 'dashboard' ? 'scale-110' : 'opacity-30 hover:opacity-100'}`}
-          >
-            <div className={`p-2.5 rounded-2xl ${view === 'dashboard' ? 'bg-[#3DC39E]/10 text-[#3DC39E] mint-glow' : 'text-slate-400'}`}>
-              <ClipboardList size={20} strokeWidth={view === 'dashboard' ? 2.5 : 2} />
-            </div>
-          </button>
-
-          <button 
-            onClick={() => setView('control')}
-            className={`flex flex-col items-center gap-1 transition-all flex-1 ${view === 'control' ? 'scale-110' : 'opacity-30 hover:opacity-100'}`}
-          >
-            <div className={`p-2.5 rounded-2xl ${view === 'control' ? 'bg-[#FF9F9F]/10 text-[#FF9F9F]' : 'text-slate-400'}`}>
-              <Zap size={20} strokeWidth={view === 'control' ? 2.5 : 2} />
-            </div>
-          </button>
-          
-          <motion.button 
-            whileHover={{ scale: 1.1, rotate: 90 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setView('create')}
-            className={`flex items-center justify-center bg-gradient-to-br from-[#3DC39E] to-[#2DA886] text-white w-14 h-14 rounded-2xl shadow-xl shadow-[#3DC39E]/30 relative z-40 transition-all ${view === 'create' ? 'rotate-45' : ''}`}
-          >
-            <Plus size={28} strokeWidth={3} />
-          </motion.button>
-
-          <button 
-            onClick={() => setView('plant')}
-            className={`flex flex-col items-center gap-1 transition-all flex-1 ${view === 'plant' ? 'scale-110' : 'opacity-30 hover:opacity-100'}`}
-          >
-            <div className={`p-2.5 rounded-2xl ${view === 'plant' ? 'bg-yellow-500/10 text-yellow-500' : 'text-slate-400'}`}>
-              <Monitor size={20} strokeWidth={view === 'plant' ? 2.5 : 2} />
-            </div>
-          </button>
-
-          <button 
-            onClick={() => setView('analytics')}
-            className={`flex flex-col items-center gap-1 transition-all flex-1 ${view === 'analytics' ? 'scale-110' : 'opacity-30 hover:opacity-100'}`}
-          >
-            <div className={`p-2.5 rounded-2xl ${view === 'analytics' ? 'bg-[#3DC39E]/10 text-[#3DC39E] mint-glow' : 'text-slate-400'}`}>
-              <BarChart3 size={20} strokeWidth={view === 'analytics' ? 2.5 : 2} />
-            </div>
-          </button>
-        </nav>
+      {/* No bottom nav as per top menu request */}
       </div>
     </AuthContext.Provider>
   );

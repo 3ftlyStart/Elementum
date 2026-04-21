@@ -144,66 +144,69 @@ export const InventoryManager = () => {
     <div className="p-6 space-y-8 pb-32">
       <div className="flex justify-between items-start">
         <div className="space-y-2">
-          <h2 className="text-3xl font-medium text-white tracking-tight">Inventory Control</h2>
-          <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Consumables & Reagent Lifecycle</p>
+          <h2 className="text-3xl font-display font-medium text-thriva-navy tracking-tight">Inventory Control</h2>
+          <p className="text-[10px] text-thriva-navy/40 uppercase tracking-widest font-bold">Consumables & Reagent Lifecycle</p>
         </div>
         <button 
           onClick={() => setShowAddModal(true)}
-          className="bg-cyan-500 text-slate-950 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-cyan-500/20"
+          className="bg-thriva-mint text-thriva-navy px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all shadow-xl shadow-thriva-mint/20"
         >
-          <PlusCircle size={14} /> Add SKU
+          <PlusCircle size={16} /> Add SKU
         </button>
       </div>
 
       {/* Quick Alerts */}
       {lowStockItems.length > 0 && (
-        <div className="bg-red-500/10 border border-red-500/30 p-4 rounded-2xl flex items-center justify-between">
-          <div className="flex items-center gap-3">
-             <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center text-red-500">
-               <TrendingDown size={20} />
+        <div className="bg-thriva-coral/5 border border-thriva-coral/20 p-6 rounded-[32px] flex items-center justify-between shadow-sm relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-24 h-full bg-thriva-coral/5 -mr-12 skew-x-12 group-hover:bg-thriva-coral/10 transition-colors" />
+          <div className="flex items-center gap-4 relative z-10">
+             <div className="w-12 h-12 rounded-2xl bg-thriva-coral text-white flex items-center justify-center shadow-lg shadow-thriva-coral/20">
+               <TrendingDown size={24} />
              </div>
              <div>
-                <p className="text-xs font-bold text-red-500 uppercase tracking-widest">Low Stock Detected</p>
-                <p className="text-[9px] text-slate-500">{lowStockItems.length} items require immediate requisition</p>
+                <p className="text-[11px] font-bold text-thriva-coral uppercase tracking-widest">Low Stock Detected</p>
+                <p className="text-[10px] text-thriva-navy/40 font-bold uppercase tracking-widest mt-1">{lowStockItems.length} SKUs require immediate action</p>
              </div>
           </div>
-          <AlertTriangle className="text-red-500 animate-pulse" size={16} />
+          <AlertTriangle className="text-thriva-coral animate-pulse relative z-10" size={20} />
         </div>
       )}
 
       {/* Summary Chips */}
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-1">
-          <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Total SKU Count</p>
-          <div className="text-2xl font-mono font-bold text-white tracking-tighter">{items.length}</div>
+        <div className="bg-white border border-thriva-navy/5 p-6 rounded-[32px] space-y-2 shadow-thriva relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-thriva-navy/5 rounded-full blur-3xl -mr-12 -mt-12 transition-colors group-hover:bg-thriva-mint/5" />
+          <p className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em] relative z-10">Total SKU Inventory</p>
+          <div className="text-3xl font-display font-medium text-thriva-navy tracking-tight relative z-10">{items.length.toString().padStart(2, '0')}</div>
         </div>
-        <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-1">
-          <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Low Stock SKUs</p>
-          <div className="text-2xl font-mono font-bold text-red-400 tracking-tighter">
+        <div className="bg-white border border-thriva-navy/5 p-6 rounded-[32px] space-y-2 shadow-thriva relative overflow-hidden group">
+           <div className="absolute top-0 right-0 w-24 h-24 bg-thriva-coral/5 rounded-full blur-3xl -mr-12 -mt-12 transition-colors group-hover:bg-thriva-coral/10" />
+          <p className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em] relative z-10">Depleted Lines</p>
+          <div className="text-3xl font-display font-medium text-thriva-coral tracking-tight relative z-10">
             {activeRequestCount.toString().padStart(2, '0')}
           </div>
         </div>
       </div>
 
       {/* Search & Filter */}
-      <div className="space-y-4">
+      <div className="space-y-6">
         <div className="relative group">
-          <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-cyan-400" />
+          <Search size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-thriva-navy/20 group-focus-within:text-thriva-mint transition-colors" />
           <input 
             type="text" 
-            placeholder="Search stock..." 
+            placeholder="Search stock repository..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs text-white outline-none focus:border-cyan-500/50 transition-all font-mono"
+            className="w-full bg-white border border-thriva-navy/10 rounded-[20px] py-4 pl-12 pr-6 text-xs text-thriva-navy outline-none focus:border-thriva-mint transition-all shadow-thriva font-medium"
           />
         </div>
 
-        <div className="flex gap-2 overflow-x-auto pb-2 noscroll">
+        <div className="flex gap-2 overflow-x-auto pb-4 noscroll px-2">
           {(['All', 'Reagent', 'Consumable', 'Standard', 'Safety'] as const).map(cat => (
             <button 
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-lg text-[9px] font-bold uppercase tracking-widest border transition-all whitespace-nowrap ${activeCategory === cat ? 'bg-cyan-500 border-cyan-500 text-slate-950' : 'bg-slate-950 border-slate-800 text-slate-500'}`}
+              className={`px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest border transition-all whitespace-nowrap shadow-sm ${activeCategory === cat ? 'bg-thriva-navy text-white border-thriva-navy shadow-lg' : 'bg-white border-thriva-navy/5 text-thriva-navy/40 hover:text-thriva-navy'}`}
             >
               {cat}
             </button>
@@ -213,50 +216,53 @@ export const InventoryManager = () => {
 
       {/* Loading State */}
       {loading && (
-        <div className="flex justify-center py-12">
-          <Loader2 size={32} className="text-slate-700 animate-spin" />
+        <div className="flex flex-col items-center justify-center py-20 gap-4">
+          <Loader2 size={40} className="text-thriva-mint animate-spin" />
+          <p className="text-[10px] text-thriva-navy/20 font-bold uppercase tracking-widest">Synchronizing Ledger...</p>
         </div>
       )}
 
       {/* Item List */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         {filteredItems.map(item => {
           const isLow = item.currentStock < item.minStockLevel;
           const progress = Math.min(100, (item.currentStock / (item.minStockLevel * 2)) * 100);
 
           return (
-            <div key={item.id} className="bg-slate-900/40 border border-slate-800 rounded-[24px] p-5 space-y-4 hover:border-slate-700 transition-all">
-              <div className="flex justify-between items-start">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-sm font-bold text-white">{item.name}</h3>
-                    <span className="text-[8px] font-mono bg-slate-800 px-1.5 py-0.5 rounded text-slate-500">{item.id.slice(0, 8)}</span>
+            <div key={item.id} className="bg-white border border-thriva-navy/5 rounded-[40px] p-8 space-y-6 hover:shadow-thriva hover:shadow-thriva-hover transition-all duration-500 overflow-hidden relative shadow-sm">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#FCFAF7]/50 rounded-full blur-[60px] -mr-16 -mt-16 pointer-events-none" />
+              
+              <div className="flex justify-between items-start relative z-10">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3">
+                    <h3 className="text-lg font-bold text-thriva-navy tracking-tight">{item.name}</h3>
+                    <span className="text-[9px] font-bold bg-thriva-navy/5 px-2.5 py-1 rounded-full text-thriva-navy/30 uppercase tracking-widest">{item.id.slice(0, 8)}</span>
                   </div>
-                  <p className="text-[9px] text-slate-500 uppercase tracking-widest font-medium">LOC: {item.location}</p>
+                  <p className="text-[10px] text-thriva-navy/30 uppercase tracking-[0.2em] font-bold font-display">Storage Loc: <span className="text-thriva-navy/50">{item.location}</span></p>
                 </div>
-                <div className="flex flex-col items-end gap-1">
+                <div className="flex flex-col items-end gap-2">
                    <button 
                      onClick={() => handleDelete(item.id)}
-                     className="text-slate-700 hover:text-red-500 p-1"
+                     className="text-thriva-navy/10 hover:text-thriva-coral p-2 bg-[#FCFAF7] rounded-xl hover:bg-thriva-coral/5 transition-all"
                    >
-                     <Trash2 size={12} />
+                     <Trash2 size={14} />
                    </button>
                   <div className="text-right">
-                    <div className={`text-sm font-mono font-bold ${isLow ? 'text-red-500' : 'text-cyan-400'}`}>
+                    <div className={`text-2xl font-display font-medium leading-none ${isLow ? 'text-thriva-coral' : 'text-thriva-mint'}`}>
                       {item.currentStock} 
-                      <span className="text-[10px] text-slate-600 ml-1 uppercase">{item.unit}</span>
+                      <span className="text-[10px] text-thriva-navy/20 ml-2 font-bold uppercase tracking-widest">{item.unit}</span>
                     </div>
-                    <p className="text-[8px] text-slate-600 uppercase font-bold tracking-tighter">Min Level: {item.minStockLevel}</p>
+                    <p className="text-[9px] text-thriva-navy/20 uppercase font-bold tracking-widest mt-1">Operational Min: {item.minStockLevel}</p>
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <div className="h-1 bg-slate-950 rounded-full overflow-hidden">
+              <div className="space-y-3 relative z-10">
+                <div className="h-2 bg-[#FCFAF7] rounded-full overflow-hidden shadow-inner">
                   <motion.div 
                     initial={{ width: 0 }}
                     animate={{ width: `${progress}%` }}
-                    className={`h-full rounded-full ${isLow ? 'bg-red-500' : 'bg-cyan-500/50 shadow-[0_0_8px_rgba(6,182,212,0.3)]'}`}
+                    className={`h-full rounded-full transition-all duration-1000 ${isLow ? 'bg-thriva-coral shadow-[0_0_10px_#EB7460]' : 'bg-thriva-mint shadow-[0_0_10px_#39D3C0]'}`}
                   ></motion.div>
                 </div>
                 <div className="flex justify-between items-center px-1">
@@ -264,47 +270,47 @@ export const InventoryManager = () => {
                       <button 
                         onClick={() => handleReorder(item)}
                         disabled={!!orderLoading}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all ${
+                        className={`flex items-center gap-3 px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] transition-all shadow-sm ${
                           orderSuccess === item.id 
-                            ? 'bg-green-500 text-slate-950' 
-                            : 'bg-red-500/20 text-red-500 border border-red-500/30 hover:bg-red-500 hover:text-slate-950'
+                            ? 'bg-thriva-mint text-white' 
+                            : 'bg-thriva-coral/10 text-thriva-coral border border-thriva-coral/20 hover:bg-thriva-coral hover:text-white'
                         }`}
                       >
                         {orderLoading === item.id ? (
-                          <Loader2 size={12} className="animate-spin" />
+                          <Loader2 size={14} className="animate-spin" />
                         ) : orderSuccess === item.id ? (
-                          <CheckCircle2 size={12} />
+                          <CheckCircle2 size={14} />
                         ) : (
-                          <ShoppingCart size={12} />
+                          <ShoppingCart size={14} />
                         )}
-                        {orderSuccess === item.id ? 'Requisitioned' : 'Reorder Now'}
+                        {orderSuccess === item.id ? 'Requisitioned' : 'Atomic Reorder'}
                       </button>
                    ) : (
-                     <div className="flex items-center gap-1 opacity-40">
-                       <History size={10} className="text-slate-500" />
-                       <span className="text-[8px] font-mono text-slate-500 uppercase tracking-tighter">
-                         Restocked: {item.lastRestocked ? new Date(item.lastRestocked).toLocaleDateString() : 'N/A'}
+                     <div className="flex items-center gap-2 px-3 py-1 bg-[#FCFAF7] rounded-full border border-thriva-navy/5">
+                       <History size={12} className="text-thriva-navy/20" />
+                       <span className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-widest">
+                         Cyclic Restock: {item.lastRestocked ? new Date(item.lastRestocked).toLocaleDateString('en-GB') : 'N/A'}
                        </span>
                      </div>
                    )}
-                   <div className="flex items-center gap-2">
+                   <div className="flex items-center gap-3">
                       <button 
                         onClick={() => setExpandedItemId(expandedItemId === item.id ? null : item.id)}
-                        className={`w-6 h-6 rounded-md border flex items-center justify-center transition-all ${expandedItemId === item.id ? 'bg-white border-white text-slate-950' : 'bg-slate-800 border-slate-700 text-slate-400'}`}
+                        className={`w-10 h-10 rounded-2xl border flex items-center justify-center transition-all duration-300 shadow-sm ${expandedItemId === item.id ? 'bg-thriva-navy border-thriva-navy text-white shadow-xl rotate-180' : 'bg-white border-thriva-navy/5 text-thriva-navy/20 hover:text-thriva-navy'}`}
                       >
-                        {expandedItemId === item.id ? <ChevronUp size={10} /> : <ChevronDown size={10} />}
+                         <ChevronDown size={18} />
                       </button>
                       <button 
                         onClick={() => handleAdjustStock(item, -1, 'Manual adjustment (Decrease)')}
-                        className="w-6 h-6 rounded-md bg-slate-800 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-slate-700 transition-all"
+                        className="w-10 h-10 rounded-2xl bg-[#FCFAF7] border border-thriva-navy/5 flex items-center justify-center text-thriva-navy/20 hover:text-thriva-coral hover:bg-thriva-coral/5 transition-all duration-300 shadow-sm"
                       >
-                        <Minus size={10} />
+                        <Minus size={18} />
                       </button>
                       <button 
                         onClick={() => handleAdjustStock(item, 1, 'Manual adjustment (Increase)')}
-                        className="w-6 h-6 rounded-md bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 hover:bg-cyan-500 hover:text-slate-950 transition-all"
+                        className="w-10 h-10 rounded-2xl bg-thriva-mint/5 border border-thriva-mint/20 flex items-center justify-center text-thriva-mint hover:bg-thriva-mint hover:text-white transition-all duration-300 shadow-sm"
                       >
-                        <Plus size={10} />
+                        <Plus size={18} />
                       </button>
                    </div>
                 </div>
@@ -317,33 +323,36 @@ export const InventoryManager = () => {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    className="overflow-hidden border-t border-slate-800 pt-4 mt-4 space-y-3"
+                    className="overflow-hidden border-t border-thriva-navy/5 pt-6 mt-6 space-y-4 relative z-10"
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Transaction Audit (Last 10)</span>
+                    <div className="flex items-center justify-between px-2">
+                      <span className="text-[10px] font-bold text-thriva-navy/20 uppercase tracking-[0.2em]">Inventory Audit Trail</span>
+                      <span className="text-[9px] font-bold text-thriva-navy/10 uppercase italic">Last 10 Events</span>
                     </div>
                     
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       {!transactions[item.id] || transactions[item.id].length === 0 ? (
-                        <div className="py-4 text-center text-[9px] text-slate-600 uppercase font-mono italic">No recent activity logged</div>
+                        <div className="py-8 text-center text-[10px] text-thriva-navy/20 uppercase font-bold tracking-[0.2em] bg-[#FCFAF7] rounded-[32px] border border-dashed border-thriva-navy/10">No recent mutations logged</div>
                       ) : (
                         transactions[item.id].map(tx => (
-                          <div key={tx.id} className="bg-slate-950/50 rounded-xl p-3 flex justify-between items-center border border-slate-800/50">
-                            <div className="flex items-center gap-3">
-                              <div className={`w-1.5 h-1.5 rounded-full ${tx.type === 'In' ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                          <div key={tx.id} className="bg-[#FCFAF7] rounded-[24px] p-5 flex justify-between items-center border border-thriva-navy/5 group/tx hover:bg-white hover:shadow-thriva transition-all duration-300">
+                            <div className="flex items-center gap-4">
+                              <div className={`w-2.5 h-2.5 rounded-full shadow-sm ${tx.type === 'In' ? 'bg-thriva-mint' : 'bg-thriva-coral'}`}></div>
                               <div>
-                                <p className="text-[10px] font-bold text-white leading-none mb-1">{tx.reason || 'General adjustment'}</p>
-                                <div className="flex items-center gap-2 opacity-50">
-                                  <UserIcon size={8} className="text-slate-500" />
-                                  <span className="text-[8px] font-mono text-slate-500 uppercase">{tx.userName}</span>
+                                <p className="text-[11px] font-bold text-thriva-navy leading-none mb-2 capitalize">{tx.reason || 'General maintenance'}</p>
+                                <div className="flex items-center gap-3">
+                                  <div className="flex items-center gap-1.5 px-2 py-0.5 bg-white rounded-full border border-thriva-navy/5">
+                                    <UserIcon size={10} className="text-thriva-navy/20" />
+                                    <span className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-widest">{tx.userName}</span>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                             <div className="text-right">
-                              <p className={`text-[10px] font-mono font-bold ${tx.type === 'In' ? 'text-green-500' : 'text-red-400'}`}>
+                              <p className={`text-base font-display font-medium ${tx.type === 'In' ? 'text-thriva-mint' : 'text-thriva-coral'}`}>
                                 {tx.type === 'In' ? '+' : '-'}{tx.quantity}
                               </p>
-                              <p className="text-[7px] text-slate-600 font-mono">{new Date(tx.timestamp).toLocaleDateString()}</p>
+                              <p className="text-[10px] text-thriva-navy/20 font-bold uppercase tracking-widest mt-1">{new Date(tx.timestamp).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</p>
                             </div>
                           </div>
                         ))

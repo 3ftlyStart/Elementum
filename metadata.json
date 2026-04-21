@@ -1,6 +1,6 @@
 {
-  "name": "Elementum Assay Lab",
-  "description": "A metallurgical assay lab companion for mobile devices, featuring real-time sample tracking and secure cloud results.",
+  "name": "MetLeo",
+  "description": "A reimagined metallurgical assay lab companion, providing professional-grade tracking and analysis with a modern wellness-inspired interface.",
   "requestFramePermissions": [],
   "majorCapabilities": []
 }

@@ -38,14 +38,14 @@ export const Onboarding = ({ user, onComplete }: OnboardingProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F9F7F5] flex flex-col items-center justify-center p-6 text-[#0A3044]">
+    <div className="min-h-screen bg-thriva-bg flex flex-col items-center justify-center p-6 text-thriva-navy">
       <div className="max-w-md w-full space-y-12">
         {/* Progress Bar */}
         <div className="flex gap-2 justify-center">
           {[1, 2, 3].map((s) => (
             <div 
               key={s} 
-              className={`h-1.5 rounded-full transition-all duration-500 ${step >= s ? 'w-10 bg-[#3DC39E]' : 'w-4 bg-[#0A3044]/10'}`} 
+              className={`h-1.5 rounded-full transition-all duration-500 ${step >= s ? 'w-10 bg-thriva-mint' : 'w-4 bg-thriva-navy/10'}`} 
             />
           ))}
         </div>
@@ -59,42 +59,42 @@ export const Onboarding = ({ user, onComplete }: OnboardingProps) => {
               exit={{ opacity: 0, x: -20 }}
               className="space-y-8"
             >
-              <div className="text-center space-y-3">
-                <div className="w-16 h-16 bg-[#3DC39E]/10 rounded-[28px] mx-auto flex items-center justify-center text-[#3DC39E]">
+              <div className="text-center space-y-4">
+                <div className="w-16 h-16 bg-thriva-mint/10 rounded-[28px] mx-auto flex items-center justify-center text-thriva-mint">
                    <FlaskConical size={32} />
                 </div>
-                <h2 className="font-serif text-3xl font-bold tracking-tight">Welcome to Elementum</h2>
-                <p className="text-[#0A3044]/60 font-medium">How will you be using the portal?</p>
+                <h2 className="font-display text-4xl font-medium tracking-tight">Welcome to MetLeo</h2>
+                <p className="text-thriva-navy/60 font-medium leading-relaxed">How will you be using the portal today?</p>
               </div>
 
               <div className="space-y-4">
                 <button
                   onClick={() => { setRole('Technician'); handleNext(); }}
-                  className={`w-full p-6 text-left rounded-[32px] border-2 transition-all group ${role === 'Technician' ? 'border-[#3DC39E] bg-[#3DC39E]/5' : 'border-transparent bg-white shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:border-[#3DC39E]/20'}`}
+                  className={`w-full p-6 text-left rounded-[40px] border-2 transition-all group ${role === 'Technician' ? 'border-thriva-mint bg-thriva-mint/5' : 'border-transparent bg-white shadow-thriva hover:border-thriva-mint/20 hover:-translate-y-1'}`}
                 >
                   <div className="flex justify-between items-center">
                     <div className="space-y-1">
-                      <div className="flex items-center gap-2 font-bold uppercase tracking-widest text-[10px] text-[#3DC39E]">
+                      <div className="flex items-center gap-2 font-bold uppercase tracking-widest text-[9px] text-thriva-mint">
                          Laboratory Team
                       </div>
-                      <div className="text-sm font-bold text-[#0A3044]">Assay Specialist or Lab Admin</div>
+                      <div className="text-base font-bold text-thriva-navy">Assay Specialist or Lab Admin</div>
                     </div>
-                    <ChevronRight size={20} className="text-[#0A3044]/20 group-hover:text-[#3DC39E] transition-colors" />
+                    <ChevronRight size={20} className="text-thriva-navy/20 group-hover:text-thriva-mint transition-colors" />
                   </div>
                 </button>
 
                 <button
                   onClick={() => { setRole('Client'); handleNext(); }}
-                  className={`w-full p-6 text-left rounded-[32px] border-2 transition-all group ${role === 'Client' ? 'border-[#3DC39E] bg-[#3DC39E]/5' : 'border-transparent bg-white shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:border-[#3DC39E]/20'}`}
+                  className={`w-full p-6 text-left rounded-[40px] border-2 transition-all group ${role === 'Client' ? 'border-thriva-mint bg-thriva-mint/5' : 'border-transparent bg-white shadow-thriva hover:border-thriva-mint/20 hover:-translate-y-1'}`}
                 >
                   <div className="flex justify-between items-center">
                     <div className="space-y-1">
-                      <div className="flex items-center gap-2 font-bold uppercase tracking-widest text-[10px] text-[#3DC39E]">
+                      <div className="flex items-center gap-2 font-bold uppercase tracking-widest text-[9px] text-thriva-mint">
                          Mining Stakeholder 
                       </div>
-                      <div className="text-sm font-bold text-[#0A3044]">View Results & Manage Billing</div>
+                      <div className="text-base font-bold text-thriva-navy">View Results & Manage Billing</div>
                     </div>
-                    <ChevronRight size={20} className="text-[#0A3044]/20 group-hover:text-[#3DC39E] transition-colors" />
+                    <ChevronRight size={20} className="text-thriva-navy/20 group-hover:text-thriva-mint transition-colors" />
                   </div>
                 </button>
               </div>
@@ -109,41 +109,41 @@ export const Onboarding = ({ user, onComplete }: OnboardingProps) => {
               exit={{ opacity: 0, x: -20 }}
               className="space-y-8"
             >
-              <div className="text-center space-y-2">
-                <h2 className="font-serif text-3xl font-bold tracking-tight">Personalize your profile</h2>
-                <p className="text-[#0A3044]/60 font-medium">How should colleagues address you?</p>
+              <div className="text-center space-y-4">
+                <h2 className="font-display text-4xl font-medium tracking-tight">Personalize your profile</h2>
+                <p className="text-thriva-navy/60 font-medium">How should colleagues address you?</p>
               </div>
 
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#0A3044]/40">Full Name</label>
+              <div className="space-y-6">
+                <div className="space-y-3">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Full Name</label>
                   <input 
                     type="text"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     placeholder="Enter your name"
-                    className="w-full bg-white border border-[#0A3044]/10 rounded-2xl px-5 py-4 outline-none focus:border-[#3DC39E] transition-colors text-sm font-bold"
+                    className="w-full bg-white border border-thriva-navy/10 rounded-[28px] px-6 py-5 outline-none focus:border-thriva-mint transition-colors text-sm font-bold shadow-thriva"
                   />
                 </div>
                 {role === 'Client' && (
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#0A3044]/40">Mining Site / Company</label>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Mining Site / Company</label>
                     <input 
                       type="text"
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       placeholder="e.g. Western Goldfields"
-                      className="w-full bg-white border border-[#0A3044]/10 rounded-2xl px-5 py-4 outline-none focus:border-[#3DC39E] transition-colors text-sm font-bold"
+                      className="w-full bg-white border border-thriva-navy/10 rounded-[28px] px-6 py-5 outline-none focus:border-thriva-mint transition-colors text-sm font-bold shadow-thriva"
                     />
                   </div>
                 )}
                 
-                <div className="pt-4 flex gap-3">
-                  <button onClick={handleBack} className="flex-1 px-6 py-4 rounded-full font-bold text-sm bg-white border border-[#0A3044]/5 shadow-sm text-[#0A3044]/60 hover:text-[#0A3044] transition-colors">Back</button>
+                <div className="pt-6 flex gap-4">
+                  <button onClick={handleBack} className="flex-1 px-8 py-5 rounded-full font-bold text-sm bg-white border border-thriva-navy/5 shadow-sm text-thriva-navy/60 hover:text-thriva-navy transition-colors">Back</button>
                   <button 
                     onClick={handleNext} 
                     disabled={!displayName || (role === 'Client' && !company)}
-                    className="flex-[2] bg-[#0A3044] text-white px-6 py-4 rounded-full font-bold text-sm hover:bg-[#114B5F] disabled:opacity-20 transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#0A3044]/10"
+                    className="flex-[2] bg-thriva-navy text-white px-8 py-5 rounded-full font-bold text-sm hover:bg-thriva-banner disabled:opacity-20 transition-all flex items-center justify-center gap-2 shadow-thriva"
                   >
                     Continue <ArrowRight size={16} />
                   </button>
@@ -160,26 +160,26 @@ export const Onboarding = ({ user, onComplete }: OnboardingProps) => {
               exit={{ opacity: 0, x: -20 }}
               className="space-y-8"
             >
-              <div className="text-center space-y-4">
-                <div className="w-20 h-20 bg-[#3DC39E]/10 rounded-[32px] mx-auto flex items-center justify-center text-[#3DC39E]">
+              <div className="text-center space-y-6">
+                <div className="w-20 h-20 bg-thriva-mint/10 rounded-[32px] mx-auto flex items-center justify-center text-thriva-mint">
                   <Check size={40} strokeWidth={3} />
                 </div>
-                <h2 className="font-serif text-3xl font-bold tracking-tight">You're all set!</h2>
-                <p className="text-[#0A3044]/60 font-medium">Your access to the {role} portal is being provisioned.</p>
+                <h2 className="font-display text-4xl font-medium tracking-tight">You’re all set</h2>
+                <p className="text-thriva-navy/60 font-medium">Your access to the {role} portal is being provisioned.</p>
               </div>
 
-              <div className="bg-white p-6 rounded-[32px] shadow-sm space-y-4 border border-[#0A3044]/5">
+              <div className="bg-white p-8 rounded-[48px] shadow-thriva space-y-5 border border-thriva-navy/5">
                 <div className="flex justify-between items-center text-sm">
-                  <span className="opacity-40 font-medium">Role</span>
+                  <span className="opacity-40 font-bold uppercase tracking-widest text-[9px]">Role</span>
                   <span className="font-bold">{role}</span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
-                  <span className="opacity-40 font-medium">Identity</span>
+                  <span className="opacity-40 font-bold uppercase tracking-widest text-[9px]">Identity</span>
                   <span className="font-bold">{displayName}</span>
                 </div>
                 {company && (
                   <div className="flex justify-between items-center text-sm">
-                    <span className="opacity-40 font-medium">Site</span>
+                    <span className="opacity-40 font-bold uppercase tracking-widest text-[9px]">Site</span>
                     <span className="font-bold">{company}</span>
                   </div>
                 )}
@@ -188,7 +188,7 @@ export const Onboarding = ({ user, onComplete }: OnboardingProps) => {
               <button 
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="w-full bg-[#3DC39E] text-[#0A3044] py-5 rounded-full font-bold text-lg hover:scale-105 transition-all shadow-xl shadow-[#3DC39E]/20 flex items-center justify-center gap-3"
+                className="w-full bg-thriva-mint text-thriva-navy py-6 rounded-full font-bold text-lg hover:scale-[1.02] transition-all shadow-xl shadow-thriva-mint/20 flex items-center justify-center gap-3 active:scale-[0.98]"
               >
                 {isSubmitting ? (
                   <Loader2 size={24} className="animate-spin" />

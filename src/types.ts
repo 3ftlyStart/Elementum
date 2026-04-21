@@ -1,5 +1,5 @@
 /**
- * Elementum Assay Lab Types
+ * MetLeo Assay Lab Types
  */
 
 export type SampleStatus = 'Received' | 'Preparation' | 'Analysis' | 'Finalized' | 'Cancelled';

@@ -70,30 +70,31 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
 
   const getStatusIcon = (status: RequisitionStatus) => {
     switch (status) {
-      case 'Pending': return <Clock size={14} className="text-orange-400" />;
-      case 'Approved': return <CheckCircle2 size={14} className="text-cyan-400" />;
-      case 'Ordered': return <Truck size={14} className="text-blue-400" />;
-      case 'Received': return <PackageCheck size={14} className="text-green-400" />;
-      case 'Cancelled': return <XCircle size={14} className="text-red-400" />;
+      case 'Pending': return <Clock size={14} />;
+      case 'Approved': return <CheckCircle2 size={14} />;
+      case 'Ordered': return <Truck size={14} />;
+      case 'Received': return <PackageCheck size={14} />;
+      case 'Cancelled': return <XCircle size={14} />;
     }
   };
 
   const getStatusColor = (status: RequisitionStatus) => {
     switch (status) {
-      case 'Pending': return 'bg-orange-500/10 text-orange-400 border-orange-500/20';
-      case 'Approved': return 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20';
-      case 'Ordered': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
-      case 'Received': return 'bg-green-500/10 text-green-400 border-green-500/20';
-      case 'Cancelled': return 'bg-red-500/10 text-red-500 border-red-500/20';
+      case 'Pending': return 'bg-thriva-navy/5 text-thriva-navy/40 border-thriva-navy/10';
+      case 'Approved': return 'bg-thriva-mint/10 text-thriva-mint border-thriva-mint/20';
+      case 'Ordered': return 'bg-white border-thriva-navy/10 text-thriva-navy shadow-sm';
+      case 'Received': return 'bg-thriva-mint text-white border-thriva-mint shadow-lg shadow-thriva-mint/20';
+      case 'Cancelled': return 'bg-thriva-coral/10 text-thriva-coral border-thriva-coral/20';
     }
   };
 
   if (loading) {
     return (
-      <div className="p-12 flex justify-center">
-        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }}>
-          <ShoppingBag className="text-slate-700" size={32} />
+      <div className="p-20 flex flex-col items-center justify-center gap-6">
+        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2, ease: "linear" }}>
+          <ShoppingBag className="text-thriva-mint" size={48} />
         </motion.div>
+        <p className="text-[10px] text-thriva-navy/20 font-bold uppercase tracking-[0.3em]">Mapping Supply Chain...</p>
       </div>
     );
   }
@@ -102,24 +103,24 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
     <div className="p-6 space-y-8 pb-32">
       <div className="flex justify-between items-start">
         <div className="space-y-2">
-          <h2 className="text-3xl font-medium text-white tracking-tight">Procurement Pipe</h2>
-          <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Requisition Lifecycle Management</p>
+          <h2 className="text-3xl font-display font-medium text-thriva-navy tracking-tight">Procurement Pipe</h2>
+          <p className="text-[10px] text-thriva-navy/40 uppercase tracking-widest font-bold">Requisition Lifecycle Management</p>
         </div>
         <button 
           onClick={() => setShowAddModal(true)}
-          className="bg-white text-slate-950 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all shadow-lg"
+          className="bg-thriva-mint text-thriva-navy px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all shadow-xl shadow-thriva-mint/20"
         >
-          <PlusCircle size={14} /> New Request
+          <PlusCircle size={16} /> New Request
         </button>
       </div>
 
       {/* Filter Bar */}
-      <div className="flex gap-2 overflow-x-auto pb-4 noscroll">
+      <div className="flex gap-2 overflow-x-auto pb-4 noscroll px-2">
         {(['All', 'Pending', 'Approved', 'Ordered', 'Received', 'Cancelled'] as const).map(f => (
           <button 
             key={f}
             onClick={() => setStatusFilter(f)}
-            className={`px-4 py-2 rounded-xl text-[9px] font-bold uppercase tracking-widest border transition-all whitespace-nowrap ${statusFilter === f ? 'bg-white text-slate-950 border-white' : 'bg-slate-900 border-slate-800 text-slate-500'}`}
+            className={`px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest border transition-all whitespace-nowrap shadow-sm ${statusFilter === f ? 'bg-thriva-navy text-white border-thriva-navy shadow-lg' : 'bg-white border-thriva-navy/5 text-thriva-navy/40 hover:text-thriva-navy'}`}
           >
             {f}
           </button>
@@ -127,67 +128,69 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
       </div>
 
       {/* Requisition List */}
-      <div className="space-y-4">
+      <div className="space-y-6">
         {filteredRequisitions.length === 0 ? (
-          <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-10 text-center">
-            <Archive className="mx-auto text-slate-700 mb-2" size={24} />
-            <p className="text-[10px] text-slate-600 uppercase font-bold tracking-widest">No matching requisitions</p>
+          <div className="bg-white border border-thriva-navy/5 rounded-[48px] p-24 text-center shadow-thriva">
+            <Archive className="mx-auto text-thriva-navy/5 mb-6" size={48} />
+            <p className="text-[10px] text-thriva-navy/30 uppercase font-bold tracking-[0.3em]">Supply channel inactive</p>
           </div>
         ) : (
           filteredRequisitions.map(req => (
             <motion.div 
               layout
               key={req.id} 
-              className="bg-slate-900/40 border border-slate-800 rounded-[24px] p-5 space-y-4"
+              className="bg-white border border-thriva-navy/5 rounded-[40px] p-8 space-y-6 shadow-thriva hover:shadow-thriva-hover transition-all duration-500 overflow-hidden relative"
             >
-              <div className="flex justify-between items-start">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-sm font-bold text-white">{req.itemName}</h3>
-                    <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold uppercase border flex items-center gap-1 ${getStatusColor(req.status)}`}>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#FCFAF7] rounded-full blur-[60px] -mr-16 -mt-16 pointer-events-none opacity-50" />
+              
+              <div className="flex justify-between items-start relative z-10">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <h3 className="text-xl font-bold text-thriva-navy tracking-tight">{req.itemName}</h3>
+                    <span className={`px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest border flex items-center gap-2 transition-all ${getStatusColor(req.status)}`}>
                       {getStatusIcon(req.status)}
                       {req.status}
                     </span>
                   </div>
-                  <div className="flex items-center gap-3 opacity-60">
-                    <div className="flex items-center gap-1">
-                      <UserIcon size={10} className="text-slate-500" />
-                      <span className="text-[9px] font-mono text-slate-500 uppercase">{req.requestedByUserName}</span>
+                  <div className="flex items-center gap-5">
+                    <div className="flex items-center gap-2 bg-[#FCFAF7] px-3 py-1 rounded-full border border-thriva-navy/5">
+                      <UserIcon size={12} className="text-thriva-navy/20" />
+                      <span className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-widest">{req.requestedByUserName}</span>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Calendar size={10} className="text-slate-500" />
-                      <span className="text-[9px] font-mono text-slate-500">{new Date(req.createdAt).toLocaleDateString()}</span>
+                    <div className="flex items-center gap-2">
+                      <Calendar size={12} className="text-thriva-navy/20" />
+                      <span className="text-[9px] font-bold text-thriva-navy/20 uppercase tracking-widest">{new Date(req.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
                     </div>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-lg font-mono font-bold text-white tracking-tighter">
+                  <div className="text-3xl font-display font-medium text-thriva-navy tracking-tight">
                     {req.quantityRequested}
-                    <span className="text-[10px] text-slate-600 ml-1 uppercase">{req.unit}</span>
+                    <span className="text-[10px] text-thriva-navy/20 ml-2 font-bold uppercase tracking-widest">{req.unit}</span>
                   </div>
                 </div>
               </div>
 
               {req.notes && (
-                <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/50">
-                  <p className="text-[9px] text-slate-500 italic">"{req.notes}"</p>
+                <div className="bg-[#FCFAF7] p-5 rounded-3xl border border-thriva-navy/5 relative z-10">
+                  <p className="text-[11px] text-thriva-navy/40 font-medium leading-relaxed">"{req.notes}"</p>
                 </div>
               )}
 
               {/* Action Buttons for Admins/Technicians */}
               {(userRole === 'Admin' || userRole === 'Technician') && req.status === 'Pending' && (
-                <div className="grid grid-cols-2 gap-3 pt-2">
+                <div className="grid grid-cols-2 gap-4 pt-4 relative z-10">
                   <button 
                     onClick={() => handleUpdateStatus(req.id, 'Cancelled')}
-                    className="bg-red-500/10 border border-red-500/20 text-red-500 py-3 rounded-xl text-[9px] font-bold uppercase tracking-widest hover:bg-red-500 hover:text-slate-950 transition-all flex items-center justify-center gap-2"
+                    className="bg-[#FCFAF7] border border-thriva-navy/5 text-thriva-navy/20 py-4 rounded-[24px] text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-thriva-coral hover:text-white transition-all duration-300 flex items-center justify-center gap-3 shadow-sm"
                   >
-                    <XCircle size={14} /> Cancel
+                    <XCircle size={16} /> Discard
                   </button>
                   <button 
                     onClick={() => handleUpdateStatus(req.id, 'Approved')}
-                    className="bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 py-3 rounded-xl text-[9px] font-bold uppercase tracking-widest hover:bg-cyan-500 hover:text-slate-950 transition-all flex items-center justify-center gap-2"
+                    className="bg-thriva-navy text-white py-4 rounded-[24px] text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-thriva-mint hover:text-thriva-navy transition-all duration-300 flex items-center justify-center gap-3 shadow-xl shadow-thriva-navy/20"
                   >
-                    <CheckCircle2 size={14} /> Approve
+                    <CheckCircle2 size={16} /> Authorize
                   </button>
                 </div>
               )}
@@ -196,18 +199,18 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
               {(userRole === 'Admin' || userRole === 'Technician') && req.status === 'Approved' && (
                 <button 
                   onClick={() => handleUpdateStatus(req.id, 'Ordered')}
-                  className="w-full bg-blue-500/10 border border-blue-500/20 text-blue-400 py-3 rounded-xl text-[9px] font-bold uppercase tracking-widest hover:bg-blue-500 hover:text-slate-950 transition-all flex items-center justify-center gap-2"
+                  className="w-full bg-[#FCFAF7] border border-thriva-navy/5 text-thriva-navy/30 py-4 rounded-[24px] text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-thriva-mint hover:text-white transition-all duration-300 flex items-center justify-center gap-3 relative z-10"
                 >
-                  <Truck size={14} /> Mark as Ordered
+                  <Truck size={18} /> Deploy Supply Chain
                 </button>
               )}
 
               {(userRole === 'Admin' || userRole === 'Technician') && req.status === 'Ordered' && (
                 <button 
                   onClick={() => handleUpdateStatus(req.id, 'Received')}
-                  className="w-full bg-green-500/10 border border-green-500/20 text-green-400 py-3 rounded-xl text-[9px] font-bold uppercase tracking-widest hover:bg-green-500 hover:text-slate-950 transition-all flex items-center justify-center gap-2"
+                  className="w-full bg-thriva-mint text-thriva-navy py-4 rounded-[24px] text-[10px] font-bold uppercase tracking-[0.2em] hover:scale-[1.01] transition-all duration-300 flex items-center justify-center gap-3 relative z-10 shadow-xl shadow-thriva-mint/20"
                 >
-                  <PackageCheck size={14} /> Confirm Delivery
+                  <PackageCheck size={18} /> Confirm Atomic Delivery
                 </button>
               )}
             </motion.div>
@@ -218,33 +221,39 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
       {/* Add Requisition Modal */}
       <AnimatePresence>
         {showAddModal && (
-          <div className="fixed inset-0 z-[60] flex items-center justify-center p-6">
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-6 bg-thriva-navy/40 backdrop-blur-md">
             <motion.div 
                initial={{ opacity: 0 }}
                animate={{ opacity: 1 }}
                exit={{ opacity: 0 }}
                onClick={() => setShowAddModal(false)}
-               className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
+               className="absolute inset-0"
             />
             <motion.div 
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-900 border border-slate-800 rounded-[32px] w-full max-w-md p-8 relative z-10 space-y-6"
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="bg-white border border-thriva-navy/5 rounded-[48px] w-full max-w-lg p-10 relative z-10 space-y-8 shadow-2xl"
             >
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-3">
-                   <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-white">
-                      <ShoppingBag size={20} />
+              <div className="flex justify-between items-center border-b border-thriva-navy/5 pb-6">
+                <div className="flex items-center gap-4">
+                   <div className="w-14 h-14 rounded-3xl bg-[#FCFAF7] flex items-center justify-center text-thriva-mint shadow-inner">
+                      <ShoppingBag size={28} />
                    </div>
-                   <h3 className="text-xl font-bold text-white font-serif">Purchase Request</h3>
+                   <div className="space-y-1">
+                     <h3 className="text-2xl font-display font-medium text-thriva-navy tracking-tight">Purchase Request</h3>
+                     <p className="text-[10px] text-thriva-navy/30 uppercase font-bold tracking-widest">Procurement sequence initiation</p>
+                   </div>
                 </div>
-                <button onClick={() => setShowAddModal(false)} className="text-slate-500 hover:text-white transition-colors">
+                <button 
+                  onClick={() => setShowAddModal(false)} 
+                  className="w-10 h-10 rounded-full bg-[#FCFAF7] flex items-center justify-center text-thriva-navy/20 hover:text-thriva-coral transition-all"
+                >
                   <X size={20} />
                 </button>
               </div>
 
-              <form className="space-y-4" onSubmit={async (e) => {
+              <form className="space-y-6" onSubmit={async (e) => {
                 e.preventDefault();
                 const fd = new FormData(e.currentTarget);
                 const user = auth.currentUser;
@@ -269,19 +278,19 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
                   console.error("Failed to add requisition:", err);
                 }
               }}>
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Item Required</label>
-                  <input name="itemName" required placeholder="e.g. Hydrochloric Acid 37%" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan-500/50" />
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Item Nomenclature</label>
+                  <input name="itemName" required placeholder="e.g. Molecular Reagents Kit" className="w-full bg-[#FCFAF7] border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-all font-medium" />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Quantity</label>
-                    <input name="quantity" type="number" required defaultValue="1" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan-500/50" />
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Target Volume</label>
+                    <input name="quantity" type="number" required defaultValue="1" className="w-full bg-[#FCFAF7] border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-all font-medium font-display" />
                   </div>
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Unit</label>
-                    <select name="unit" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Unit of Measure</label>
+                    <select name="unit" className="w-full bg-[#FCFAF7] border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none cursor-pointer hover:border-thriva-mint/50 transition-all appearance-none font-medium">
                       <option value="kg">kg</option>
                       <option value="L">L</option>
                       <option value="g">g</option>
@@ -290,13 +299,13 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Justification / Details</label>
-                  <textarea name="notes" placeholder="Why is this item needed?" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan-500/50 h-24 resize-none" />
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Operational Justification</label>
+                  <textarea name="notes" placeholder="Explain the molecular necessity of this item..." className="w-full bg-[#FCFAF7] border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-all font-medium h-32 resize-none" />
                 </div>
 
-                <button type="submit" className="w-full bg-white text-slate-950 font-bold py-4 rounded-2xl shadow-lg hover:opacity-90 active:scale-95 transition-all">
-                  SUBMIT REQUISITION
+                <button type="submit" className="w-full bg-thriva-navy text-white font-bold py-5 rounded-[28px] shadow-2xl shadow-thriva-navy/30 hover:bg-thriva-mint hover:text-thriva-navy active:scale-95 transition-all duration-300 uppercase tracking-[0.2em] text-[11px] mt-4">
+                  COMMIT PROCUREMENT REQUEST
                 </button>
               </form>
             </motion.div>

@@ -1,4 +1,4 @@
-# Security Specification - Elementum Assay Lab
+# Security Specification - MetLeo Assay Lab
 
 ## Data Invariants
 1. **Technician Authority**: Only users with the 'Technician' or 'Admin' role can finalize assays or approve requisitions.
