@@ -15,6 +15,10 @@ import firebaseConfig from '../../firebase-applet-config.json';
 
 const app = initializeApp(firebaseConfig);
 
+if (typeof window !== 'undefined') {
+  console.log("Firebase initialized with project:", firebaseConfig.projectId);
+}
+
 // Initialize Auth with persistence and popup resolver for iframe stability
 export const auth = initializeAuth(app, {
   persistence: browserLocalPersistence,

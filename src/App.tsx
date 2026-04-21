@@ -9,7 +9,8 @@ import {
   signInWithPopup, 
   GoogleAuthProvider, 
   signOut,
-  User 
+  User,
+  browserPopupRedirectResolver
 } from 'firebase/auth';
 import { 
   collection, 
@@ -66,7 +67,9 @@ import {
   Package,
   ShoppingBag,
   DollarSign,
-  LayoutGrid
+  LayoutGrid,
+  Moon,
+  Sun
 } from 'lucide-react';
 import { 
   BarChart, 
@@ -263,15 +266,15 @@ const SyncIndicator = ({ isOnline, pendingCount }: { isOnline: boolean, pendingC
 const StatCard = ({ label, value, icon: Icon }: any) => (
   <motion.div 
     whileHover={{ y: -4 }}
-    className="bg-white p-6 rounded-[32px] shadow-thriva border border-thriva-navy/5 flex flex-col gap-4 relative group transition-all hover:shadow-thriva-hover"
+    className="bg-white dark:bg-[#0D0D2D] p-6 rounded-[32px] shadow-thriva border border-thriva-navy/5 flex flex-col gap-4 relative group transition-all hover:shadow-thriva-hover"
   >
     <div className="flex items-center justify-between">
-      <span className="text-[9px] uppercase tracking-[0.2em] text-thriva-navy/40 font-bold">{label}</span>
+      <span className="text-[9px] uppercase tracking-[0.2em] text-thriva-navy/40 dark:text-white/40 font-bold">{label}</span>
       <div className="w-8 h-8 rounded-full bg-thriva-mint/10 flex items-center justify-center text-thriva-mint">
         <Icon size={14} />
       </div>
     </div>
-    <div className="text-4xl font-display font-medium text-thriva-navy tracking-tight leading-none">{value}</div>
+    <div className="text-4xl font-display font-medium text-thriva-navy dark:text-white tracking-tight leading-none">{value}</div>
   </motion.div>
 );
 
@@ -280,28 +283,28 @@ const ControlRoom = ({ samples }: { samples: Sample[] }) => {
     { label: 'Drying', status: 'Received', color: 'text-thriva-mint', icon: Clock },
     { label: 'Smelting', status: 'Preparation', color: 'text-thriva-coral', icon: Flame },
     { label: 'Analysis', status: 'Analysis', color: 'text-thriva-mint', icon: Monitor },
-    { label: 'Reporting', status: 'Finalized', color: 'text-thriva-navy', icon: CheckCircle2 },
+    { label: 'Reporting', status: 'Finalized', color: 'text-thriva-navy dark:text-thriva-mint', icon: CheckCircle2 },
   ];
 
   return (
     <div className="p-6 space-y-8">
       <div className="space-y-2">
-        <h2 className="text-3xl font-display font-medium text-thriva-navy tracking-tight">Control Room</h2>
-        <p className="text-[10px] text-thriva-navy/40 uppercase tracking-widest font-bold">Real-time Operations Throughput</p>
+        <h2 className="text-3xl font-display font-medium text-thriva-navy dark:text-white tracking-tight">Control Room</h2>
+        <p className="text-[10px] text-thriva-navy/40 dark:text-white/40 uppercase tracking-widest font-bold">Real-time Operations Throughput</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         {buckets.map(bucket => (
-          <div key={bucket.label} className="bg-white border border-thriva-navy/5 shadow-thriva rounded-[32px] p-6 relative overflow-hidden group hover:shadow-thriva-hover transition-all duration-500">
+          <div key={bucket.label} className="bg-white dark:bg-[#0D0D2D] border border-thriva-navy/5 dark:border-white/5 shadow-thriva rounded-[32px] p-6 relative overflow-hidden group hover:shadow-thriva-hover transition-all duration-500">
             <div className="flex justify-between items-start relative z-10">
-              <div className={`w-10 h-10 rounded-2xl flex items-center justify-center bg-[#FCFAF7] border border-thriva-navy/5 ${bucket.color}`}>
+              <div className={`w-10 h-10 rounded-2xl flex items-center justify-center bg-[#FCFAF7] dark:bg-[#050510] border border-thriva-navy/5 dark:border-white/5 ${bucket.color}`}>
                 <bucket.icon size={18} />
               </div>
-              <span className="text-3xl font-display font-medium text-thriva-navy">
+              <span className="text-3xl font-display font-medium text-thriva-navy dark:text-white">
                 {samples.filter(s => s.status === bucket.status).length}
               </span>
             </div>
-            <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.2em] text-thriva-navy/40 relative z-10">{bucket.label}</p>
+            <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.2em] text-thriva-navy/40 dark:text-white/40 relative z-10">{bucket.label}</p>
             <div className={`absolute bottom-0 left-0 h-1 bg-current opacity-20 ${bucket.color}`} style={{ width: '100%' }}></div>
           </div>
         ))}
@@ -347,9 +350,11 @@ const LabBench = ({ sample, onUpdate, currentReading }: {
 }) => {
   const [method, setMethod] = useState<AssayMethod>(sample.method || 'FireAssay');
   const [mass, setMass] = useState(sample.physicalProperties?.mass || 50);
-  const [bead, setBead] = useState(0);
-  const [abs, setAbs] = useState(0);
-  const [dilution, setDilution] = useState(10);
+  const [bead, setBead] = useState(sample.methodData?.fireAssay?.beadWeight || 0);
+  const [abs, setAbs] = useState(sample.methodData?.aas?.absorbance || 0);
+  const [dilution, setDilution] = useState(sample.methodData?.aas?.dilutionFactor || 10);
+  const [crucible, setCrucible] = useState(sample.methodData?.fireAssay?.crucibleNumber || '');
+  const [fluxType, setFluxType] = useState(sample.methodData?.fireAssay?.fluxType || 'Standard Fusion');
   
   const handleCapture = () => {
     if (!currentReading) return;
@@ -436,10 +441,31 @@ const LabBench = ({ sample, onUpdate, currentReading }: {
          <div className="bg-[#FCFAF7] border border-thriva-navy/5 rounded-[40px] p-8 space-y-8 shadow-inner">
             {method === 'FireAssay' && (
               <div className="grid grid-cols-1 gap-8">
-                 <div className="space-y-2">
-                   <label className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-widest ml-2">Crucible Serial</label>
-                   <input className="w-full bg-white border border-thriva-navy/10 rounded-xl p-4 text-thriva-navy font-bold shadow-sm uppercase placeholder:text-thriva-navy/20" placeholder="CR-000" />
+                 <div className="grid grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-widest ml-2">Crucible Serial</label>
+                      <input 
+                        value={crucible}
+                        onChange={(e) => setCrucible(e.target.value)}
+                        className="w-full bg-white border border-thriva-navy/10 rounded-xl p-4 text-thriva-navy font-bold shadow-sm uppercase placeholder:text-thriva-navy/20" 
+                        placeholder="CR-000" 
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-widest ml-2">Flux Type</label>
+                      <select 
+                        value={fluxType}
+                        onChange={(e) => setFluxType(e.target.value)}
+                        className="w-full bg-white border border-thriva-navy/10 rounded-xl p-4 text-thriva-navy font-bold shadow-sm"
+                      >
+                        <option value="Standard Fusion">Standard Fusion</option>
+                        <option value="Litharge High">Litharge High</option>
+                        <option value="Borax Rich">Borax Rich</option>
+                        <option value="Silica Base">Silica Base</option>
+                      </select>
+                    </div>
                  </div>
+                 
                  <div className="grid grid-cols-2 gap-6">
                     <div className="space-y-3">
                       <label className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-widest ml-2">Bead Weight (mg)</label>
@@ -526,7 +552,18 @@ const LabBench = ({ sample, onUpdate, currentReading }: {
              status: 'Analysis', 
              method,
              elements: { ...sample.elements, gold: calculatedAu },
-             physicalProperties: { ...sample.physicalProperties, mass, form: 'pulp' }
+             physicalProperties: { ...sample.physicalProperties, mass, form: method === 'FireAssay' ? 'pulp' : 'solution' },
+             methodData: {
+               fireAssay: method === 'FireAssay' ? {
+                 crucibleNumber: crucible,
+                 fluxType: fluxType,
+                 beadWeight: bead
+               } : sample.methodData?.fireAssay,
+               aas: method === 'AAS' ? {
+                 dilutionFactor: dilution,
+                 absorbance: abs
+               } : sample.methodData?.aas
+             }
            })}
            className="w-full bg-thriva-navy text-white font-bold py-6 rounded-full shadow-2xl shadow-thriva-navy/20 flex items-center justify-center gap-3 hover:bg-thriva-banner active:scale-[0.98] transition-all text-sm tracking-widest uppercase"
           >
@@ -846,6 +883,8 @@ export default function App() {
   const [samples, setSamples] = useState<Sample[]>([]);
   const [view, setView] = useState<'dashboard' | 'create' | 'detail' | 'analytics' | 'control' | 'plant' | 'bench' | 'history' | 'instruments' | 'inventory' | 'requisitions' | 'billing'>('dashboard');
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [darkMode, setDarkMode] = useState(false);
+  const toggleDarkMode = () => setDarkMode(!darkMode);
   const [entryType, setEntryType] = useState<'sample' | 'job'>('sample');
   const [selectedSample, setSelectedSample] = useState<Sample | null>(null);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -932,13 +971,25 @@ export default function App() {
   const handleAuth = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
-    } catch (error) {
+      // Explicitly passing the resolver here too, for maximum compatibility in iframes
+      await signInWithPopup(auth, provider, browserPopupRedirectResolver);
+    } catch (error: any) {
       console.error("Auth failed", error);
+      
+      let message = "Authentication failed. ";
+      if (error.code === 'auth/network-request-failed') {
+        message += "This is often caused by popups being blocked, tracking protection in your browser, or the current domain not being in the 'Authorized Domains' list in Firebase Console. Please try opening the app in a new tab or disabling ad-blockers.";
+      } else if (error.code === 'auth/popup-closed-by-user') {
+        message += "The sign-in popup was closed before completion.";
+      } else {
+        message += error.message || "Please check your internet connection.";
+      }
+      
+      alert(message);
     }
   };
 
-  if (!user) return <LandingPage onSignUp={handleAuth} onSignIn={handleAuth} />;
+  if (!user) return <LandingPage onSignUp={handleAuth} onSignIn={handleAuth} darkMode={darkMode} onToggleDarkMode={toggleDarkMode} />;
 
   const handleOnboardingComplete = async (data: { role: UserRole; displayName: string; company?: string }) => {
     if (!user) return;
@@ -973,28 +1024,39 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={{ user, profile, loading }}>
-      <div className="min-h-screen bg-[#FCFAF7] text-[#0D0D2D] font-sans selection:bg-[#39D3C0]/30 max-w-lg mx-auto shadow-[0_0_100px_rgba(13,13,45,0.05)] relative overflow-x-hidden border-x border-[#0D0D2D]/5">
+      <div className={"min-h-screen transition-colors duration-500 " + (darkMode ? "dark bg-[#050510] text-white/90" : "bg-[#FCFAF7] text-[#0D0D2D]") + " font-sans selection:bg-[#39D3C0]/30 max-w-lg mx-auto shadow-[0_0_100px_rgba(13,13,45,0.05)] relative overflow-x-hidden border-x border-thriva-navy/5"}>
         <SyncIndicator isOnline={isOnline} pendingCount={pendingSyncCount} />
         
         {/* Header */}
-        <header className="border-b border-[#0D0D2D]/5 p-4 pt-8 flex items-center justify-between sticky top-0 bg-white/60 backdrop-blur-3xl z-[60] transition-all shadow-[0_4px_20px_rgba(0,0,0,0.01)] max-w-lg mx-auto">
-          <div className="flex flex-col cursor-pointer group" onClick={() => setView('dashboard')}>
-            <span className="text-[10px] font-bold tracking-[0.3em] text-[#39D3C0] uppercase group-hover:tracking-[0.4em] transition-all leading-none mb-1">MetLeo</span>
-            <span className="text-xl font-bold text-[#0D0D2D] leading-tight flex items-center gap-1">Portal <Activity size={16} className="text-[#39D3C0]" /></span>
+        <header className={"border-b border-thriva-navy/5 p-4 pt-8 flex items-center justify-between sticky top-0 " + (darkMode ? "bg-[#050510]/60" : "bg-white/60") + " backdrop-blur-3xl z-[60] transition-all shadow-[0_4px_20px_rgba(0,0,0,0.01)] max-w-lg mx-auto"}>
+          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setView('dashboard')}>
+            <div className={"w-10 h-10 rounded-full " + (darkMode ? "bg-thriva-mint text-thriva-navy" : "bg-[#0D0D2D] text-[#39D3C0]") + " flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"}>
+              <FlaskConical size={20} strokeWidth={2.5} />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold tracking-[0.3em] text-[#39D3C0] uppercase group-hover:tracking-[0.4em] transition-all leading-none mb-1">MetLeo</span>
+              <span className={"text-xl font-bold " + (darkMode ? "text-white" : "text-[#0D0D2D]") + " leading-tight flex items-center gap-1"}>Portal</span>
+            </div>
           </div>
           <div className="flex items-center gap-2">
+            <button 
+              onClick={toggleDarkMode}
+              className={"w-10 h-10 rounded-full flex items-center justify-center transition-all " + (darkMode ? "bg-white/5 text-thriva-mint hover:bg-white/10" : "bg-thriva-navy/5 text-thriva-navy/40 hover:bg-thriva-navy/10")}
+            >
+              {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
             <motion.button 
               whileHover={{ scale: 1.05 }}
-              className="w-10 h-10 rounded-full bg-white border border-[#0D0D2D]/5 flex items-center justify-center shadow-sm"
+              className={"w-10 h-10 rounded-full border flex items-center justify-center shadow-sm " + (darkMode ? "bg-[#0D0D2D] border-white/10" : "bg-white border-[#0D0D2D]/5")}
             >
-              <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-[#39D3C0] mint-glow' : 'bg-red-500'}`}></div>
+              <div className={"w-2 h-2 rounded-full " + (isOnline ? "bg-[#39D3C0] mint-glow" : "bg-red-500")}></div>
             </motion.button>
-            <button onClick={handleLogout} className="text-[#0D0D2D]/40 hover:text-[#0D0D2D] transition-colors p-2"><LogOut size={18} /></button>
+            <button onClick={handleLogout} className={(darkMode ? "text-white/40 hover:text-white" : "text-[#0D0D2D]/40 hover:text-[#0D0D2D]") + " transition-colors p-2"}><LogOut size={18} /></button>
           </div>
         </header>
 
         {/* Top Navigation Menu (Thriva style) */}
-        <nav className="sticky top-[89px] bg-white/40 backdrop-blur-2xl border-b border-[#0D0D2D]/5 z-50 overflow-x-auto noscroll max-w-lg mx-auto">
+        <nav className={`sticky top-[89px] ${darkMode ? 'bg-[#050510]/40' : 'bg-white/40'} backdrop-blur-2xl border-b border-thriva-navy/5 z-50 overflow-x-auto noscroll max-w-lg mx-auto`}>
           <div className="flex items-center px-4 py-3 gap-2 min-w-max">
             {[
               { id: 'dashboard', label: 'Summary', icon: LayoutGrid },
@@ -1011,7 +1073,7 @@ export default function App() {
               <button
                 key={item.id}
                 onClick={() => setView(item.id as any)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all whitespace-nowrap ${view === item.id ? 'bg-[#0D0D2D] text-white shadow-lg' : 'bg-white/50 text-[#0D0D2D]/60 hover:bg-white'}`}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all whitespace-nowrap ${view === item.id ? (darkMode ? 'bg-thriva-mint text-thriva-navy shadow-lg shadow-thriva-mint/20' : 'bg-[#0D0D2D] text-white shadow-lg') : (darkMode ? 'bg-white/5 text-white/40 hover:bg-white/10' : 'bg-white/50 text-[#0D0D2D]/60 hover:bg-white')}`}
               >
                 {view === item.id && <item.icon size={12} />}
                 {item.label}
@@ -1372,7 +1434,7 @@ export default function App() {
                       sampleType: formData.get('sampleType') || 'Ore',
                       priority: priority || 'Standard',
                       status: 'Received',
-                      collectedAt: new Date().toISOString(),
+                      collectedAt: formData.get('collectedDate') ? new Date(formData.get('collectedDate') as string).toISOString() : new Date().toISOString(),
                       submittedById: user!.uid,
                       elements: {},
                       physicalProperties: {
@@ -1412,6 +1474,16 @@ export default function App() {
                                 <option value="PlantFeed">Plant Feed</option>
                                 <option value="PlantTails">Plant Tails</option>
                               </select>
+                            </div>
+
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Collected Date</label>
+                              <input 
+                                type="date"
+                                name="collectedDate"
+                                defaultValue={new Date().toISOString().split('T')[0]}
+                                className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-colors shadow-thriva font-bold text-sm"
+                              />
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">

@@ -16,6 +16,11 @@
   --color-thriva-bg: #FCFAF7;
   --color-thriva-off-white: #FDFCFB;
   
+  /* Dark Mode Palette */
+  --color-thriva-dark-bg: #050510;
+  --color-thriva-dark-card: #0D0D2D;
+  --color-thriva-dark-border: rgba(255, 255, 255, 0.05);
+
   /* Interaction Colors */
   --color-thriva-mint-hover: #32BFAE;
   --color-thriva-purple-hover: #5A2578;
@@ -30,7 +35,7 @@
 }
 
 body {
-  @apply bg-[#FCFAF7] text-[#0D0D2D] antialiased font-sans min-h-screen relative overflow-x-hidden;
+  @apply bg-[#FCFAF7] text-[#0D0D2D] antialiased font-sans min-h-screen relative overflow-x-hidden transition-colors duration-500;
 }
 
 @layer utilities {

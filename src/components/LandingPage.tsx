@@ -8,24 +8,29 @@ import {
   ShieldCheck,
   Zap,
   Activity,
-  Globe
+  Globe,
+  FlaskConical,
+  Moon,
+  Sun
 } from 'lucide-react';
 
 interface LandingPageProps {
   onSignUp: () => void;
   onSignIn: () => void;
+  darkMode: boolean;
+  onToggleDarkMode: () => void;
 }
 
-export const LandingPage = ({ onSignUp, onSignIn }: LandingPageProps) => {
+export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: LandingPageProps) => {
   const { scrollY } = useScroll();
   const headerY = useTransform(scrollY, [0, 100], [48, 20]);
   const headerScale = useTransform(scrollY, [0, 100], [1, 0.95]);
 
   return (
-    <div className="min-h-screen bg-thriva-bg text-thriva-navy font-sans selection:bg-thriva-mint/20 relative overflow-x-hidden">
+    <div className={`min-h-screen transition-colors duration-500 ${darkMode ? 'dark bg-[#050510] text-white/90' : 'bg-thriva-bg text-thriva-navy'} font-sans selection:bg-thriva-mint/20 relative overflow-x-hidden`}>
       
       {/* Top Banner - Fixed Height */}
-      <div className="bg-thriva-banner text-white py-3 px-4 text-center text-xs md:text-sm font-semibold tracking-tight relative z-[60]">
+      <div className={`${darkMode ? 'bg-thriva-mint text-thriva-navy' : 'bg-thriva-banner text-white'} py-3 px-4 text-center text-xs md:text-sm font-semibold tracking-tight relative z-[60]`}>
         10% off your first subscription metallurgical assay batch
       </div>
 
@@ -34,15 +39,14 @@ export const LandingPage = ({ onSignUp, onSignIn }: LandingPageProps) => {
         style={{ top: headerY, scale: headerScale }}
         className="fixed left-0 right-0 z-50 px-4 md:px-8 pointer-events-none"
       >
-        <header className="max-w-5xl mx-auto bg-white/90 backdrop-blur-xl rounded-full h-16 md:h-20 shadow-thriva flex items-center justify-between px-6 md:px-10 border border-white/50 pointer-events-auto">
+        <header className={`max-w-5xl mx-auto ${darkMode ? 'bg-[#050510]/90 text-white border-white/10' : 'bg-white/90 text-thriva-navy border-white/50'} backdrop-blur-xl rounded-full h-16 md:h-20 shadow-thriva flex items-center justify-between px-6 md:px-10 border pointer-events-auto`}>
           {/* Logo Section */}
           <div className="flex items-center gap-2 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <div className="flex items-center">
-              <div className="w-8 h-8 relative mr-1.5">
-                <div className="absolute inset-0 bg-thriva-coral rounded-full rotate-45 transform origin-bottom-left scale-y-75 translate-x-1" />
-                <div className="absolute inset-0 bg-thriva-mint rounded-full -rotate-45 transform origin-bottom-right scale-y-75 -translate-x-1" />
+              <div className={`w-10 h-10 rounded-full ${darkMode ? 'bg-thriva-mint text-thriva-navy' : 'bg-thriva-navy text-thriva-mint'} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500 mr-3`}>
+                <FlaskConical size={24} strokeWidth={2.5} />
               </div>
-              <span className="font-bold text-2xl tracking-tighter text-thriva-navy">metleo</span>
+              <span className={`font-bold text-2xl tracking-tighter ${darkMode ? 'text-white' : 'text-thriva-navy'}`}>metleo</span>
             </div>
           </div>
 
@@ -50,18 +54,24 @@ export const LandingPage = ({ onSignUp, onSignIn }: LandingPageProps) => {
           <div className="hidden md:flex items-center gap-8 text-sm font-bold">
             <a href="#how" className="hover:text-thriva-mint transition-colors">How it works</a>
             <a href="#results" className="hover:text-thriva-mint transition-colors">Results</a>
-            <button onClick={onSignIn} className="hover:text-thriva-mint transition-colors">Sign in</button>
+            <button 
+              onClick={onToggleDarkMode}
+              className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${darkMode ? 'bg-white/5 text-thriva-mint hover:bg-white/10' : 'bg-thriva-navy/5 text-thriva-navy/40 hover:bg-thriva-navy/10'}`}
+            >
+              {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
           </div>
 
           {/* Core Action */}
           <div className="flex items-center gap-3">
             <motion.button 
-              whileHover={{ backgroundColor: '#5A2578' }}
+              whileHover={{ backgroundColor: '#5A2578', scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
-              onClick={onSignUp}
-              className="bg-thriva-purple text-white px-5 md:px-8 py-2.5 md:py-3.5 rounded-full transition-colors font-bold text-xs md:text-sm shadow-lg shadow-thriva-purple/20"
+              onClick={onSignIn}
+              className="bg-thriva-purple text-white px-5 md:px-8 py-2.5 md:py-3.5 rounded-full transition-all font-bold text-xs md:text-sm shadow-xl shadow-thriva-purple/20 flex items-center gap-2"
             >
-              Start testing
+              Sign In
+              <ArrowRight size={14} strokeWidth={3} />
             </motion.button>
             <button className="p-2 md:hidden">
               <Menu size={24} strokeWidth={2.5} />
@@ -90,15 +100,15 @@ export const LandingPage = ({ onSignUp, onSignIn }: LandingPageProps) => {
             
             {/* Context Widget - Hero Floating UI */}
             <div className="absolute bottom-8 left-8 hidden md:block">
-              <div className="bg-white/90 backdrop-blur-md p-6 rounded-[32px] shadow-thriva border border-white/50 max-w-xs">
+              <div className="bg-white/90 dark:bg-thriva-navy/90 backdrop-blur-md p-6 rounded-[32px] shadow-thriva border border-white/50 dark:border-white/10 max-w-xs">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-full bg-thriva-mint/20 flex items-center justify-center text-thriva-mint">
                     <Activity size={20} />
                   </div>
-                  <div className="font-bold text-sm">Real-time Stream Pulse</div>
+                  <div className="font-bold text-sm dark:text-white">Real-time Stream Pulse</div>
                 </div>
                 <div className="space-y-2">
-                  <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                  <div className="h-2 w-full bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden">
                     <motion.div 
                       initial={{ width: 0 }}
                       animate={{ width: '88%' }}
@@ -106,7 +116,7 @@ export const LandingPage = ({ onSignUp, onSignIn }: LandingPageProps) => {
                       className="h-full bg-thriva-mint" 
                     />
                   </div>
-                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Optimized Recovery</div>
+                  <div className="text-[10px] font-bold text-slate-400 dark:text-white/40 uppercase tracking-widest">Optimized Recovery</div>
                 </div>
               </div>
             </div>
@@ -119,7 +129,7 @@ export const LandingPage = ({ onSignUp, onSignIn }: LandingPageProps) => {
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              className="text-5xl md:text-[96px] font-display font-medium leading-[0.95] tracking-tight text-thriva-navy text-balance"
+              className="text-5xl md:text-[96px] font-display font-medium leading-[0.95] tracking-tight text-thriva-navy dark:text-white text-balance"
             >
               Know your ore. <br className="hidden md:block" />
               Own your recovery.
@@ -129,7 +139,7 @@ export const LandingPage = ({ onSignUp, onSignIn }: LandingPageProps) => {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="text-xl md:text-2xl text-thriva-navy/60 max-w-2xl mx-auto font-medium leading-relaxed"
+              className="text-xl md:text-2xl text-thriva-navy/60 dark:text-white/60 max-w-2xl mx-auto font-medium leading-relaxed"
             >
               MetLeo delivers clinical-grade metallurgical insights directly from your processing stream, helping you optimize yield and slash operational latency.
             </motion.p>
@@ -218,11 +228,11 @@ export const LandingPage = ({ onSignUp, onSignIn }: LandingPageProps) => {
             </div>
             <div className="flex-1 space-y-8 order-1 md:order-2">
               <div className="text-thriva-coral font-bold text-sm uppercase tracking-widest">Scientific Precision</div>
-              <h2 className="text-4xl md:text-7xl font-display font-medium leading-tight tracking-tight">Your lab results, deciphered.</h2>
-              <p className="text-xl text-thriva-navy/60 leading-relaxed">Don't just collect data—understand it. MetLeo creates actionable reports that tell you exactly where your processing plant is losing efficiency and how to reclaim it.</p>
+              <h2 className="text-4xl md:text-7xl font-display font-medium leading-tight tracking-tight dark:text-white">Your lab results, deciphered.</h2>
+              <p className="text-xl text-thriva-navy/60 dark:text-white/60 leading-relaxed">Don't just collect data—understand it. MetLeo creates actionable reports that tell you exactly where your processing plant is losing efficiency and how to reclaim it.</p>
               <button 
                 onClick={() => document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' })}
-                className="flex items-center gap-3 font-bold text-thriva-navy group hover:text-thriva-mint transition-colors"
+                className="flex items-center gap-3 font-bold text-thriva-navy dark:text-thriva-mint group hover:text-thriva-mint dark:hover:text-white transition-colors"
               >
                 See a sample report <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
               </button>
@@ -242,48 +252,48 @@ export const LandingPage = ({ onSignUp, onSignIn }: LandingPageProps) => {
       </main>
 
       {/* Refined Footer - Thriva Minimal */}
-      <footer className="py-24 px-6 bg-white border-t border-slate-100">
+      <footer className={`py-24 px-6 ${darkMode ? 'bg-[#050510] border-t border-white/5' : 'bg-white border-t border-slate-100'}`}>
         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-16">
           <div className="md:col-span-1 space-y-6">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-thriva-navy flex items-center justify-center text-thriva-mint">
-                <Activity size={18} />
+              <div className="w-10 h-10 rounded-full bg-thriva-navy dark:bg-thriva-mint flex items-center justify-center text-thriva-mint dark:text-thriva-navy shadow-lg">
+                <FlaskConical size={24} strokeWidth={2.5} />
               </div>
-              <span className="font-bold text-2xl tracking-tighter text-thriva-navy">metleo</span>
+              <span className={`font-bold text-2xl tracking-tighter ${darkMode ? 'text-white' : 'text-thriva-navy'}`}>metleo</span>
             </div>
-            <p className="text-slate-400 font-medium leading-relaxed">Optimizing the world's mineral processing streams with digital precision.</p>
+            <p className={`font-medium leading-relaxed ${darkMode ? 'text-white/40' : 'text-slate-400'}`}>Optimizing the world's mineral processing streams with digital precision.</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 md:col-span-3 gap-12">
             <div className="space-y-4">
-              <h4 className="font-bold text-thriva-navy">Services</h4>
-              <nav className="flex flex-col gap-3 text-slate-500 font-medium text-sm">
+              <h4 className={`font-bold ${darkMode ? 'text-white' : 'text-thriva-navy'}`}>Services</h4>
+              <nav className={`flex flex-col gap-3 font-medium text-sm ${darkMode ? 'text-white/40' : 'text-slate-500'}`}>
                 <a href="#results" className="hover:text-thriva-mint transition-colors">Assay Testing</a>
                 <a href="#how" className="hover:text-thriva-mint transition-colors">Stream Analytics</a>
                 <a href="#how" className="hover:text-thriva-mint transition-colors">Inventory Management</a>
               </nav>
             </div>
             <div className="space-y-4">
-              <h4 className="font-bold text-thriva-navy">Company</h4>
-              <nav className="flex flex-col gap-3 text-slate-500 font-medium text-sm">
+              <h4 className={`font-bold ${darkMode ? 'text-white' : 'text-thriva-navy'}`}>Company</h4>
+              <nav className={`flex flex-col gap-3 font-medium text-sm ${darkMode ? 'text-white/40' : 'text-slate-500'}`}>
                 <button onClick={onSignIn} className="text-left hover:text-thriva-mint transition-colors">About Us</button>
                 <a href="#" className="hover:text-thriva-mint transition-colors">Privacy Policy</a>
                 <button onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })} className="text-left hover:text-thriva-mint transition-colors">Contact</button>
               </nav>
             </div>
             <div className="space-y-4">
-              <h4 className="font-bold text-thriva-navy">Connect</h4>
-              <nav className="flex flex-col gap-3 text-slate-500 font-medium text-sm">
+              <h4 className={`font-bold ${darkMode ? 'text-white' : 'text-thriva-navy'}`}>Connect</h4>
+              <nav className={`flex flex-col gap-3 font-medium text-sm ${darkMode ? 'text-white/40' : 'text-slate-500'}`}>
                 <a href="#" className="hover:text-thriva-mint transition-colors">LinkedIn</a>
                 <a href="#" className="hover:text-thriva-mint transition-colors">Twitter</a>
               </nav>
             </div>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto pt-24 mt-24 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-bold text-slate-300 uppercase tracking-[0.3em]">
-          <p>© 2026 METLEO SYSTEMS. PRECISION GUARANTEED.</p>
+        <div className={`max-w-7xl mx-auto pt-24 mt-24 border-t flex flex-col items-center text-center gap-8 text-[10px] font-bold uppercase tracking-[0.3em] ${darkMode ? 'border-white/5 text-white/20' : 'border-slate-100 text-slate-300'}`}>
+          <p>© 2026 3ftly®Apps. All rights reserved.</p>
           <div className="flex gap-8">
-            <a href="#">TERMS</a>
-            <a href="#">PRIVACY</a>
+            <a href="#" className="hover:text-thriva-mint transition-colors">TERMS</a>
+            <a href="#" className="hover:text-thriva-mint transition-colors">PRIVACY</a>
           </div>
         </div>
       </footer>
