@@ -1,5 +1,5 @@
 /**
- * MetLeo Assay Lab Types
+ * Metalytics Assay Lab Types
  */
 
 export type SampleStatus = 'Received' | 'Preparation' | 'Analysis' | 'Finalized' | 'Cancelled';

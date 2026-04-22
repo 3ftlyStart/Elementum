@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
+import ChatModal from './ChatModal';
 import { 
   Menu, 
-  Heart,
+  MessageCircle,
   ArrowRight,
   ChevronRight,
   ShieldCheck,
@@ -22,6 +23,7 @@ interface LandingPageProps {
 }
 
 export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: LandingPageProps) => {
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const { scrollY } = useScroll();
   const headerY = useTransform(scrollY, [0, 100], [48, 20]);
   const headerScale = useTransform(scrollY, [0, 100], [1, 0.95]);
@@ -46,13 +48,14 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
               <div className={`w-10 h-10 rounded-full ${darkMode ? 'bg-thriva-mint text-thriva-navy' : 'bg-thriva-navy text-thriva-mint'} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500 mr-3`}>
                 <FlaskConical size={24} strokeWidth={2.5} />
               </div>
-              <span className={`font-bold text-2xl tracking-tighter ${darkMode ? 'text-white' : 'text-thriva-navy'}`}>metleo</span>
+              <span className={`font-bold text-2xl tracking-tighter ${darkMode ? 'text-white' : 'text-thriva-navy'}`}>metalytics</span>
             </div>
           </div>
 
           {/* Desktop Nav Actions */}
-          <div className="hidden md:flex items-center gap-8 text-sm font-bold">
+          <div className="hidden lg:flex items-center gap-8 text-sm font-bold">
             <a href="#how" className="hover:text-thriva-mint transition-colors">How it works</a>
+            <a href="#onboarding" className="hover:text-thriva-mint transition-colors">Onboarding</a>
             <a href="#results" className="hover:text-thriva-mint transition-colors">Results</a>
             <button 
               onClick={onToggleDarkMode}
@@ -141,7 +144,7 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
               transition={{ delay: 0.2 }}
               className="text-xl md:text-2xl text-thriva-navy/60 dark:text-white/60 max-w-2xl mx-auto font-medium leading-relaxed"
             >
-              MetLeo delivers clinical-grade metallurgical insights directly from your processing stream, helping you optimize yield and slash operational latency.
+              Metalytics delivers clinical-grade metallurgical insights directly from your processing stream, helping you optimize yield and slash operational latency.
             </motion.p>
 
             <motion.div
@@ -153,21 +156,25 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
                 onClick={onSignUp}
                 className="bg-thriva-navy text-white px-12 py-5 rounded-full text-lg font-bold hover:scale-[1.03] transition-transform shadow-xl flex items-center justify-center gap-3 w-full md:w-auto"
               >
-                Explore services <ArrowRight size={22} />
+                Register a Sample <ArrowRight size={22} />
               </button>
-              <a 
-                href="#how"
-                className="flex items-center gap-4 text-sm font-bold border-b-2 border-thriva-mint pb-1 hover:text-thriva-mint transition-colors cursor-pointer"
+              <button 
+                onClick={onSignIn}
+                className={`bg-white text-thriva-navy border border-thriva-navy/10 px-12 py-5 rounded-full text-lg font-bold hover:scale-[1.03] transition-transform shadow-xl flex items-center justify-center gap-3 w-full md:w-auto ${darkMode ? 'bg-white/5 text-white border-white/10' : ''}`}
               >
-                How it works <ChevronRight size={18} />
-              </a>
+                Client Portal <Activity size={22} className="text-thriva-mint" />
+              </button>
             </motion.div>
           </div>
         </section>
 
-        {/* The MetLeo Method - Feature Trio */}
+        {/* The Metalytics Method - Feature Trio */}
         <section className="bg-thriva-off-white py-32 px-6" id="how">
           <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-24 space-y-4">
+              <div className="text-thriva-mint font-bold text-sm uppercase tracking-widest">Protocol</div>
+              <h2 className="text-4xl md:text-6xl font-display font-medium dark:text-white">The Metalytics Engine</h2>
+            </div>
             <div className="grid md:grid-cols-3 gap-12 md:gap-24">
               <div className="space-y-6">
                 <div className="w-16 h-16 rounded-3xl bg-white shadow-thriva flex items-center justify-center text-thriva-mint">
@@ -194,6 +201,62 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
           </div>
         </section>
 
+        {/* Onboarding Pathway - New Section */}
+        <section className="py-32 px-6" id="onboarding">
+          <div className="max-w-7xl mx-auto">
+            <div className="bg-thriva-navy rounded-[60px] p-12 md:p-24 relative overflow-hidden text-white">
+              <div className="absolute top-0 right-0 w-96 h-96 bg-thriva-mint/10 rounded-full blur-[100px] -mr-48 -mt-48" />
+              <div className="relative z-10 grid md:grid-cols-2 gap-16 items-center">
+                <div className="space-y-10">
+                  <div className="text-thriva-mint font-bold text-sm uppercase tracking-widest">Onboarding</div>
+                  <h2 className="text-4xl md:text-7xl font-display font-medium leading-[0.9] tracking-tight">Rapid access to <br/>your data pipeline.</h2>
+                  <p className="text-xl text-white/60 leading-relaxed max-w-md">Seamlessly transition from physical sampling to digital intelligence. Our three-step onboarding gets you results in 24 hours.</p>
+                  <div className="space-y-6 pt-4">
+                    {[
+                      { step: '01', title: 'Register Facility', desc: 'Securely map your mine site and plant sectors.' },
+                      { step: '02', title: 'Connect Sensors', desc: 'Sync your lab instruments via our IoT edge.' },
+                      { step: '03', title: 'Submit Sample', desc: 'Log your first batch and track lifecycle live.' },
+                    ].map((s, i) => (
+                      <div key={i} className="flex gap-6 items-start">
+                        <span className="text-thriva-mint font-display text-2xl font-medium pt-1">{s.step}</span>
+                        <div className="space-y-1">
+                          <h4 className="font-bold text-lg">{s.title}</h4>
+                          <p className="text-white/40 text-sm">{s.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="relative">
+                  <div className="bg-white/5 backdrop-blur-3xl rounded-[40px] p-8 border border-white/10 shadow-2xl relative z-10">
+                    <div className="flex justify-between items-center mb-8">
+                       <span className="text-[10px] font-bold text-thriva-mint uppercase tracking-widest">Sample Tracker</span>
+                       <Activity size={18} className="text-thriva-mint" />
+                    </div>
+                    <div className="space-y-4">
+                      {[1, 2, 3].map(i => (
+                        <div key={i} className="bg-white/5 rounded-2xl p-4 flex justify-between items-center">
+                          <div className="flex gap-4 items-center">
+                            <div className="w-8 h-8 rounded-full bg-thriva-mint/20" />
+                            <div className="w-24 h-2 bg-white/20 rounded-full" />
+                          </div>
+                          <div className="w-12 h-2 bg-thriva-mint/40 rounded-full" />
+                        </div>
+                      ))}
+                    </div>
+                    <button 
+                      onClick={onSignUp}
+                      className="w-full bg-thriva-mint text-thriva-navy font-bold py-5 rounded-full mt-10 transition-transform hover:scale-[1.02] shadow-xl shadow-thriva-mint/20"
+                    >
+                      Get Started Now
+                    </button>
+                  </div>
+                  <div className="absolute inset-0 bg-thriva-mint/20 blur-[120px] rounded-full scale-75 translate-y-10" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
         {/* Results Spotlight - Card Layout */}
         <section className="py-32 px-6" id="results">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-20 items-center">
@@ -229,7 +292,7 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
             <div className="flex-1 space-y-8 order-1 md:order-2">
               <div className="text-thriva-coral font-bold text-sm uppercase tracking-widest">Scientific Precision</div>
               <h2 className="text-4xl md:text-7xl font-display font-medium leading-tight tracking-tight dark:text-white">Your lab results, deciphered.</h2>
-              <p className="text-xl text-thriva-navy/60 dark:text-white/60 leading-relaxed">Don't just collect data—understand it. MetLeo creates actionable reports that tell you exactly where your processing plant is losing efficiency and how to reclaim it.</p>
+              <p className="text-xl text-thriva-navy/60 dark:text-white/60 leading-relaxed">Don't just collect data—understand it. Metalytics creates actionable reports that tell you exactly where your processing plant is losing efficiency and how to reclaim it.</p>
               <button 
                 onClick={() => document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' })}
                 className="flex items-center gap-3 font-bold text-thriva-navy dark:text-thriva-mint group hover:text-thriva-mint dark:hover:text-white transition-colors"
@@ -240,15 +303,17 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
           </div>
         </section>
 
-        {/* Floating Action Button (FAB) - Scroll to top / Contact toggle */}
+        {/* Floating Action Button (FAB) - Contact / Chat toggle */}
         <motion.button
           whileHover={{ scale: 1.1, y: -5 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-10 right-10 z-[100] w-16 h-16 bg-thriva-coral text-white rounded-full shadow-[0_15px_30px_rgba(242,76,109,0.35)] flex items-center justify-center transition-shadow hover:shadow-[0_20px_40px_rgba(242,76,109,0.5)]"
+          onClick={() => setIsChatOpen(!isChatOpen)}
+          className="fixed bottom-10 right-10 z-[100] w-16 h-16 bg-thriva-navy text-thriva-mint rounded-full shadow-thriva flex items-center justify-center transition-shadow"
         >
-          <Heart size={28} fill="currentColor" />
+          <MessageCircle size={28} fill="currentColor" />
         </motion.button>
+
+        <ChatModal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
       </main>
 
       {/* Refined Footer - Thriva Minimal */}
@@ -259,7 +324,7 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
               <div className="w-10 h-10 rounded-full bg-thriva-navy dark:bg-thriva-mint flex items-center justify-center text-thriva-mint dark:text-thriva-navy shadow-lg">
                 <FlaskConical size={24} strokeWidth={2.5} />
               </div>
-              <span className={`font-bold text-2xl tracking-tighter ${darkMode ? 'text-white' : 'text-thriva-navy'}`}>metleo</span>
+              <span className={`font-bold text-2xl tracking-tighter ${darkMode ? 'text-white' : 'text-thriva-navy'}`}>metalytics</span>
             </div>
             <p className={`font-medium leading-relaxed ${darkMode ? 'text-white/40' : 'text-slate-400'}`}>Optimizing the world's mineral processing streams with digital precision.</p>
           </div>

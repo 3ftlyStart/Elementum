@@ -1,6 +1,6 @@
 {
-  "name": "MetLeo",
-  "description": "A reimagined metallurgical assay lab companion, providing professional-grade tracking and analysis with a modern wellness-inspired interface.",
+  "name": "Metalytics",
+  "description": "A reimagined metallurgical assay lab companion with distinct Admin, Technician, and Client dashboards, providing professional-grade tracking and analysis with a modern wellness-inspired interface.",
   "requestFramePermissions": [],
   "majorCapabilities": []
 }
