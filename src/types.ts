@@ -1,5 +1,5 @@
 /**
- * Metalytics Assay Lab Types
+ * metalyt Assay Lab Types
  */
 
 export type SampleStatus = 'Received' | 'Preparation' | 'Analysis' | 'Finalized' | 'Cancelled';
@@ -86,6 +86,8 @@ export interface Sample {
   collectedAt: string;
   submittedById: string;
   elements: AssayElements;
+  assignedToId?: string;
+  assignedToName?: string;
   notes: string;
   history: HistoryEntry[];
   updatedAt: string;

@@ -63,7 +63,7 @@ export const Onboarding = ({ user, onComplete }: OnboardingProps) => {
                 <div className="w-16 h-16 bg-thriva-mint/10 rounded-[28px] mx-auto flex items-center justify-center text-thriva-mint">
                    <FlaskConical size={32} />
                 </div>
-                <h2 className="font-display text-4xl font-medium tracking-tight">Welcome to Metalytics</h2>
+                <h2 className="font-display text-4xl font-medium tracking-tight">Welcome to metalyt</h2>
                 <p className="text-thriva-navy/60 font-medium leading-relaxed">How will you be using the portal today?</p>
               </div>
 

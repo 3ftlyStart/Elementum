@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
+import React, { useState, useEffect } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
 import ChatModal from './ChatModal';
 import { 
   Menu, 
@@ -12,7 +12,16 @@ import {
   Globe,
   FlaskConical,
   Moon,
-  Sun
+  Sun,
+  Database,
+  Search,
+  Cpu,
+  Store,
+  X,
+  Settings,
+  User,
+  LogOut,
+  ChevronDown
 } from 'lucide-react';
 
 interface LandingPageProps {
@@ -24,7 +33,40 @@ interface LandingPageProps {
 
 export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: LandingPageProps) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeCard, setActiveCard] = useState(0);
   const { scrollY } = useScroll();
+
+  const heroCards = [
+    {
+      title: "Digital Custody",
+      desc: "End-to-end encryption for every sample lifecycle.",
+      icon: ShieldCheck,
+      color: "bg-thriva-mint",
+      accent: "text-thriva-navy"
+    },
+    {
+      title: "Stream Intelligence",
+      desc: "Millisecond precision from sensors to dashboard.",
+      icon: Zap,
+      color: "bg-thriva-purple",
+      accent: "text-white"
+    },
+    {
+      title: "Global Standards",
+      desc: "ISO-ready reporting for international compliance.",
+      icon: Globe,
+      color: "bg-thriva-coral",
+      accent: "text-white"
+    }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveCard((prev) => (prev + 1) % heroCards.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
   const headerY = useTransform(scrollY, [0, 100], [48, 20]);
   const headerScale = useTransform(scrollY, [0, 100], [1, 0.95]);
 
@@ -41,14 +83,14 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
         style={{ top: headerY, scale: headerScale }}
         className="fixed left-0 right-0 z-50 px-4 md:px-8 pointer-events-none"
       >
-        <header className={`max-w-5xl mx-auto ${darkMode ? 'bg-[#050510]/90 text-white border-white/10' : 'bg-white/90 text-thriva-navy border-white/50'} backdrop-blur-xl rounded-full h-16 md:h-20 shadow-thriva flex items-center justify-between px-6 md:px-10 border pointer-events-auto`}>
+        <header className={`max-w-5xl mx-auto ${darkMode ? 'bg-[#050510]/90 text-white border-white/10' : 'bg-white/90 text-thriva-navy border-white/50'} backdrop-blur-xl rounded-full h-16 md:h-20 shadow-2xl shadow-thriva-navy/5 flex items-center justify-between px-6 md:px-10 border pointer-events-auto`}>
           {/* Logo Section */}
           <div className="flex items-center gap-2 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <div className="flex items-center">
               <div className={`w-10 h-10 rounded-full ${darkMode ? 'bg-thriva-mint text-thriva-navy' : 'bg-thriva-navy text-thriva-mint'} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500 mr-3`}>
                 <FlaskConical size={24} strokeWidth={2.5} />
               </div>
-              <span className={`font-bold text-2xl tracking-tighter ${darkMode ? 'text-white' : 'text-thriva-navy'}`}>metalytics</span>
+              <span className={`font-bold text-2xl tracking-tighter ${darkMode ? 'text-white' : 'text-thriva-navy'}`}>metalyt</span>
             </div>
           </div>
 
@@ -66,193 +108,308 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
           </div>
 
           {/* Core Action */}
-          <div className="flex items-center gap-3">
-            <motion.button 
-              whileHover={{ backgroundColor: '#5A2578', scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={onSignIn}
-              className="bg-thriva-purple text-white px-5 md:px-8 py-2.5 md:py-3.5 rounded-full transition-all font-bold text-xs md:text-sm shadow-xl shadow-thriva-purple/20 flex items-center gap-2"
+          <div className="flex items-center gap-2">
+            <button 
+              className={`p-2 rounded-full transition-all ${darkMode ? 'hover:bg-white/10 text-white' : 'hover:bg-thriva-navy/5 text-thriva-navy'}`}
+              aria-label="Store"
             >
-              Sign In
-              <ArrowRight size={14} strokeWidth={3} />
-            </motion.button>
-            <button className="p-2 md:hidden">
+              <Store size={22} strokeWidth={2.5} />
+            </button>
+            <button 
+              onClick={() => setIsMenuOpen(true)}
+              className={`p-2 rounded-full transition-all ${darkMode ? 'hover:bg-white/10 text-white' : 'hover:bg-thriva-navy/5 text-thriva-navy'}`}
+            >
               <Menu size={24} strokeWidth={2.5} />
             </button>
           </div>
         </header>
       </motion.div>
 
-      {/* Hero Content Section */}
-      <main className="pt-24">
-        {/* Dynamic Image Canvas Section */}
-        <section className="px-0 md:px-8 max-w-7xl mx-auto">
-          <motion.div 
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full aspect-[4/3] md:aspect-[21/10] rounded-none md:rounded-[60px] overflow-hidden relative shadow-thriva"
-          >
-            <img 
-              src="https://picsum.photos/seed/metallurgy-expertise/1920/1080" 
-              alt="Precision Metallurgy Lab"
-              className="w-full h-full object-cover scale-105"
-              referrerPolicy="no-referrer"
+      {/* Slide Menu Overlay */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMenuOpen(false)}
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[70]"
             />
-            <div className="absolute inset-0 bg-thriva-navy/5" />
-            
-            {/* Context Widget - Hero Floating UI */}
-            <div className="absolute bottom-8 left-8 hidden md:block">
-              <div className="bg-white/90 dark:bg-thriva-navy/90 backdrop-blur-md p-6 rounded-[32px] shadow-thriva border border-white/50 dark:border-white/10 max-w-xs">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-thriva-mint/20 flex items-center justify-center text-thriva-mint">
-                    <Activity size={20} />
-                  </div>
-                  <div className="font-bold text-sm dark:text-white">Real-time Stream Pulse</div>
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className={`fixed top-0 right-0 h-full w-full max-w-sm z-[80] shadow-2xl flex flex-col ${darkMode ? 'bg-[#0D0D2D] text-white' : 'bg-white text-thriva-navy'}`}
+            >
+              <div className="p-6 flex justify-between items-center border-b border-white/5">
+                <div className="flex items-center gap-2">
+                  <FlaskConical className="text-thriva-mint" size={24} />
+                  <span className="font-bold text-xl lowercase">metalyt</span>
                 </div>
-                <div className="space-y-2">
-                  <div className="h-2 w-full bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden">
-                    <motion.div 
-                      initial={{ width: 0 }}
-                      animate={{ width: '88%' }}
-                      transition={{ duration: 2, delay: 1 }}
-                      className="h-full bg-thriva-mint" 
-                    />
-                  </div>
-                  <div className="text-[10px] font-bold text-slate-400 dark:text-white/40 uppercase tracking-widest">Optimized Recovery</div>
+                <button 
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`p-2 rounded-full ${darkMode ? 'hover:bg-white/10' : 'hover:bg-thriva-navy/5'}`}
+                >
+                  <X size={24} />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-6 space-y-8">
+                <nav className="space-y-4">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">Navigation</p>
+                  {[
+                    { label: 'How it works', href: '#how' },
+                    { label: 'Onboarding', href: '#onboarding' },
+                    { label: 'Results', href: '#results' },
+                    { label: 'Documentation', href: '#' },
+                  ].map((item) => (
+                    <a
+                      key={item.label}
+                      href={item.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className="flex items-center justify-between group p-2 -mx-2 rounded-xl transition-colors hover:bg-thriva-mint/10"
+                    >
+                      <span className="font-medium">{item.label}</span>
+                      <ChevronRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </a>
+                  ))}
+                </nav>
+
+                <div className="space-y-4">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">Account</p>
+                  <button 
+                    onClick={() => { onSignIn(); setIsMenuOpen(false); }}
+                    className="w-full flex items-center gap-4 p-3 rounded-2xl bg-thriva-navy text-white hover:bg-thriva-navy/80 transition-colors"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-thriva-mint/20 flex items-center justify-center text-thriva-mint">
+                      <User size={20} />
+                    </div>
+                    <div className="text-left">
+                      <p className="font-bold text-sm">Sign In</p>
+                      <p className="text-[10px] opacity-60">Access your portal</p>
+                    </div>
+                  </button>
                 </div>
               </div>
-            </div>
-          </motion.div>
-        </section>
 
-        {/* Headline Cluster - Editorial Precision */}
-        <section className="pt-24 pb-32 px-6 text-center max-w-5xl mx-auto">
-          <div className="space-y-10">
+              <div className="p-6 border-t border-white/5 space-y-4">
+                <button
+                  onClick={onToggleDarkMode}
+                  className={`w-full flex items-center justify-between p-3 rounded-2xl ${darkMode ? 'bg-white/5' : 'bg-thriva-navy/5'}`}
+                >
+                  <div className="flex items-center gap-3">
+                    {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+                    <span className="text-sm font-medium">{darkMode ? 'Light' : 'Dark'} Mode</span>
+                  </div>
+                  <div className={`w-10 h-5 rounded-full relative transition-colors ${darkMode ? 'bg-thriva-mint' : 'bg-thriva-navy/20'}`}>
+                    <div className={`absolute top-1 w-3 h-3 rounded-full bg-white transition-all ${darkMode ? 'right-1' : 'left-1'}`} />
+                  </div>
+                </button>
+                
+                <p className="text-center text-[10px] font-medium opacity-40">
+                  © 2026 metalyt Mineral Intelligence. <br />
+                  All rights reserved.
+                </p>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Hero Content Section */}
+      <main className="pt-24 lg:pt-32">
+        <section className="px-6 lg:px-8 max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+          <div className="space-y-8 lg:space-y-12">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="inline-flex items-center gap-2 px-3 py-1 bg-thriva-mint/10 rounded-full border border-thriva-mint/20"
+            >
+              <span className="flex h-2 w-2 rounded-full bg-thriva-mint animate-pulse" />
+              <span className="text-[10px] font-bold text-thriva-mint uppercase tracking-[0.2em]">Next-Gen Mineral Intelligence</span>
+            </motion.div>
+            
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              className="text-5xl md:text-[96px] font-display font-medium leading-[0.95] tracking-tight text-thriva-navy dark:text-white text-balance"
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-6xl lg:text-[104px] font-display font-medium leading-[0.9] tracking-tighter text-thriva-navy dark:text-white"
             >
-              Know your ore. <br className="hidden md:block" />
-              Own your recovery.
+              Own your <br className="hidden lg:block" />
+              <span className="text-thriva-mint italic pr-4">recovery.</span>
             </motion.h1>
             
             <motion.p 
               initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="text-xl md:text-2xl text-thriva-navy/60 dark:text-white/60 max-w-2xl mx-auto font-medium leading-relaxed"
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="text-lg lg:text-2xl text-thriva-navy/60 dark:text-white/60 max-w-lg font-medium leading-relaxed"
             >
-              Metalytics delivers clinical-grade metallurgical insights directly from your processing stream, helping you optimize yield and slash operational latency.
+              metalyt delivers clinical-grade metallurgical insights directly from your stream to slash operational latency.
             </motion.p>
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              className="pt-8 flex flex-col md:flex-row items-center justify-center gap-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="flex flex-col sm:flex-row items-center gap-4"
             >
               <button 
                 onClick={onSignUp}
-                className="bg-thriva-navy text-white px-12 py-5 rounded-full text-lg font-bold hover:scale-[1.03] transition-transform shadow-xl flex items-center justify-center gap-3 w-full md:w-auto"
+                className="bg-thriva-navy dark:bg-thriva-mint text-white dark:text-thriva-navy px-10 py-5 rounded-full text-sm font-bold hover:scale-[1.03] transition-all shadow-2xl flex items-center justify-center gap-3 w-full sm:w-auto overflow-hidden group relative"
               >
-                Register a Sample <ArrowRight size={22} />
+                <span className="relative z-10 flex items-center gap-2">Register Sample <ArrowRight size={18} /></span>
+                <motion.div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
               </button>
               <button 
                 onClick={onSignIn}
-                className={`bg-white text-thriva-navy border border-thriva-navy/10 px-12 py-5 rounded-full text-lg font-bold hover:scale-[1.03] transition-transform shadow-xl flex items-center justify-center gap-3 w-full md:w-auto ${darkMode ? 'bg-white/5 text-white border-white/10' : ''}`}
+                className={`bg-white text-thriva-navy border border-thriva-navy/10 px-10 py-5 rounded-full text-sm font-bold hover:scale-[1.03] transition-all shadow-xl flex items-center justify-center gap-3 w-full sm:w-auto ${darkMode ? 'bg-white/5 text-white border-white/10' : ''}`}
               >
-                Client Portal <Activity size={22} className="text-thriva-mint" />
+                Client Portal <Activity size={18} className="text-thriva-mint" />
               </button>
             </motion.div>
           </div>
-        </section>
 
-        {/* The Metalytics Method - Feature Trio */}
-        <section className="bg-thriva-off-white py-32 px-6" id="how">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-24 space-y-4">
-              <div className="text-thriva-mint font-bold text-sm uppercase tracking-widest">Protocol</div>
-              <h2 className="text-4xl md:text-6xl font-display font-medium dark:text-white">The Metalytics Engine</h2>
-            </div>
-            <div className="grid md:grid-cols-3 gap-12 md:gap-24">
-              <div className="space-y-6">
-                <div className="w-16 h-16 rounded-3xl bg-white shadow-thriva flex items-center justify-center text-thriva-mint">
-                  <ShieldCheck size={32} />
-                </div>
-                <h3 className="text-3xl font-display font-medium">Digital Custody</h3>
-                <p className="text-thriva-navy/60 leading-relaxed">End-to-end encryption for every sample, ensuring permanent and tamper-proof extraction records.</p>
-              </div>
-              <div className="space-y-6">
-                <div className="w-16 h-16 rounded-3xl bg-white shadow-thriva flex items-center justify-center text-thriva-purple">
-                  <Zap size={32} />
-                </div>
-                <h3 className="text-3xl font-display font-medium">Stream Intelligence</h3>
-                <p className="text-thriva-navy/60 leading-relaxed">High-frequency data streaming directly from plant sensors to your dashboard in milliseconds.</p>
-              </div>
-              <div className="space-y-6">
-                <div className="w-16 h-16 rounded-3xl bg-white shadow-thriva flex items-center justify-center text-thriva-coral">
-                  <Globe size={32} />
-                </div>
-                <h3 className="text-3xl font-display font-medium">Global Standards</h3>
-                <p className="text-thriva-navy/60 leading-relaxed">Compliance-ready reporting that meets both local regulatory and global ESG requirements.</p>
-              </div>
+          {/* Shuffling Card Slider */}
+          <div className="relative h-[400px] lg:h-[500px] flex items-center justify-center">
+            <div className="relative w-full max-w-sm aspect-[4/5]">
+              <AnimatePresence mode="popLayout">
+                {heroCards.map((card, idx) => {
+                  const isFront = activeCard === idx;
+                  const isMiddle = (activeCard + 1) % heroCards.length === idx;
+                  const isBack = (activeCard + 2) % heroCards.length === idx;
+                  
+                  let zIndex = 0;
+                  let scale = 0.8;
+                  let y = 40;
+                  let opacity = 0;
+                  let rotate = 0;
+
+                  if (isFront) {
+                    zIndex = 30;
+                    scale = 1;
+                    y = 0;
+                    opacity = 1;
+                    rotate = 0;
+                  } else if (isMiddle) {
+                    zIndex = 20;
+                    scale = 0.9;
+                    y = -30;
+                    opacity = 0.6;
+                    rotate = 2;
+                  } else if (isBack) {
+                    zIndex = 10;
+                    scale = 0.8;
+                    y = -60;
+                    opacity = 0.3;
+                    rotate = 4;
+                  }
+
+                  return (
+                    <motion.div
+                      key={card.title}
+                      initial={{ opacity: 0, scale: 0.8, y: 100 }}
+                      animate={{ 
+                        opacity, 
+                        scale, 
+                        y, 
+                        zIndex,
+                        rotate,
+                      }}
+                      exit={{ opacity: 0, scale: 0.5, x: 200, rotate: 10 }}
+                      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                      className={`absolute inset-0 rounded-[48px] ${card.color} p-10 flex flex-col justify-between shadow-2xl overflow-hidden group`}
+                    >
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-1000" />
+                      
+                      <div className="space-y-6 relative z-10">
+                        <div className={`w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center ${card.accent}`}>
+                          <card.icon size={32} />
+                        </div>
+                        <h3 className={`text-4xl font-display font-medium leading-none ${card.accent}`}>
+                          {card.title.split(' ').map((word, i) => (
+                            <React.Fragment key={i}>{word}<br/></React.Fragment>
+                          ))}
+                        </h3>
+                      </div>
+
+                      <div className="space-y-6 relative z-10">
+                        <p className={`text-lg font-medium leading-relaxed ${idx === 0 ? 'text-thriva-navy/70' : 'text-white/70'}`}>
+                          {card.desc}
+                        </p>
+                        <div className="flex gap-2">
+                          {heroCards.map((_, dotIdx) => (
+                            <div 
+                              key={dotIdx} 
+                              className={`h-1.5 rounded-full transition-all duration-500 ${dotIdx === activeCard ? 'w-8 bg-current' : 'w-2 opacity-20 bg-current'} ${card.accent}`} 
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
             </div>
           </div>
         </section>
 
-        {/* Onboarding Pathway - New Section */}
-        <section className="py-32 px-6" id="onboarding">
-          <div className="max-w-7xl mx-auto">
-            <div className="bg-thriva-navy rounded-[60px] p-12 md:p-24 relative overflow-hidden text-white">
-              <div className="absolute top-0 right-0 w-96 h-96 bg-thriva-mint/10 rounded-full blur-[100px] -mr-48 -mt-48" />
-              <div className="relative z-10 grid md:grid-cols-2 gap-16 items-center">
-                <div className="space-y-10">
-                  <div className="text-thriva-mint font-bold text-sm uppercase tracking-widest">Onboarding</div>
-                  <h2 className="text-4xl md:text-7xl font-display font-medium leading-[0.9] tracking-tight">Rapid access to <br/>your data pipeline.</h2>
-                  <p className="text-xl text-white/60 leading-relaxed max-w-md">Seamlessly transition from physical sampling to digital intelligence. Our three-step onboarding gets you results in 24 hours.</p>
-                  <div className="space-y-6 pt-4">
-                    {[
-                      { step: '01', title: 'Register Facility', desc: 'Securely map your mine site and plant sectors.' },
-                      { step: '02', title: 'Connect Sensors', desc: 'Sync your lab instruments via our IoT edge.' },
-                      { step: '03', title: 'Submit Sample', desc: 'Log your first batch and track lifecycle live.' },
-                    ].map((s, i) => (
-                      <div key={i} className="flex gap-6 items-start">
-                        <span className="text-thriva-mint font-display text-2xl font-medium pt-1">{s.step}</span>
-                        <div className="space-y-1">
-                          <h4 className="font-bold text-lg">{s.title}</h4>
-                          <p className="text-white/40 text-sm">{s.desc}</p>
-                        </div>
-                      </div>
-                    ))}
+        {/* Condensed Intelligence Section */}
+        <section className="bg-thriva-off-white py-32 px-6" id="onboarding">
+          <div className="max-w-7xl mx-auto space-y-32">
+            <div className="grid lg:grid-cols-2 gap-24 items-center">
+              <div className="space-y-10">
+                <div className="text-thriva-mint font-bold text-xs uppercase tracking-[0.3em]">Lifecycle</div>
+                <h2 className="text-5xl lg:text-7xl font-display font-medium leading-[0.9] tracking-tighter dark:text-white">Seamless <br/>data ingestion.</h2>
+              <p className="text-xl text-thriva-navy/60 dark:text-white/60 leading-relaxed font-medium">From physical core to digital assay. Our pipeline ensures millisecond latency between laboratory completion and executive visibility.</p>
+                <div className="grid sm:grid-cols-2 gap-8 pt-4">
+                  <div className="p-6 bg-white dark:bg-white/5 rounded-3xl border border-thriva-navy/5 shadow-sm">
+                    <Database className="text-thriva-mint mb-4" />
+                    <h4 className="font-bold mb-2">Vault Storage</h4>
+                    <p className="text-xs text-thriva-navy/40 uppercase font-bold tracking-widest">Permanent Encrypted Records</p>
+                  </div>
+                  <div className="p-6 bg-white dark:bg-white/5 rounded-3xl border border-thriva-navy/5 shadow-sm">
+                    <Search className="text-thriva-purple mb-4" />
+                    <h4 className="font-bold mb-2">Forensic Search</h4>
+                    <p className="text-xs text-thriva-navy/40 uppercase font-bold tracking-widest">Instant Archeological Query</p>
                   </div>
                 </div>
-                <div className="relative">
-                  <div className="bg-white/5 backdrop-blur-3xl rounded-[40px] p-8 border border-white/10 shadow-2xl relative z-10">
-                    <div className="flex justify-between items-center mb-8">
-                       <span className="text-[10px] font-bold text-thriva-mint uppercase tracking-widest">Sample Tracker</span>
-                       <Activity size={18} className="text-thriva-mint" />
+              </div>
+              <div className="relative group">
+                <div className="absolute inset-x-0 -bottom-10 h-10 bg-thriva-navy/5 blur-3xl rounded-full scale-90 group-hover:scale-100 transition-transform duration-700" />
+                <motion.div 
+                  initial={{ rotate: 1 }}
+                  whileInView={{ rotate: 0 }}
+                  className="bg-thriva-navy rounded-[60px] p-12 lg:p-20 shadow-2xl relative overflow-hidden"
+                >
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-thriva-mint/10 rounded-full blur-[80px] -mr-32 -mt-32" />
+                  <div className="space-y-8 relative z-10">
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-thriva-mint/20 flex items-center justify-center text-thriva-mint">
+                          <Activity size={20} />
+                        </div>
+                        <span className="text-[10px] font-bold text-white uppercase tracking-widest">Active Stream</span>
+                      </div>
+                      <div className="h-2 w-2 rounded-full bg-thriva-mint animate-ping" />
                     </div>
-                    <div className="space-y-4">
-                      {[1, 2, 3].map(i => (
-                        <div key={i} className="bg-white/5 rounded-2xl p-4 flex justify-between items-center">
-                          <div className="flex gap-4 items-center">
-                            <div className="w-8 h-8 rounded-full bg-thriva-mint/20" />
-                            <div className="w-24 h-2 bg-white/20 rounded-full" />
-                          </div>
-                          <div className="w-12 h-2 bg-thriva-mint/40 rounded-full" />
+                    <div className="space-y-3">
+                      {[1, 2, 3, 4].map(i => (
+                        <div key={i} className="h-3 w-full bg-white/5 rounded-full overflow-hidden">
+                          <motion.div 
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${60 + Math.random() * 35}%` }}
+                            transition={{ duration: 1, delay: i * 0.1 }}
+                            className="h-full bg-thriva-mint/40" 
+                          />
                         </div>
                       ))}
                     </div>
-                    <button 
-                      onClick={onSignUp}
-                      className="w-full bg-thriva-mint text-thriva-navy font-bold py-5 rounded-full mt-10 transition-transform hover:scale-[1.02] shadow-xl shadow-thriva-mint/20"
-                    >
-                      Get Started Now
-                    </button>
+                    <p className="text-[10px] text-white/40 uppercase font-bold tracking-[0.2em]">Efficiency Pulse: 94.2%</p>
                   </div>
-                  <div className="absolute inset-0 bg-thriva-mint/20 blur-[120px] rounded-full scale-75 translate-y-10" />
-                </div>
+                </motion.div>
               </div>
             </div>
           </div>
@@ -292,7 +449,7 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
             <div className="flex-1 space-y-8 order-1 md:order-2">
               <div className="text-thriva-coral font-bold text-sm uppercase tracking-widest">Scientific Precision</div>
               <h2 className="text-4xl md:text-7xl font-display font-medium leading-tight tracking-tight dark:text-white">Your lab results, deciphered.</h2>
-              <p className="text-xl text-thriva-navy/60 dark:text-white/60 leading-relaxed">Don't just collect data—understand it. Metalytics creates actionable reports that tell you exactly where your processing plant is losing efficiency and how to reclaim it.</p>
+              <p className="text-xl text-thriva-navy/60 dark:text-white/60 leading-relaxed">Don't just collect data—understand it. metalyt creates actionable reports that tell you exactly where your processing plant is losing efficiency and how to reclaim it.</p>
               <button 
                 onClick={() => document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' })}
                 className="flex items-center gap-3 font-bold text-thriva-navy dark:text-thriva-mint group hover:text-thriva-mint dark:hover:text-white transition-colors"
@@ -308,9 +465,9 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
           whileHover={{ scale: 1.1, y: -5 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setIsChatOpen(!isChatOpen)}
-          className="fixed bottom-10 right-10 z-[100] w-16 h-16 bg-thriva-navy text-thriva-mint rounded-full shadow-thriva flex items-center justify-center transition-shadow"
+          className="fixed bottom-10 right-10 z-[100] p-4 text-thriva-navy dark:text-thriva-mint transition-all"
         >
-          <MessageCircle size={28} fill="currentColor" />
+          <MessageCircle size={36} fill="currentColor" className="opacity-80 hover:opacity-100 transition-opacity" />
         </motion.button>
 
         <ChatModal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
@@ -324,7 +481,7 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
               <div className="w-10 h-10 rounded-full bg-thriva-navy dark:bg-thriva-mint flex items-center justify-center text-thriva-mint dark:text-thriva-navy shadow-lg">
                 <FlaskConical size={24} strokeWidth={2.5} />
               </div>
-              <span className={`font-bold text-2xl tracking-tighter ${darkMode ? 'text-white' : 'text-thriva-navy'}`}>metalytics</span>
+              <span className={`font-bold text-2xl tracking-tighter ${darkMode ? 'text-white' : 'text-thriva-navy'}`}>metalyt</span>
             </div>
             <p className={`font-medium leading-relaxed ${darkMode ? 'text-white/40' : 'text-slate-400'}`}>Optimizing the world's mineral processing streams with digital precision.</p>
           </div>

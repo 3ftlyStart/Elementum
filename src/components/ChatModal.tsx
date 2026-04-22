@@ -33,7 +33,7 @@ type TabType = 'Home' | 'Messages' | 'Help';
 const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
   const [activeTab, setActiveTab] = useState<TabType>('Home');
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'bot', content: 'Hello! I am your Metalytics AI consultant. How can I help you with your mineral processing today?' }
+    { role: 'bot', content: 'Hello! I am your metalyt AI consultant. How can I help you with your mineral processing today?' }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -67,7 +67,7 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
         model: "gemini-3-flash-preview",
         contents: chatHistory as any,
         config: {
-          systemInstruction: "You are a professional metallurgical consultant for Metalytics Systems. You help miners and plant managers optimize their gold recovery, understand assay results, and manage their lab processes. Be precise, technical but accessible, and always prioritize precision. Your tone is helpful, expert, and efficient.",
+          systemInstruction: "You are a professional metallurgical consultant for metalyt Systems. You help miners and plant managers optimize their gold recovery, understand assay results, and manage their lab processes. Be precise, technical but accessible, and always prioritize precision. Your tone is helpful, expert, and efficient.",
         }
       });
 
@@ -90,7 +90,7 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
   const faqs = [
     "When should I take my test?",
     "How do discount codes work?",
-    "How does Metalytics work?",
+    "How does metalyt work?",
     "Where can I see my results?",
     "What is the precision of your assays?"
   ];
@@ -104,7 +104,7 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
             animate={{ opacity: 1, y: 0 }}
             className="p-6 space-y-4"
           >
-            <div className="pt-24 pb-8">
+            <div className="pt-8 pb-8">
               <motion.h2 
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -262,7 +262,7 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
                 <div className="w-9 h-9 rounded-full bg-thriva-navy flex items-center justify-center text-thriva-mint shadow-lg">
                     <FlaskConical size={20} strokeWidth={2.5} />
                 </div>
-                <span className="font-bold text-[20px] tracking-tighter text-thriva-navy">metalytics</span>
+                <span className="font-bold text-[20px] tracking-tighter text-thriva-navy">metalyt</span>
               </div>
               <button 
                 onClick={onClose}

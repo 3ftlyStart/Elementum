@@ -146,7 +146,7 @@ const HistoryView = ({ samples }: { samples: Sample[] }) => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `Metalytics_History_${startDate || 'all'}_to_${endDate || 'all'}.json`;
+    link.download = `metalyt_History_${startDate || 'all'}_to_${endDate || 'all'}.json`;
     link.click();
   };
 
@@ -749,7 +749,7 @@ const AnalyticsView = ({ samples }: { samples: Sample[] }) => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `Metalytics_Assay_Analytics_${new Date().toISOString().split('T')[0]}.json`;
+    link.download = `metalyt_Assay_Analytics_${new Date().toISOString().split('T')[0]}.json`;
     link.click();
   };
 
@@ -897,6 +897,32 @@ export default function App() {
   const [typeFilter, setTypeFilter] = useState<SampleType | 'All'>('All');
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
+  const handleUpdateSample = async (sampleId: string, data: Partial<Sample>) => {
+    const sample = samples.find(s => s.id === sampleId);
+    if (!sample) return;
+
+    const historyEntry = {
+      timestamp: new Date().toISOString(),
+      action: data.assignedToId ? 'Reassignment' : (data.status ? `Status Update: ${data.status}` : 'Sample Update'),
+      userId: user!.uid,
+      userName: profile!.displayName,
+      previousStatus: sample.status,
+      newStatus: data.status as SampleStatus || sample.status,
+      notes: data.assignedToName ? `Assigned to ${data.assignedToName}` : ''
+    };
+
+    if (navigator.onLine) {
+      await updateDoc(doc(db, 'samples', sampleId), { 
+        ...data, 
+        updatedAt: new Date().toISOString(),
+        history: [...(sample.history || []), historyEntry]
+      });
+    } else {
+      // For simplicity, we only handle simple online updates here or the user needs to implement a more complex offline merge
+      console.warn("Offline updates for complex objects not fully implemented in this demo POC");
+    }
+  };
+
   // Sync Manager Effect
   useEffect(() => {
     const handleStatusChange = () => {
@@ -1036,7 +1062,7 @@ export default function App() {
               <FlaskConical size={20} strokeWidth={2.5} />
             </div>
             <div className="flex flex-col">
-              <span className="text-[10px] font-bold tracking-[0.3em] text-[#39D3C0] uppercase group-hover:tracking-[0.4em] transition-all leading-none mb-1">Metalytics</span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-[#39D3C0] uppercase group-hover:tracking-[0.4em] transition-all leading-none mb-1">metalyt</span>
               <span className={"text-xl font-bold " + (darkMode ? "text-white" : "text-[#0D0D2D]") + " leading-tight flex items-center gap-1"}>Portal</span>
             </div>
           </div>
@@ -1097,9 +1123,9 @@ export default function App() {
                 {profile?.role === 'Client' ? (
                   <ClientPortal user={profile} />
                 ) : profile?.role === 'Admin' ? (
-                  <AdminDashboard samples={samples} user={profile} onNavigate={setView} />
+                  <AdminDashboard samples={samples} user={profile} onNavigate={setView} onUpdateSample={handleUpdateSample} />
                 ) : (
-                  <TechnicianDashboard samples={samples} user={profile} onNavigate={setView} />
+                  <TechnicianDashboard samples={samples} user={profile} onNavigate={setView} onUpdateSample={handleUpdateSample} />
                 )}
               </motion.div>
             )}

@@ -31,6 +31,7 @@ interface AdminDashboardProps {
   samples: Sample[];
   user: UserProfile;
   onNavigate: (view: any) => void;
+  onUpdateSample: (id: string, data: Partial<Sample>) => void;
 }
 
 const StatCard = ({ label, value, icon: Icon, trend }: any) => (
@@ -55,7 +56,7 @@ const StatCard = ({ label, value, icon: Icon, trend }: any) => (
   </motion.div>
 );
 
-export const AdminDashboard = ({ samples, user, onNavigate }: AdminDashboardProps) => {
+export const AdminDashboard = ({ samples, user, onNavigate, onUpdateSample }: AdminDashboardProps) => {
   const finalizedSamples = samples.filter(s => s.status === 'Finalized');
   const revenueEst = finalizedSamples.length * 150; // Mock $150 per sample
   
