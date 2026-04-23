@@ -223,141 +223,108 @@ export const InventoryManager = () => {
       )}
 
       {/* Item List */}
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredItems.map(item => {
           const isLow = item.currentStock < item.minStockLevel;
           const progress = Math.min(100, (item.currentStock / (item.minStockLevel * 2)) * 100);
 
           return (
-            <div key={item.id} className="bg-white border border-thriva-navy/5 rounded-[40px] p-8 space-y-6 hover:shadow-thriva hover:shadow-thriva-hover transition-all duration-500 overflow-hidden relative shadow-sm">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#FCFAF7]/50 rounded-full blur-[60px] -mr-16 -mt-16 pointer-events-none" />
-              
-              <div className="flex justify-between items-start relative z-10">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-lg font-bold text-thriva-navy tracking-tight">{item.name}</h3>
-                    <span className="text-[9px] font-bold bg-thriva-navy/5 px-2.5 py-1 rounded-full text-thriva-navy/30 uppercase tracking-widest">{item.id.slice(0, 8)}</span>
+            <div key={item.id} className="bg-white border border-thriva-navy/5 rounded-[32px] p-5 space-y-4 hover:shadow-thriva transition-all duration-300 relative shadow-sm h-fit">
+              <div className="flex justify-between items-start">
+                <div className="space-y-1">
+                  <h3 className="text-sm font-bold text-thriva-navy leading-tight line-clamp-1">{item.name}</h3>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[8px] font-bold bg-thriva-navy/5 px-2 py-0.5 rounded text-thriva-navy/30 uppercase tracking-widest">{item.category}</span>
+                    <span className="text-[8px] font-bold text-thriva-navy/20 uppercase tracking-widest leading-none">{item.location}</span>
                   </div>
-                  <p className="text-[10px] text-thriva-navy/30 uppercase tracking-[0.2em] font-bold font-display">Storage Loc: <span className="text-thriva-navy/50">{item.location}</span></p>
                 </div>
-                <div className="flex flex-col items-end gap-2">
-                   <button 
-                     onClick={() => handleDelete(item.id)}
-                     className="text-thriva-navy/10 hover:text-thriva-coral p-2 bg-[#FCFAF7] rounded-xl hover:bg-thriva-coral/5 transition-all"
-                   >
-                     <Trash2 size={14} />
-                   </button>
-                  <div className="text-right">
-                    <div className={`text-2xl font-display font-medium leading-none ${isLow ? 'text-thriva-coral' : 'text-thriva-mint'}`}>
-                      {item.currentStock} 
-                      <span className="text-[10px] text-thriva-navy/20 ml-2 font-bold uppercase tracking-widest">{item.unit}</span>
-                    </div>
-                    <p className="text-[9px] text-thriva-navy/20 uppercase font-bold tracking-widest mt-1">Operational Min: {item.minStockLevel}</p>
+                <button 
+                  onClick={() => handleDelete(item.id)}
+                  className="text-thriva-navy/10 hover:text-thriva-coral p-1 transition-colors"
+                >
+                  <Trash2 size={12} />
+                </button>
+              </div>
+
+              <div className="flex justify-between items-end">
+                <div className="space-y-0.5">
+                  <div className={`text-2xl font-display font-medium leading-none ${isLow ? 'text-thriva-coral' : 'text-thriva-mint'}`}>
+                    {item.currentStock} 
+                    <span className="text-[9px] text-thriva-navy/20 ml-1 font-bold uppercase tracking-widest">{item.unit}</span>
                   </div>
+                  <p className="text-[8px] text-thriva-navy/20 uppercase font-bold tracking-widest">Min: {item.minStockLevel}</p>
+                </div>
+                
+                <div className="flex gap-1.5 items-center">
+                  <button 
+                    onClick={() => handleAdjustStock(item, -1, 'Manual adjustment (Decrease)')}
+                    className="w-8 h-8 rounded-xl bg-[#FCFAF7] border border-thriva-navy/5 flex items-center justify-center text-thriva-navy/30 hover:text-thriva-coral transition-colors"
+                  >
+                    <Minus size={14} />
+                  </button>
+                  <button 
+                    onClick={() => handleAdjustStock(item, 1, 'Manual adjustment (Increase)')}
+                    className="w-8 h-8 rounded-xl bg-thriva-mint/5 border border-thriva-mint/20 flex items-center justify-center text-thriva-mint hover:bg-thriva-mint hover:text-white transition-colors"
+                  >
+                    <Plus size={14} />
+                  </button>
                 </div>
               </div>
 
-              <div className="space-y-3 relative z-10">
-                <div className="h-2 bg-[#FCFAF7] rounded-full overflow-hidden shadow-inner">
+              <div className="space-y-2">
+                <div className="h-1.5 bg-[#FCFAF7] rounded-full overflow-hidden shadow-inner">
                   <motion.div 
                     initial={{ width: 0 }}
                     animate={{ width: `${progress}%` }}
-                    className={`h-full rounded-full transition-all duration-1000 ${isLow ? 'bg-thriva-coral shadow-[0_0_10px_#EB7460]' : 'bg-thriva-mint shadow-[0_0_10px_#39D3C0]'}`}
+                    className={`h-full rounded-full transition-all duration-1000 ${isLow ? 'bg-thriva-coral' : 'bg-thriva-mint'}`}
                   ></motion.div>
                 </div>
-                <div className="flex justify-between items-center px-1">
-                   {isLow ? (
-                      <button 
-                        onClick={() => handleReorder(item)}
-                        disabled={!!orderLoading}
-                        className={`flex items-center gap-3 px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] transition-all shadow-sm ${
-                          orderSuccess === item.id 
-                            ? 'bg-thriva-mint text-white' 
-                            : 'bg-thriva-coral/10 text-thriva-coral border border-thriva-coral/20 hover:bg-thriva-coral hover:text-white'
-                        }`}
-                      >
-                        {orderLoading === item.id ? (
-                          <Loader2 size={14} className="animate-spin" />
-                        ) : orderSuccess === item.id ? (
-                          <CheckCircle2 size={14} />
-                        ) : (
-                          <ShoppingCart size={14} />
-                        )}
-                        {orderSuccess === item.id ? 'Requisitioned' : 'Atomic Reorder'}
-                      </button>
-                   ) : (
-                     <div className="flex items-center gap-2 px-3 py-1 bg-[#FCFAF7] rounded-full border border-thriva-navy/5">
-                       <History size={12} className="text-thriva-navy/20" />
-                       <span className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-widest">
-                         Cyclic Restock: {item.lastRestocked ? new Date(item.lastRestocked).toLocaleDateString('en-GB') : 'N/A'}
-                       </span>
-                     </div>
-                   )}
-                   <div className="flex items-center gap-3">
-                      <button 
-                        onClick={() => setExpandedItemId(expandedItemId === item.id ? null : item.id)}
-                        className={`w-10 h-10 rounded-2xl border flex items-center justify-center transition-all duration-300 shadow-sm ${expandedItemId === item.id ? 'bg-thriva-navy border-thriva-navy text-white shadow-xl rotate-180' : 'bg-white border-thriva-navy/5 text-thriva-navy/20 hover:text-thriva-navy'}`}
-                      >
-                         <ChevronDown size={18} />
-                      </button>
-                      <button 
-                        onClick={() => handleAdjustStock(item, -1, 'Manual adjustment (Decrease)')}
-                        className="w-10 h-10 rounded-2xl bg-[#FCFAF7] border border-thriva-navy/5 flex items-center justify-center text-thriva-navy/20 hover:text-thriva-coral hover:bg-thriva-coral/5 transition-all duration-300 shadow-sm"
-                      >
-                        <Minus size={18} />
-                      </button>
-                      <button 
-                        onClick={() => handleAdjustStock(item, 1, 'Manual adjustment (Increase)')}
-                        className="w-10 h-10 rounded-2xl bg-thriva-mint/5 border border-thriva-mint/20 flex items-center justify-center text-thriva-mint hover:bg-thriva-mint hover:text-white transition-all duration-300 shadow-sm"
-                      >
-                        <Plus size={18} />
-                      </button>
-                   </div>
+                
+                <div className="flex justify-between items-center">
+                  <button 
+                    onClick={() => setExpandedItemId(expandedItemId === item.id ? null : item.id)}
+                    className={`flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-widest px-2 py-1 rounded-lg transition-all ${expandedItemId === item.id ? 'bg-thriva-navy text-white' : 'text-thriva-navy/30 hover:text-thriva-navy bg-thriva-navy/5'}`}
+                  >
+                    <History size={10} /> {expandedItemId === item.id ? 'Hide Audit' : 'Audit Log'}
+                  </button>
+                  
+                  {isLow && (
+                    <button 
+                      onClick={() => handleReorder(item)}
+                      disabled={!!orderLoading}
+                      className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-[0.1em] text-thriva-coral"
+                    >
+                      {orderLoading === item.id ? <Loader2 size={10} className="animate-spin" /> : <ShoppingCart size={10} />}
+                      {orderSuccess === item.id ? 'Requested' : 'Reorder'}
+                    </button>
+                  )}
                 </div>
               </div>
 
-              {/* Collapsible Audit History */}
+              {/* Collapsible Audit History - Absolute positioned or relative based on layout */}
               <AnimatePresence>
                 {expandedItemId === item.id && (
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    className="overflow-hidden border-t border-thriva-navy/5 pt-6 mt-6 space-y-4 relative z-10"
+                    className="overflow-hidden border-t border-thriva-navy/5 pt-4 mt-2 space-y-3"
                   >
-                    <div className="flex items-center justify-between px-2">
-                      <span className="text-[10px] font-bold text-thriva-navy/20 uppercase tracking-[0.2em]">Inventory Audit Trail</span>
-                      <span className="text-[9px] font-bold text-thriva-navy/10 uppercase italic">Last 10 Events</span>
-                    </div>
-                    
-                    <div className="space-y-3">
-                      {!transactions[item.id] || transactions[item.id].length === 0 ? (
-                        <div className="py-8 text-center text-[10px] text-thriva-navy/20 uppercase font-bold tracking-[0.2em] bg-[#FCFAF7] rounded-[32px] border border-dashed border-thriva-navy/10">No recent mutations logged</div>
-                      ) : (
-                        transactions[item.id].map(tx => (
-                          <div key={tx.id} className="bg-[#FCFAF7] rounded-[24px] p-5 flex justify-between items-center border border-thriva-navy/5 group/tx hover:bg-white hover:shadow-thriva transition-all duration-300">
-                            <div className="flex items-center gap-4">
-                              <div className={`w-2.5 h-2.5 rounded-full shadow-sm ${tx.type === 'In' ? 'bg-thriva-mint' : 'bg-thriva-coral'}`}></div>
-                              <div>
-                                <p className="text-[11px] font-bold text-thriva-navy leading-none mb-2 capitalize">{tx.reason || 'General maintenance'}</p>
-                                <div className="flex items-center gap-3">
-                                  <div className="flex items-center gap-1.5 px-2 py-0.5 bg-white rounded-full border border-thriva-navy/5">
-                                    <UserIcon size={10} className="text-thriva-navy/20" />
-                                    <span className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-widest">{tx.userName}</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="text-right">
-                              <p className={`text-base font-display font-medium ${tx.type === 'In' ? 'text-thriva-mint' : 'text-thriva-coral'}`}>
-                                {tx.type === 'In' ? '+' : '-'}{tx.quantity}
-                              </p>
-                              <p className="text-[10px] text-thriva-navy/20 font-bold uppercase tracking-widest mt-1">{new Date(tx.timestamp).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</p>
-                            </div>
+                    {!transactions[item.id] || transactions[item.id].length === 0 ? (
+                      <div className="py-4 text-center text-[8px] text-thriva-navy/20 uppercase font-bold tracking-[0.1em]">No mutations logged</div>
+                    ) : (
+                      transactions[item.id].slice(0, 3).map(tx => (
+                        <div key={tx.id} className="flex justify-between items-center bg-[#FCFAF7] p-2 rounded-xl border border-thriva-navy/5">
+                          <div className="flex items-center gap-2">
+                            <div className={`w-1.5 h-1.5 rounded-full ${tx.type === 'In' ? 'bg-thriva-mint' : 'bg-thriva-coral'}`}></div>
+                            <p className="text-[9px] font-bold text-thriva-navy/60 truncate max-w-[80px]">{tx.reason || 'Mutation'}</p>
                           </div>
-                        ))
-                      )}
-                    </div>
+                          <p className={`text-[9px] font-bold ${tx.type === 'In' ? 'text-thriva-mint' : 'text-thriva-coral'}`}>
+                            {tx.type === 'In' ? '+' : '-'}{tx.quantity}
+                          </p>
+                        </div>
+                      ))
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>

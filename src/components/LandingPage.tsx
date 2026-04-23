@@ -16,6 +16,7 @@ import {
   Database,
   Search,
   Cpu,
+  ShoppingBag,
   Store,
   X,
   Settings,
@@ -27,11 +28,12 @@ import {
 interface LandingPageProps {
   onSignUp: () => void;
   onSignIn: () => void;
+  onStoreClick: () => void;
   darkMode: boolean;
   onToggleDarkMode: () => void;
 }
 
-export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: LandingPageProps) => {
+export const LandingPage = ({ onSignUp, onSignIn, onStoreClick, darkMode, onToggleDarkMode }: LandingPageProps) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeCard, setActiveCard] = useState(0);
@@ -90,7 +92,7 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
               <div className={`w-10 h-10 rounded-full ${darkMode ? 'bg-thriva-mint text-thriva-navy' : 'bg-thriva-navy text-thriva-mint'} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500 mr-3`}>
                 <FlaskConical size={24} strokeWidth={2.5} />
               </div>
-              <span className={`font-bold text-2xl tracking-tighter ${darkMode ? 'text-white' : 'text-thriva-navy'}`}>metalyt</span>
+              <span className={`font-bold text-2xl tracking-tighter ${darkMode ? 'text-white' : 'text-thriva-navy'}`}>MetLyft</span>
             </div>
           </div>
 
@@ -110,10 +112,11 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
           {/* Core Action */}
           <div className="flex items-center gap-2">
             <button 
+              onClick={onStoreClick}
               className={`p-2 rounded-full transition-all ${darkMode ? 'hover:bg-white/10 text-white' : 'hover:bg-thriva-navy/5 text-thriva-navy'}`}
               aria-label="Store"
             >
-              <Store size={22} strokeWidth={2.5} />
+              <ShoppingBag size={22} strokeWidth={2.5} />
             </button>
             <button 
               onClick={() => setIsMenuOpen(true)}
@@ -146,7 +149,7 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
               <div className="p-6 flex justify-between items-center border-b border-white/5">
                 <div className="flex items-center gap-2">
                   <FlaskConical className="text-thriva-mint" size={24} />
-                  <span className="font-bold text-xl lowercase">metalyt</span>
+                  <span className="font-bold text-xl lowercase">MetLyft</span>
                 </div>
                 <button 
                   onClick={() => setIsMenuOpen(false)}
@@ -163,17 +166,29 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
                     { label: 'How it works', href: '#how' },
                     { label: 'Onboarding', href: '#onboarding' },
                     { label: 'Results', href: '#results' },
+                    { label: 'Supply Store', onClick: onStoreClick },
                     { label: 'Documentation', href: '#' },
                   ].map((item) => (
-                    <a
-                      key={item.label}
-                      href={item.href}
-                      onClick={() => setIsMenuOpen(false)}
-                      className="flex items-center justify-between group p-2 -mx-2 rounded-xl transition-colors hover:bg-thriva-mint/10"
-                    >
-                      <span className="font-medium">{item.label}</span>
-                      <ChevronRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </a>
+                    item.onClick ? (
+                      <button
+                        key={item.label}
+                        onClick={() => { item.onClick(); setIsMenuOpen(false); }}
+                        className="w-full flex items-center justify-between group p-2 -mx-2 rounded-xl transition-colors hover:bg-thriva-mint/10 text-left"
+                      >
+                        <span className="font-medium">{item.label}</span>
+                        <ChevronRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </button>
+                    ) : (
+                      <a
+                        key={item.label}
+                        href={item.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center justify-between group p-2 -mx-2 rounded-xl transition-colors hover:bg-thriva-mint/10"
+                      >
+                        <span className="font-medium">{item.label}</span>
+                        <ChevronRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </a>
+                    )
                   ))}
                 </nav>
 
@@ -209,7 +224,7 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
                 </button>
                 
                 <p className="text-center text-[10px] font-medium opacity-40">
-                  © 2026 metalyt Mineral Intelligence. <br />
+                  © 2026 MetLyft Mineral Intelligence. <br />
                   All rights reserved.
                 </p>
               </div>
@@ -247,28 +262,56 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
               transition={{ delay: 0.4 }}
               className="text-lg lg:text-2xl text-thriva-navy/60 dark:text-white/60 max-w-lg font-medium leading-relaxed"
             >
-              metalyt delivers clinical-grade metallurgical insights directly from your stream to slash operational latency.
+              MetLyft delivers clinical-grade metallurgical insights directly from your stream to slash operational latency.
             </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="flex flex-col sm:flex-row items-center gap-4"
+              className="flex items-center gap-10 lg:gap-14 pt-4"
             >
-              <button 
-                onClick={onSignUp}
-                className="bg-thriva-navy dark:bg-thriva-mint text-white dark:text-thriva-navy px-10 py-5 rounded-full text-sm font-bold hover:scale-[1.03] transition-all shadow-2xl flex items-center justify-center gap-3 w-full sm:w-auto overflow-hidden group relative"
-              >
-                <span className="relative z-10 flex items-center gap-2">Register Sample <ArrowRight size={18} /></span>
-                <motion.div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-              </button>
-              <button 
-                onClick={onSignIn}
-                className={`bg-white text-thriva-navy border border-thriva-navy/10 px-10 py-5 rounded-full text-sm font-bold hover:scale-[1.03] transition-all shadow-xl flex items-center justify-center gap-3 w-full sm:w-auto ${darkMode ? 'bg-white/5 text-white border-white/10' : ''}`}
-              >
-                Client Portal <Activity size={18} className="text-thriva-mint" />
-              </button>
+              <div className="group flex flex-col items-center gap-4">
+                <button 
+                  onClick={onSignUp}
+                  className={`relative w-24 h-24 lg:w-28 lg:h-28 rounded-full flex items-center justify-center shadow-2xl transition-all duration-700 hover:scale-110 active:scale-95 ${darkMode ? 'bg-thriva-mint text-thriva-navy shadow-thriva-mint/30' : 'bg-thriva-navy text-white shadow-thriva-navy/30'}`}
+                >
+                  {/* Orbital effect */}
+                  <div className="absolute inset-2 border-2 border-current/10 rounded-full animate-[spin_10s_linear_infinite]" />
+                  <div className="absolute inset-4 border border-current/5 rounded-full animate-[spin_15s_linear_infinite_reverse]" />
+                  
+                  <FlaskConical 
+                    size={36} 
+                    strokeWidth={1.5} 
+                    className="rotate-12 group-hover:rotate-0 transition-transform duration-700 relative z-10" 
+                  />
+                  
+                  <motion.div className="absolute inset-0 bg-white/20 rounded-full translate-y-full group-hover:translate-y-0 transition-transform duration-500 opacity-0 group-hover:opacity-100" />
+                </button>
+                <div className="text-center space-y-1">
+                  <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-thriva-navy/40 dark:text-white/40">Register</span>
+                  <span className="block text-[8px] font-bold uppercase tracking-[0.1em] text-thriva-mint/60">Sample Data</span>
+                </div>
+              </div>
+
+              <div className="group flex flex-col items-center gap-4">
+                <button 
+                  onClick={onSignIn}
+                  className={`relative w-24 h-24 lg:w-28 lg:h-28 rounded-full flex items-center justify-center shadow-xl transition-all duration-700 hover:scale-110 active:scale-95 border ${darkMode ? 'bg-white/5 text-white border-white/10 hover:bg-white/10' : 'bg-white text-thriva-navy border-thriva-navy/5'}`}
+                >
+                  <div className="absolute inset-2 border-2 border-thriva-mint/5 rounded-full animate-[spin_20s_linear_infinite]" />
+                  
+                  <Activity 
+                    size={36} 
+                    strokeWidth={1.5} 
+                    className="-rotate-12 group-hover:rotate-0 transition-transform duration-700 text-thriva-mint relative z-10" 
+                  />
+                </button>
+                <div className="text-center space-y-1">
+                  <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-thriva-navy/40 dark:text-white/40">Access</span>
+                  <span className="block text-[8px] font-bold uppercase tracking-[0.1em] text-thriva-navy/30 dark:text-white/20">Client Portal</span>
+                </div>
+              </div>
             </motion.div>
           </div>
 
@@ -449,7 +492,7 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
             <div className="flex-1 space-y-8 order-1 md:order-2">
               <div className="text-thriva-coral font-bold text-sm uppercase tracking-widest">Scientific Precision</div>
               <h2 className="text-4xl md:text-7xl font-display font-medium leading-tight tracking-tight dark:text-white">Your lab results, deciphered.</h2>
-              <p className="text-xl text-thriva-navy/60 dark:text-white/60 leading-relaxed">Don't just collect data—understand it. metalyt creates actionable reports that tell you exactly where your processing plant is losing efficiency and how to reclaim it.</p>
+              <p className="text-xl text-thriva-navy/60 dark:text-white/60 leading-relaxed">Don't just collect data—understand it. MetLyft creates actionable reports that tell you exactly where your processing plant is losing efficiency and how to reclaim it.</p>
               <button 
                 onClick={() => document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' })}
                 className="flex items-center gap-3 font-bold text-thriva-navy dark:text-thriva-mint group hover:text-thriva-mint dark:hover:text-white transition-colors"
@@ -481,7 +524,7 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
               <div className="w-10 h-10 rounded-full bg-thriva-navy dark:bg-thriva-mint flex items-center justify-center text-thriva-mint dark:text-thriva-navy shadow-lg">
                 <FlaskConical size={24} strokeWidth={2.5} />
               </div>
-              <span className={`font-bold text-2xl tracking-tighter ${darkMode ? 'text-white' : 'text-thriva-navy'}`}>metalyt</span>
+              <span className={`font-bold text-2xl tracking-tighter ${darkMode ? 'text-white' : 'text-thriva-navy'}`}>MetLyft</span>
             </div>
             <p className={`font-medium leading-relaxed ${darkMode ? 'text-white/40' : 'text-slate-400'}`}>Optimizing the world's mineral processing streams with digital precision.</p>
           </div>
@@ -491,6 +534,7 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
               <nav className={`flex flex-col gap-3 font-medium text-sm ${darkMode ? 'text-white/40' : 'text-slate-500'}`}>
                 <a href="#results" className="hover:text-thriva-mint transition-colors">Assay Testing</a>
                 <a href="#how" className="hover:text-thriva-mint transition-colors">Stream Analytics</a>
+                <button onClick={onStoreClick} className="text-left hover:text-thriva-mint transition-colors">Supply Store</button>
                 <a href="#how" className="hover:text-thriva-mint transition-colors">Inventory Management</a>
               </nav>
             </div>
@@ -505,6 +549,7 @@ export const LandingPage = ({ onSignUp, onSignIn, darkMode, onToggleDarkMode }: 
             <div className="space-y-4">
               <h4 className={`font-bold ${darkMode ? 'text-white' : 'text-thriva-navy'}`}>Connect</h4>
               <nav className={`flex flex-col gap-3 font-medium text-sm ${darkMode ? 'text-white/40' : 'text-slate-500'}`}>
+                <a href="https://wa.me/263700000000" target="_blank" rel="noopener noreferrer" className="text-[#25D366] hover:text-[#128C7E] transition-colors font-bold">WhatsApp Support</a>
                 <a href="#" className="hover:text-thriva-mint transition-colors">LinkedIn</a>
                 <a href="#" className="hover:text-thriva-mint transition-colors">Twitter</a>
               </nav>

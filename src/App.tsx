@@ -69,7 +69,8 @@ import {
   DollarSign,
   LayoutGrid,
   Moon,
-  Sun
+  Sun,
+  ShoppingCart
 } from 'lucide-react';
 import { 
   BarChart, 
@@ -109,7 +110,8 @@ import {
   SourceCategory,
   AssayElements,
   InstrumentReading,
-  InventoryItem
+  InventoryItem,
+  CartItem
 } from './types.ts';
 import { InstrumentManager } from './components/InstrumentManager';
 import { InventoryManager } from './components/InventoryManager';
@@ -121,6 +123,8 @@ import { seedHeroImages } from './services/marketingService';
 import { Onboarding } from './components/Onboarding';
 import { AdminDashboard } from './components/AdminDashboard';
 import { TechnicianDashboard } from './components/TechnicianDashboard';
+import { StoreView } from './components/StoreView';
+import { CartDrawer } from './components/CartDrawer';
 
 const HistoryView = ({ samples }: { samples: Sample[] }) => {
   const [startDate, setStartDate] = useState('');
@@ -146,7 +150,7 @@ const HistoryView = ({ samples }: { samples: Sample[] }) => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `metalyt_History_${startDate || 'all'}_to_${endDate || 'all'}.json`;
+    link.download = `MetLyft_History_${startDate || 'all'}_to_${endDate || 'all'}.json`;
     link.click();
   };
 
@@ -749,7 +753,7 @@ const AnalyticsView = ({ samples }: { samples: Sample[] }) => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `metalyt_Assay_Analytics_${new Date().toISOString().split('T')[0]}.json`;
+    link.download = `MetLyft_Assay_Analytics_${new Date().toISOString().split('T')[0]}.json`;
     link.click();
   };
 
@@ -883,7 +887,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [samples, setSamples] = useState<Sample[]>([]);
-  const [view, setView] = useState<'dashboard' | 'create' | 'detail' | 'analytics' | 'control' | 'plant' | 'bench' | 'history' | 'instruments' | 'inventory' | 'requisitions' | 'billing'>('dashboard');
+  const [view, setView] = useState<'dashboard' | 'create' | 'detail' | 'analytics' | 'control' | 'plant' | 'bench' | 'history' | 'instruments' | 'inventory' | 'requisitions' | 'billing' | 'store'>('dashboard');
   const [jobs, setJobs] = useState<Job[]>([]);
   const [darkMode, setDarkMode] = useState(false);
   const toggleDarkMode = () => setDarkMode(!darkMode);
@@ -892,6 +896,8 @@ export default function App() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [pendingSyncCount, setPendingSyncCount] = useState(0);
   const [globalReading, setGlobalReading] = useState<InstrumentReading | null>(null);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState<SampleStatus | 'All'>('All');
   const [priorityFilter, setPriorityFilter] = useState<Priority | 'All'>('All');
   const [typeFilter, setTypeFilter] = useState<SampleType | 'All'>('All');
@@ -1002,13 +1008,19 @@ export default function App() {
       // Explicitly passing the resolver here too, for maximum compatibility in iframes
       await signInWithPopup(auth, provider, browserPopupRedirectResolver);
     } catch (error: any) {
-      console.error("Auth failed", error);
+      // Quietly handle user-cancellation errors
+      if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
+        return;
+      }
+
+      // Log genuine auth failures
+      console.error("Auth failed:", error);
       
       let message = "Authentication failed. ";
       if (error.code === 'auth/network-request-failed') {
         message += "This is often caused by popups being blocked, tracking protection in your browser, or the current domain not being in the 'Authorized Domains' list in Firebase Console. Please try opening the app in a new tab or disabling ad-blockers.";
-      } else if (error.code === 'auth/popup-closed-by-user') {
-        message += "The sign-in popup was closed before completion.";
+      } else if (error.code === 'auth/operation-not-supported-in-this-environment') {
+        message += "This environment does not support popups. Please try opening the application in a new tab.";
       } else {
         message += error.message || "Please check your internet connection.";
       }
@@ -1017,7 +1029,7 @@ export default function App() {
     }
   };
 
-  if (!user) return <LandingPage onSignUp={handleAuth} onSignIn={handleAuth} darkMode={darkMode} onToggleDarkMode={toggleDarkMode} />;
+  if (!user) return <LandingPage onSignUp={handleAuth} onSignIn={handleAuth} onStoreClick={() => setView('store')} darkMode={darkMode} onToggleDarkMode={toggleDarkMode} />;
 
   const handleOnboardingComplete = async (data: { role: UserRole; displayName: string; company?: string }) => {
     if (!user) return;
@@ -1062,11 +1074,22 @@ export default function App() {
               <FlaskConical size={20} strokeWidth={2.5} />
             </div>
             <div className="flex flex-col">
-              <span className="text-[10px] font-bold tracking-[0.3em] text-[#39D3C0] uppercase group-hover:tracking-[0.4em] transition-all leading-none mb-1">metalyt</span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-[#39D3C0] uppercase group-hover:tracking-[0.4em] transition-all leading-none mb-1">MetLyft</span>
               <span className={"text-xl font-bold " + (darkMode ? "text-white" : "text-[#0D0D2D]") + " leading-tight flex items-center gap-1"}>Portal</span>
             </div>
           </div>
           <div className="flex items-center gap-2">
+              <button 
+                onClick={() => setIsCartOpen(true)}
+                className={"w-10 h-10 rounded-full flex items-center justify-center transition-all relative " + (darkMode ? "bg-white/5 text-thriva-mint hover:bg-white/10" : "bg-thriva-navy/5 text-thriva-navy/40 hover:bg-thriva-navy/10")}
+              >
+                <ShoppingBag size={18} />
+                {cart.length > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-thriva-coral text-white text-[8px] font-bold rounded-full flex items-center justify-center shadow-lg">
+                    {cart.reduce((acc, item) => acc + item.quantity, 0)}
+                  </span>
+                )}
+              </button>
             <button 
               onClick={toggleDarkMode}
               className={"w-10 h-10 rounded-full flex items-center justify-center transition-all " + (darkMode ? "bg-white/5 text-thriva-mint hover:bg-white/10" : "bg-thriva-navy/5 text-thriva-navy/40 hover:bg-thriva-navy/10")}
@@ -1605,6 +1628,12 @@ export default function App() {
               </motion.div>
             )}
 
+            {view === 'store' && (
+              <motion.div key="store" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <StoreView cart={cart} setCart={setCart} user={user} onOpenCart={() => setIsCartOpen(true)} />
+              </motion.div>
+            )}
+
             {view === 'instruments' && (
               <motion.div key="instruments" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <InstrumentManager onCapture={(r) => setGlobalReading(r)} />
@@ -1629,6 +1658,14 @@ export default function App() {
               </motion.div>
             )}
           </AnimatePresence>
+
+          <CartDrawer 
+            isOpen={isCartOpen} 
+            onClose={() => setIsCartOpen(false)} 
+            cart={cart} 
+            setCart={setCart} 
+            user={user} 
+          />
         </main>
 
       {/* No bottom nav as per top menu request */}

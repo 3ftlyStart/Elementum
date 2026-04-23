@@ -33,7 +33,7 @@ type TabType = 'Home' | 'Messages' | 'Help';
 const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
   const [activeTab, setActiveTab] = useState<TabType>('Home');
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'bot', content: 'Hello! I am your metalyt AI consultant. How can I help you with your mineral processing today?' }
+    { role: 'bot', content: 'Hello! I am your MetLyft AI consultant. How can I help you with your mineral processing today?' }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -67,7 +67,7 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
         model: "gemini-3-flash-preview",
         contents: chatHistory as any,
         config: {
-          systemInstruction: "You are a professional metallurgical consultant for metalyt Systems. You help miners and plant managers optimize their gold recovery, understand assay results, and manage their lab processes. Be precise, technical but accessible, and always prioritize precision. Your tone is helpful, expert, and efficient.",
+          systemInstruction: "You are a professional metallurgical consultant for MetLyft Systems. You help miners and plant managers optimize their gold recovery, understand assay results, and manage their lab processes. Be precise, technical but accessible, and always prioritize precision. Your tone is helpful, expert, and efficient.",
         }
       });
 
@@ -90,7 +90,7 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
   const faqs = [
     "When should I take my test?",
     "How do discount codes work?",
-    "How does metalyt work?",
+    "How does MetLyft work?",
     "Where can I see my results?",
     "What is the precision of your assays?"
   ];
@@ -127,6 +127,21 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
                 <ArrowRight size={24} strokeWidth={3} />
               </div>
             </button>
+
+            <a 
+              href="https://wa.me/263700000000" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="w-full bg-[#25D366] rounded-[28px] p-8 flex items-center justify-between group hover:bg-[#128C7E] transition-all transform hover:-translate-y-1 shadow-xl shadow-[#25D366]/20"
+            >
+              <div className="text-left space-y-1">
+                <h4 className="font-bold text-white text-[17px]">WhatsApp Support</h4>
+                <p className="text-sm text-white/80 font-medium">Chat directly with a specialist</p>
+              </div>
+              <div className="text-[#25D366] group-hover:scale-110 transition-transform bg-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg">
+                <MessageCircle size={24} strokeWidth={2.5} fill="#25D366" className="text-white" />
+              </div>
+            </a>
 
             <div className="bg-white shadow-[0_12px_40px_rgba(0,0,0,0.04)] rounded-[32px] overflow-hidden">
                <div className="p-6 bg-thriva-navy/[0.02]">
@@ -262,14 +277,25 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
                 <div className="w-9 h-9 rounded-full bg-thriva-navy flex items-center justify-center text-thriva-mint shadow-lg">
                     <FlaskConical size={20} strokeWidth={2.5} />
                 </div>
-                <span className="font-bold text-[20px] tracking-tighter text-thriva-navy">metalyt</span>
+                <span className="font-bold text-[20px] tracking-tighter text-thriva-navy">MetLyft</span>
               </div>
+            <div className="flex items-center gap-2">
+              <a 
+                href="https://wa.me/263700000000" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="p-2 hover:bg-[#25D366]/10 rounded-full transition-all text-[#25D366] hover:scale-110"
+                title="WhatsApp Support"
+              >
+                <MessageCircle size={22} fill="currentColor" strokeWidth={2.5} className="opacity-80" />
+              </a>
               <button 
                 onClick={onClose}
                 className="p-2 hover:bg-thriva-navy/5 rounded-full transition-all text-thriva-navy/40 hover:text-thriva-navy"
               >
                 <X size={24} strokeWidth={1.5} />
               </button>
+            </div>
             </div>
 
             {/* Scrollable Content Area */}

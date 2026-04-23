@@ -1,5 +1,5 @@
 /**
- * metalyt Assay Lab Types
+ * MetLyft Assay Lab Types
  */
 
 export type SampleStatus = 'Received' | 'Preparation' | 'Analysis' | 'Finalized' | 'Cancelled';
@@ -194,4 +194,28 @@ export interface ClientProfile extends UserProfile {
   address: string;
   contactNumber: string;
   billingEmail: string;
+}
+
+export interface StoreProduct {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: 'CRM' | 'Consumables' | 'Safety' | 'Equipment';
+  image: string;
+  stock: number;
+}
+
+export interface CartItem extends StoreProduct {
+  quantity: number;
+}
+
+export interface Order {
+  id: string;
+  userId: string;
+  items: CartItem[];
+  total: number;
+  status: 'Pending' | 'Paid' | 'Shipped' | 'Cancelled';
+  createdAt: string;
+  shippingAddress: string;
 }
