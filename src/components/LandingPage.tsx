@@ -4,6 +4,8 @@ import ChatModal from './ChatModal';
 import { 
   Menu, 
   MessageCircle,
+  Linkedin,
+  Twitter,
   ArrowRight,
   ChevronRight,
   ShieldCheck,
@@ -41,21 +43,21 @@ export const LandingPage = ({ onSignUp, onSignIn, onStoreClick, darkMode, onTogg
 
   const heroCards = [
     {
-      title: "Digital Custody",
-      desc: "End-to-end encryption for every sample lifecycle.",
+      title: "Holistic Insight",
+      desc: "Complete transparency for every sample lifecycle.",
       icon: ShieldCheck,
       color: "bg-thriva-mint",
-      accent: "text-thriva-navy"
+      accent: "text-white"
     },
     {
-      title: "Stream Intelligence",
-      desc: "Millisecond precision from sensors to dashboard.",
+      title: "Vital Precision",
+      desc: "Millisecond accuracy from sensors to dashboard.",
       icon: Zap,
       color: "bg-thriva-purple",
       accent: "text-white"
     },
     {
-      title: "Global Standards",
+      title: "Nature Synced",
       desc: "ISO-ready reporting for international compliance.",
       icon: Globe,
       color: "bg-thriva-coral",
@@ -73,7 +75,7 @@ export const LandingPage = ({ onSignUp, onSignIn, onStoreClick, darkMode, onTogg
   const headerScale = useTransform(scrollY, [0, 100], [1, 0.95]);
 
   return (
-    <div className={`min-h-screen transition-colors duration-500 ${darkMode ? 'dark bg-[#050510] text-white/90' : 'bg-thriva-bg text-thriva-navy'} font-sans selection:bg-thriva-mint/20 relative overflow-x-hidden`}>
+    <div className={`min-h-screen transition-colors duration-500 ${darkMode ? 'dark bg-[#111B21] text-white/90' : 'bg-thriva-bg text-thriva-navy'} font-sans selection:bg-thriva-mint/20 relative overflow-x-hidden`}>
       
       {/* Top Banner - Fixed Height */}
       <div className={`${darkMode ? 'bg-thriva-mint text-thriva-navy' : 'bg-thriva-banner text-white'} py-3 px-4 text-center text-xs md:text-sm font-semibold tracking-tight relative z-[60]`}>
@@ -85,7 +87,7 @@ export const LandingPage = ({ onSignUp, onSignIn, onStoreClick, darkMode, onTogg
         style={{ top: headerY, scale: headerScale }}
         className="fixed left-0 right-0 z-50 px-4 md:px-8 pointer-events-none"
       >
-        <header className={`max-w-5xl mx-auto ${darkMode ? 'bg-[#050510]/90 text-white border-white/10' : 'bg-white/90 text-thriva-navy border-white/50'} backdrop-blur-xl rounded-full h-16 md:h-20 shadow-2xl shadow-thriva-navy/5 flex items-center justify-between px-6 md:px-10 border pointer-events-auto`}>
+        <header className={`max-w-5xl mx-auto ${darkMode ? 'bg-[#111B21]/90 text-white border-white/10' : 'bg-white/90 text-thriva-navy border-white/50'} backdrop-blur-xl rounded-full h-16 md:h-20 shadow-2xl shadow-thriva-navy/5 flex items-center justify-between px-6 md:px-10 border pointer-events-auto`}>
           {/* Logo Section */}
           <div className="flex items-center gap-2 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <div className="flex items-center">
@@ -144,7 +146,7 @@ export const LandingPage = ({ onSignUp, onSignIn, onStoreClick, darkMode, onTogg
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className={`fixed top-0 right-0 h-full w-full max-w-sm z-[80] shadow-2xl flex flex-col ${darkMode ? 'bg-[#0D0D2D] text-white' : 'bg-white text-thriva-navy'}`}
+              className={`fixed top-0 right-0 h-full w-full max-w-sm z-[80] shadow-2xl flex flex-col ${darkMode ? 'bg-[#111B21] text-white' : 'bg-white text-thriva-navy'}`}
             >
               <div className="p-6 flex justify-between items-center border-b border-white/5">
                 <div className="flex items-center gap-2">
@@ -243,7 +245,7 @@ export const LandingPage = ({ onSignUp, onSignIn, onStoreClick, darkMode, onTogg
               className="inline-flex items-center gap-2 px-3 py-1 bg-thriva-mint/10 rounded-full border border-thriva-mint/20"
             >
               <span className="flex h-2 w-2 rounded-full bg-thriva-mint animate-pulse" />
-              <span className="text-[10px] font-bold text-thriva-mint uppercase tracking-[0.2em]">Next-Gen Mineral Intelligence</span>
+              <span className="text-[10px] font-bold text-thriva-mint uppercase tracking-[0.2em]">Next-Gen Wellness Analytics</span>
             </motion.div>
             
             <motion.h1 
@@ -252,66 +254,31 @@ export const LandingPage = ({ onSignUp, onSignIn, onStoreClick, darkMode, onTogg
               transition={{ delay: 0.2 }}
               className="text-6xl lg:text-[104px] font-display font-medium leading-[0.9] tracking-tighter text-thriva-navy dark:text-white"
             >
-              Own your <br className="hidden lg:block" />
-              <span className="text-thriva-mint italic pr-4">recovery.</span>
+              Purity in <br className="hidden lg:block" />
+              <span className="text-thriva-coral italic pr-4">precision.</span>
             </motion.h1>
             
             <motion.p 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="text-lg lg:text-2xl text-thriva-navy/60 dark:text-white/60 max-w-lg font-medium leading-relaxed"
+              className="text-lg lg:text-2xl text-thriva-navy/60 dark:text-white/60 max-w-lg font-normal leading-relaxed italic"
             >
-              MetLyft delivers clinical-grade metallurgical insights directly from your stream to slash operational latency.
+              MetLyft delivers holistic metallurgical insights to harmonize your laboratory stream and optimize recovery naturally.
             </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="flex items-center gap-10 lg:gap-14 pt-4"
+              className="pt-4"
             >
-              <div className="group flex flex-col items-center gap-4">
-                <button 
-                  onClick={onSignUp}
-                  className={`relative w-24 h-24 lg:w-28 lg:h-28 rounded-full flex items-center justify-center shadow-2xl transition-all duration-700 hover:scale-110 active:scale-95 ${darkMode ? 'bg-thriva-mint text-thriva-navy shadow-thriva-mint/30' : 'bg-thriva-navy text-white shadow-thriva-navy/30'}`}
-                >
-                  {/* Orbital effect */}
-                  <div className="absolute inset-2 border-2 border-current/10 rounded-full animate-[spin_10s_linear_infinite]" />
-                  <div className="absolute inset-4 border border-current/5 rounded-full animate-[spin_15s_linear_infinite_reverse]" />
-                  
-                  <FlaskConical 
-                    size={36} 
-                    strokeWidth={1.5} 
-                    className="rotate-12 group-hover:rotate-0 transition-transform duration-700 relative z-10" 
-                  />
-                  
-                  <motion.div className="absolute inset-0 bg-white/20 rounded-full translate-y-full group-hover:translate-y-0 transition-transform duration-500 opacity-0 group-hover:opacity-100" />
-                </button>
-                <div className="text-center space-y-1">
-                  <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-thriva-navy/40 dark:text-white/40">Register</span>
-                  <span className="block text-[8px] font-bold uppercase tracking-[0.1em] text-thriva-mint/60">Sample Data</span>
-                </div>
-              </div>
-
-              <div className="group flex flex-col items-center gap-4">
-                <button 
-                  onClick={onSignIn}
-                  className={`relative w-24 h-24 lg:w-28 lg:h-28 rounded-full flex items-center justify-center shadow-xl transition-all duration-700 hover:scale-110 active:scale-95 border ${darkMode ? 'bg-white/5 text-white border-white/10 hover:bg-white/10' : 'bg-white text-thriva-navy border-thriva-navy/5'}`}
-                >
-                  <div className="absolute inset-2 border-2 border-thriva-mint/5 rounded-full animate-[spin_20s_linear_infinite]" />
-                  
-                  <Activity 
-                    size={36} 
-                    strokeWidth={1.5} 
-                    className="-rotate-12 group-hover:rotate-0 transition-transform duration-700 text-thriva-mint relative z-10" 
-                  />
-                </button>
-                <div className="text-center space-y-1">
-                  <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-thriva-navy/40 dark:text-white/40">Access</span>
-                  <span className="block text-[8px] font-bold uppercase tracking-[0.1em] text-thriva-navy/30 dark:text-white/20">Client Portal</span>
-                </div>
-              </div>
+              <button 
+                onClick={onSignUp}
+                className={`px-8 py-4 rounded-full font-bold text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-2xl ${darkMode ? 'bg-thriva-mint text-thriva-navy shadow-thriva-mint/20' : 'bg-thriva-navy text-white shadow-thriva-navy/20'}`}
+              >
+                Start Analysis
+              </button>
             </motion.div>
           </div>
 
@@ -404,19 +371,19 @@ export const LandingPage = ({ onSignUp, onSignIn, onStoreClick, darkMode, onTogg
           <div className="max-w-7xl mx-auto space-y-32">
             <div className="grid lg:grid-cols-2 gap-24 items-center">
               <div className="space-y-10">
-                <div className="text-thriva-mint font-bold text-xs uppercase tracking-[0.3em]">Lifecycle</div>
-                <h2 className="text-5xl lg:text-7xl font-display font-medium leading-[0.9] tracking-tighter dark:text-white">Seamless <br/>data ingestion.</h2>
-              <p className="text-xl text-thriva-navy/60 dark:text-white/60 leading-relaxed font-medium">From physical core to digital assay. Our pipeline ensures millisecond latency between laboratory completion and executive visibility.</p>
+                <div className="text-thriva-mint font-bold text-xs uppercase tracking-[0.3em]">Pure Workflow</div>
+                <h2 className="text-5xl lg:text-7xl font-display font-medium leading-[0.9] tracking-tighter dark:text-white">Seamless <br/>data flow.</h2>
+              <p className="text-xl text-thriva-navy/60 dark:text-white/60 leading-relaxed font-medium">Harmonizing the journey from physical core to digital assay with serene efficiency.</p>
                 <div className="grid sm:grid-cols-2 gap-8 pt-4">
-                  <div className="p-6 bg-white dark:bg-white/5 rounded-3xl border border-thriva-navy/5 shadow-sm">
+                  <div className="p-8 bg-white dark:bg-white/5 rounded-[40px] border border-thriva-navy/5 shadow-sm hover:shadow-thriva transition-all duration-700 glass-panel">
                     <Database className="text-thriva-mint mb-4" />
                     <h4 className="font-bold mb-2">Vault Storage</h4>
-                    <p className="text-xs text-thriva-navy/40 uppercase font-bold tracking-widest">Permanent Encrypted Records</p>
+                    <p className="text-xs text-thriva-navy/40 uppercase font-bold tracking-widest">Enduring Archival Clarity</p>
                   </div>
-                  <div className="p-6 bg-white dark:bg-white/5 rounded-3xl border border-thriva-navy/5 shadow-sm">
+                  <div className="p-8 bg-white dark:bg-white/5 rounded-[40px] border border-thriva-navy/5 shadow-sm hover:shadow-thriva transition-all duration-700 glass-panel">
                     <Search className="text-thriva-purple mb-4" />
-                    <h4 className="font-bold mb-2">Forensic Search</h4>
-                    <p className="text-xs text-thriva-navy/40 uppercase font-bold tracking-widest">Instant Archeological Query</p>
+                    <h4 className="font-bold mb-2">Fluent Search</h4>
+                    <p className="text-xs text-thriva-navy/40 uppercase font-bold tracking-widest">Effortless Discovery Query</p>
                   </div>
                 </div>
               </div>
@@ -503,21 +470,69 @@ export const LandingPage = ({ onSignUp, onSignIn, onStoreClick, darkMode, onTogg
           </div>
         </section>
 
-        {/* Floating Action Button (FAB) - Contact / Chat toggle */}
-        <motion.button
-          whileHover={{ scale: 1.1, y: -5 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => setIsChatOpen(!isChatOpen)}
-          className="fixed bottom-10 right-10 z-[100] p-4 text-thriva-navy dark:text-thriva-mint transition-all"
-        >
-          <MessageCircle size={36} fill="currentColor" className="opacity-80 hover:opacity-100 transition-opacity" />
-        </motion.button>
+        {/* Floating Action Button (FAB) Stack */}
+        <div className="fixed bottom-10 right-10 z-[100] flex flex-col items-center gap-4">
+          <AnimatePresence>
+            {!isChatOpen && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0, y: 20, scale: 0.5 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 20, scale: 0.5 }}
+                  className="group flex flex-col items-center"
+                >
+                  <button 
+                    onClick={onSignUp}
+                    title="Register Sample Data"
+                    className={`w-[68px] h-[68px] rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 ${darkMode ? 'bg-thriva-mint text-thriva-navy shadow-thriva-mint/30' : 'bg-thriva-navy text-white shadow-thriva-navy/30'}`}
+                  >
+                    <FlaskConical size={36} strokeWidth={1.5} />
+                  </button>
+                  <div className="absolute right-20 px-3 py-1 bg-thriva-navy text-white text-[10px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                    Register Sample
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20, scale: 0.5 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 20, scale: 0.5 }}
+                  className="group flex flex-col items-center"
+                >
+                  <button 
+                    onClick={onSignIn}
+                    title="Access Client Portal"
+                    className={`w-[68px] h-[68px] rounded-full flex items-center justify-center shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 border ${darkMode ? 'bg-white/5 text-white border-white/10 hover:bg-white/10' : 'bg-white text-thriva-navy border-thriva-navy/5'}`}
+                  >
+                    <Activity size={36} strokeWidth={1.5} className="text-thriva-mint" />
+                  </button>
+                  <div className="absolute right-20 px-3 py-1 bg-thriva-navy text-white text-[10px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                    Client Portal
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
+
+          <motion.button
+            whileHover={{ scale: 1.1, y: -5 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsChatOpen(!isChatOpen)}
+            className="p-4 text-thriva-navy dark:text-thriva-mint transition-all"
+          >
+            {isChatOpen ? (
+              <X size={36} className="opacity-80 hover:opacity-100 transition-opacity" />
+            ) : (
+              <MessageCircle size={36} fill="currentColor" className="opacity-80 hover:opacity-100 transition-opacity" />
+            )}
+          </motion.button>
+        </div>
 
         <ChatModal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
       </main>
 
       {/* Refined Footer - Thriva Minimal */}
-      <footer className={`py-24 px-6 ${darkMode ? 'bg-[#050510] border-t border-white/5' : 'bg-white border-t border-slate-100'}`}>
+      <footer className={`py-24 px-6 ${darkMode ? 'bg-[#111B21] border-t border-white/5' : 'bg-white border-t border-slate-100'}`}>
         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-16">
           <div className="md:col-span-1 space-y-6">
             <div className="flex items-center gap-2">
@@ -548,10 +563,30 @@ export const LandingPage = ({ onSignUp, onSignIn, onStoreClick, darkMode, onTogg
             </div>
             <div className="space-y-4">
               <h4 className={`font-bold ${darkMode ? 'text-white' : 'text-thriva-navy'}`}>Connect</h4>
-              <nav className={`flex flex-col gap-3 font-medium text-sm ${darkMode ? 'text-white/40' : 'text-slate-500'}`}>
-                <a href="https://wa.me/263700000000" target="_blank" rel="noopener noreferrer" className="text-[#25D366] hover:text-[#128C7E] transition-colors font-bold">WhatsApp Support</a>
-                <a href="#" className="hover:text-thriva-mint transition-colors">LinkedIn</a>
-                <a href="#" className="hover:text-thriva-mint transition-colors">Twitter</a>
+              <nav className="flex items-center gap-4">
+                <a 
+                  href="https://wa.me/263700000000" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center text-[#25D366] hover:bg-[#25D366] hover:text-white transition-all transform hover:-translate-y-1 shadow-sm"
+                  title="WhatsApp Support"
+                >
+                  <MessageCircle size={20} fill="currentColor" />
+                </a>
+                <a 
+                  href="#" 
+                  className={`w-10 h-10 rounded-full ${darkMode ? 'bg-white/5 text-white/40 hover:bg-white hover:text-thriva-navy' : 'bg-slate-100 text-slate-400 hover:bg-thriva-navy hover:text-white'} flex items-center justify-center transition-all transform hover:-translate-y-1 shadow-sm`}
+                  title="LinkedIn"
+                >
+                  <Linkedin size={20} />
+                </a>
+                <a 
+                  href="#" 
+                  className={`w-10 h-10 rounded-full ${darkMode ? 'bg-white/5 text-white/40 hover:bg-white hover:text-thriva-navy' : 'bg-slate-100 text-slate-400 hover:bg-thriva-navy hover:text-white'} flex items-center justify-center transition-all transform hover:-translate-y-1 shadow-sm`}
+                  title="Twitter"
+                >
+                  <Twitter size={20} />
+                </a>
               </nav>
             </div>
           </div>

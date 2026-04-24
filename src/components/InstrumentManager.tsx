@@ -85,7 +85,7 @@ export const InstrumentManager = ({ onCapture }: InstrumentManagerProps) => {
         
         <div className="flex justify-between items-start mb-6 relative z-10">
           <div className="flex items-center gap-3">
-            <div className={`w-2 h-2 rounded-full ${simulating ? 'bg-thriva-mint shadow-[0_0_10px_#39D3C0] animate-pulse' : 'bg-thriva-navy/10'}`}></div>
+            <div className={`w-2 h-2 rounded-full ${simulating ? 'bg-thriva-mint shadow-[0_0_10px_#25D366] animate-pulse' : 'bg-thriva-navy/10'}`}></div>
             <span className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em]">Stream: {simulating ? 'BAL-01 Online' : 'Standby'}</span>
           </div>
           <button 

@@ -32,7 +32,7 @@ interface TechnicianDashboardProps {
 const StatCard = ({ label, value, icon: Icon }: any) => (
   <motion.div 
     whileHover={{ y: -4 }}
-    className="bg-white dark:bg-[#0D0D2D] p-6 rounded-[32px] shadow-thriva border border-thriva-navy/5 flex flex-col gap-4 relative group transition-all"
+    className="bg-white dark:bg-[#111B21] p-6 rounded-[32px] shadow-thriva border border-thriva-navy/5 flex flex-col gap-4 relative group transition-all"
   >
     <div className="flex items-center justify-between">
       <span className="text-[9px] uppercase tracking-[0.2em] text-thriva-navy/40 dark:text-white/40 font-bold">{label}</span>
@@ -142,7 +142,7 @@ export const TechnicianDashboard = ({ samples, user, onNavigate, onUpdateSample 
           <motion.div 
             key={bucket.label} 
             whileTap={{ scale: 0.98 }}
-            className="bg-white dark:bg-[#0D0D2D] border border-thriva-navy/5 dark:border-white/5 shadow-thriva rounded-[32px] p-6 relative overflow-hidden group hover:shadow-thriva-hover transition-all duration-500 cursor-pointer"
+            className="bg-white dark:bg-[#111B21] border border-thriva-navy/5 dark:border-white/5 shadow-thriva rounded-[32px] p-6 relative overflow-hidden group hover:shadow-thriva-hover transition-all duration-500 cursor-pointer"
           >
             <div className="flex justify-between items-start relative z-10">
               <div className={`w-10 h-10 rounded-2xl flex items-center justify-center bg-[#FCFAF7] dark:bg-[#050510] border border-thriva-navy/5 dark:border-white/5 ${bucket.color}`}>
@@ -180,7 +180,7 @@ export const TechnicianDashboard = ({ samples, user, onNavigate, onUpdateSample 
       </div>
 
       {/* Operational Pulse Chart */}
-      <div className="bg-[#0D0D2D] rounded-[48px] p-8 space-y-6 shadow-2xl relative overflow-hidden group">
+      <div className="bg-[#111B21] rounded-[48px] p-8 space-y-6 shadow-2xl relative overflow-hidden group">
         <div className="absolute top-0 right-0 w-64 h-64 bg-thriva-mint/10 rounded-full blur-[100px] -mr-32 -mt-32" />
         <div className="flex justify-between items-center relative z-10">
           <div className="space-y-1">
@@ -200,11 +200,11 @@ export const TechnicianDashboard = ({ samples, user, onNavigate, onUpdateSample 
              ]}>
                <defs>
                  <linearGradient id="techColor" x1="0" y1="0" x2="0" y2="1">
-                   <stop offset="5%" stopColor="#39D3C0" stopOpacity={0.4}/>
-                   <stop offset="95%" stopColor="#39D3C0" stopOpacity={0}/>
+                   <stop offset="5%" stopColor="#25D366" stopOpacity={0.4}/>
+                   <stop offset="95%" stopColor="#25D366" stopOpacity={0}/>
                  </linearGradient>
                </defs>
-               <Area type="monotone" dataKey="val" stroke="#39D3C0" strokeWidth={3} fillOpacity={1} fill="url(#techColor)" />
+               <Area type="monotone" dataKey="val" stroke="#25D366" strokeWidth={3} fillOpacity={1} fill="url(#techColor)" />
              </AreaChart>
            </ResponsiveContainer>
         </div>
@@ -246,7 +246,7 @@ export const TechnicianDashboard = ({ samples, user, onNavigate, onUpdateSample 
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-48px)] max-w-sm z-[110] bg-white dark:bg-[#0D0D2D] rounded-[40px] p-8 shadow-2xl border border-thriva-navy/5"
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-48px)] max-w-sm z-[110] bg-white dark:bg-[#111B21] rounded-[40px] p-8 shadow-2xl border border-thriva-navy/5"
             >
               <div className="space-y-6">
                 <div className="w-16 h-16 rounded-[24px] bg-thriva-mint/10 flex items-center justify-center text-thriva-mint mx-auto">

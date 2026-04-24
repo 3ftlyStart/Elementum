@@ -7,23 +7,23 @@
   --font-serif: "Playfair Display", "Georgia", serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
-  /* Thriva Refined Absolute Palette */
-  --color-thriva-navy: #0D0D2D;
-  --color-thriva-mint: #39D3C0;
-  --color-thriva-purple: #6A2B8D;
-  --color-thriva-banner: #2F1B4E;
-  --color-thriva-coral: #F24C6D;
-  --color-thriva-bg: #FCFAF7;
-  --color-thriva-off-white: #FDFCFB;
+  /* WhatsApp Inspired Palette */
+  --color-thriva-navy: #128C7E; /* Teal Green */
+  --color-thriva-mint: #25D366; /* Vibrant WhatsApp Green */
+  --color-thriva-purple: #075E54; /* Dark Teal Green */
+  --color-thriva-banner: #111B21; /* Deep Dark Blue/Charcoal */
+  --color-thriva-coral: #34B7F1; /* Informational Blue */
+  --color-thriva-bg: #F0F2F5; /* Neutral Light Grey */
+  --color-thriva-off-white: #FFFFFF;
   
-  /* Dark Mode Palette */
-  --color-thriva-dark-bg: #050510;
-  --color-thriva-dark-card: #0D0D2D;
-  --color-thriva-dark-border: rgba(255, 255, 255, 0.05);
+  /* WhatsApp Dark Mode Palette */
+  --color-thriva-dark-bg: #111B21;
+  --color-thriva-dark-card: #202C33;
+  --color-thriva-dark-border: rgba(255, 255, 255, 0.1);
 
   /* Interaction Colors */
-  --color-thriva-mint-hover: #32BFAE;
-  --color-thriva-purple-hover: #5A2578;
+  --color-thriva-mint-hover: #128C7E;
+  --color-thriva-purple-hover: #111B21;
   
   /* Overrides */
   --color-primary: var(--color-thriva-mint);
@@ -35,7 +35,7 @@
 }
 
 body {
-  @apply bg-[#FCFAF7] text-[#0D0D2D] antialiased font-sans min-h-screen relative overflow-x-hidden transition-colors duration-500;
+  @apply bg-[#F0F2F5] text-[#111B21] antialiased font-sans min-h-screen relative overflow-x-hidden transition-colors duration-500;
 }
 
 @layer utilities {

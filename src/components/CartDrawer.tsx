@@ -120,14 +120,33 @@ export const CartDrawer = ({ isOpen, onClose, cart, setCart, user }: CartDrawerP
                         <h4 className="text-xs font-bold text-thriva-navy dark:text-white">{item.name}</h4>
                         <div className="flex justify-between items-center">
                           <div className="text-xs text-thriva-mint font-bold">${item.price.toFixed(2)}</div>
-                          <div className="flex items-center gap-3 bg-[#FCFAF7] dark:bg-[#050510] rounded-lg p-1 border border-thriva-navy/5">
-                            <button onClick={() => updateQuantity(item.id, -1)} className="p-1 text-thriva-navy/40 hover:text-thriva-navy transition-colors">
-                              <Minus size={14} />
-                            </button>
-                            <span className="text-xs font-bold w-4 text-center">{item.quantity}</span>
-                            <button onClick={() => updateQuantity(item.id, 1)} className="p-1 text-thriva-navy/40 hover:text-thriva-navy transition-colors">
-                              <Plus size={14} />
-                            </button>
+                          <div className="flex items-center gap-2 bg-[#F0F2F5] dark:bg-[#050510] rounded-xl p-1 border border-thriva-navy/5">
+                            <motion.button 
+                              whileTap={{ scale: 0.8 }}
+                              onClick={() => updateQuantity(item.id, -1)} 
+                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-white dark:bg-[#111B21] text-thriva-navy/60 hover:text-thriva-coral hover:shadow-sm transition-all border border-thriva-navy/5"
+                            >
+                              <Minus size={12} />
+                            </motion.button>
+                            <AnimatePresence mode="wait">
+                              <motion.span 
+                                key={item.quantity}
+                                initial={{ y: 5, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                exit={{ y: -5, opacity: 0 }}
+                                transition={{ duration: 0.15 }}
+                                className="text-xs font-bold w-6 text-center text-thriva-navy dark:text-thriva-mint"
+                              >
+                                {item.quantity}
+                              </motion.span>
+                            </AnimatePresence>
+                            <motion.button 
+                              whileTap={{ scale: 0.8 }}
+                              onClick={() => updateQuantity(item.id, 1)} 
+                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-white dark:bg-[#111B21] text-thriva-navy/60 hover:text-thriva-mint hover:shadow-sm transition-all border border-thriva-navy/5"
+                            >
+                              <Plus size={12} />
+                            </motion.button>
                           </div>
                         </div>
                       </div>

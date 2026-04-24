@@ -258,7 +258,7 @@ export const InventoryManager = () => {
                 <div className="flex gap-1.5 items-center">
                   <button 
                     onClick={() => handleAdjustStock(item, -1, 'Manual adjustment (Decrease)')}
-                    className="w-8 h-8 rounded-xl bg-[#FCFAF7] border border-thriva-navy/5 flex items-center justify-center text-thriva-navy/30 hover:text-thriva-coral transition-colors"
+                    className="w-8 h-8 rounded-xl bg-[#F0F2F5] border border-thriva-navy/5 flex items-center justify-center text-thriva-navy/30 hover:text-thriva-coral transition-colors"
                   >
                     <Minus size={14} />
                   </button>
@@ -272,7 +272,7 @@ export const InventoryManager = () => {
               </div>
 
               <div className="space-y-2">
-                <div className="h-1.5 bg-[#FCFAF7] rounded-full overflow-hidden shadow-inner">
+                <div className="h-1.5 bg-[#F0F2F5] rounded-full overflow-hidden shadow-inner">
                   <motion.div 
                     initial={{ width: 0 }}
                     animate={{ width: `${progress}%` }}
@@ -313,15 +313,23 @@ export const InventoryManager = () => {
                     {!transactions[item.id] || transactions[item.id].length === 0 ? (
                       <div className="py-4 text-center text-[8px] text-thriva-navy/20 uppercase font-bold tracking-[0.1em]">No mutations logged</div>
                     ) : (
-                      transactions[item.id].slice(0, 3).map(tx => (
-                        <div key={tx.id} className="flex justify-between items-center bg-[#FCFAF7] p-2 rounded-xl border border-thriva-navy/5">
-                          <div className="flex items-center gap-2">
-                            <div className={`w-1.5 h-1.5 rounded-full ${tx.type === 'In' ? 'bg-thriva-mint' : 'bg-thriva-coral'}`}></div>
-                            <p className="text-[9px] font-bold text-thriva-navy/60 truncate max-w-[80px]">{tx.reason || 'Mutation'}</p>
+                      transactions[item.id].slice(0, 5).map(tx => (
+                        <div key={tx.id} className="flex justify-between items-center bg-[#F0F2F5] p-3 rounded-xl border border-thriva-navy/5 gap-3">
+                          <div className="flex items-start gap-3 flex-1 overflow-hidden">
+                            <div className={`w-2 h-2 rounded-full shrink-0 mt-1.5 ${tx.type === 'In' ? 'bg-thriva-mint' : 'bg-thriva-coral'}`}></div>
+                            <div className="space-y-0.5 overflow-hidden">
+                              <p className="text-[10px] font-bold text-thriva-navy/60 truncate">{tx.reason || 'Mutation'}</p>
+                              <p className="text-[8px] text-thriva-navy/30 font-medium uppercase tracking-widest">
+                                {new Date(tx.timestamp).toLocaleDateString()} • {new Date(tx.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                              </p>
+                            </div>
                           </div>
-                          <p className={`text-[9px] font-bold ${tx.type === 'In' ? 'text-thriva-mint' : 'text-thriva-coral'}`}>
-                            {tx.type === 'In' ? '+' : '-'}{tx.quantity}
-                          </p>
+                          <div className="text-right shrink-0">
+                            <p className={`text-[10px] font-bold ${tx.type === 'In' ? 'text-thriva-mint' : 'text-thriva-coral'}`}>
+                              {tx.type === 'In' ? '+' : '-'}{tx.quantity}
+                            </p>
+                            <p className="text-[8px] text-thriva-navy/20 font-bold uppercase">{item.unit}</p>
+                          </div>
                         </div>
                       ))
                     )}

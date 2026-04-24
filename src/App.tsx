@@ -246,25 +246,31 @@ const useAuth = () => useContext(AuthContext);
 // --- Components ---
 
 const LoadingScreen = () => (
-  <div className="fixed inset-0 bg-slate-950 flex items-center justify-center">
+  <div className="fixed inset-0 bg-thriva-navy flex items-center justify-center">
     <motion.div 
-      animate={{ rotate: 360 }}
-      transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-      className="text-cyan-400"
+      animate={{ 
+        rotate: 360,
+        scale: [1, 1.1, 1] 
+      }}
+      transition={{ 
+        rotate: { duration: 3, repeat: Infinity, ease: "linear" },
+        scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+      }}
+      className="text-thriva-mint"
     >
-      <FlaskConical size={48} />
+      <FlaskConical size={64} strokeWidth={1.5} />
     </motion.div>
   </div>
 );
 
 const SyncIndicator = ({ isOnline, pendingCount }: { isOnline: boolean, pendingCount: number }) => (
-  <div className={`fixed top-4 right-4 z-50 flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all ${isOnline ? 'bg-slate-900/80 border-slate-800 text-slate-400' : 'bg-red-500/10 border-red-500/30 text-red-500'}`}>
-    {isOnline ? (pendingCount > 0 ? <CloudSync size={12} className="text-cyan-400 animate-pulse" /> : <Wifi size={12} className="text-cyan-400" />) : <WifiOff size={12} />}
+  <div className={`fixed top-4 right-4 z-50 flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all ${isOnline ? 'bg-thriva-navy/90 border-white/10 text-white/50' : 'bg-thriva-coral/10 border-thriva-coral/30 text-thriva-coral'}`}>
+    {isOnline ? (pendingCount > 0 ? <CloudSync size={12} className="text-thriva-mint animate-pulse" /> : <Wifi size={12} className="text-thriva-mint" />) : <WifiOff size={12} />}
     <span className="text-[10px] font-bold uppercase tracking-widest">
       {isOnline ? (pendingCount > 0 ? `Syncing ${pendingCount}...` : 'Live') : 'Offline'}
     </span>
     {pendingCount > 0 && (
-      <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+      <div className="w-1.5 h-1.5 rounded-full bg-thriva-mint animate-pulse" />
     )}
   </div>
 );
@@ -336,11 +342,11 @@ const ControlRoom = ({ samples }: { samples: Sample[] }) => {
              ]}>
                <defs>
                  <linearGradient id="colorVal" x1="0" y1="0" x2="0" y2="1">
-                   <stop offset="5%" stopColor="#39D3C0" stopOpacity={0.4}/>
-                   <stop offset="95%" stopColor="#39D3C0" stopOpacity={0}/>
+                   <stop offset="5%" stopColor="#25D366" stopOpacity={0.4}/>
+                   <stop offset="95%" stopColor="#25D366" stopOpacity={0}/>
                  </linearGradient>
                </defs>
-               <Area type="monotone" dataKey="val" stroke="#39D3C0" strokeWidth={3} fillOpacity={1} fill="url(#colorVal)" />
+               <Area type="monotone" dataKey="val" stroke="#25D366" strokeWidth={3} fillOpacity={1} fill="url(#colorVal)" />
              </AreaChart>
            </ResponsiveContainer>
         </div>
@@ -621,14 +627,14 @@ const PlantProfile = ({ samples }: { samples: Sample[] }) => {
         <div className="absolute top-0 right-0 w-64 h-64 bg-thriva-mint/5 rounded-full blur-[100px] -mr-32 -mt-32" />
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={adsorptionData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#0D0D2D08" vertical={false} />
-            <XAxis dataKey="tank" stroke="#0D0D2D40" fontSize={9} fontWeight={600} tick={{ fill: '#0D0D2D40' }} axisLine={false} tickLine={false} />
-            <YAxis stroke="#0D0D2D40" fontSize={9} fontWeight={600} tick={{ fill: '#0D0D2D40' }} axisLine={false} tickLine={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#128C7E08" vertical={false} />
+            <XAxis dataKey="tank" stroke="#128C7E40" fontSize={9} fontWeight={600} tick={{ fill: '#128C7E40' }} axisLine={false} tickLine={false} />
+            <YAxis stroke="#128C7E40" fontSize={9} fontWeight={600} tick={{ fill: '#128C7E40' }} axisLine={false} tickLine={false} />
             <Tooltip 
-              contentStyle={{ backgroundColor: '#0D0D2D', border: 'none', borderRadius: '16px', color: '#fff', fontSize: '10px' }} 
+              contentStyle={{ backgroundColor: '#128C7E', border: 'none', borderRadius: '16px', color: '#fff', fontSize: '10px' }} 
               itemStyle={{ color: '#fff', fontWeight: 'bold' }}
             />
-            <Line type="monotone" dataKey="au" stroke="#39D3C0" strokeWidth={4} dot={{ r: 6, fill: '#39D3C0', strokeWidth: 4, stroke: '#fff' }} activeDot={{ r: 8, strokeWidth: 0 }} />
+            <Line type="monotone" dataKey="au" stroke="#25D366" strokeWidth={4} dot={{ r: 6, fill: '#25D366', strokeWidth: 4, stroke: '#fff' }} activeDot={{ r: 8, strokeWidth: 0 }} />
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -738,10 +744,10 @@ const AnalyticsView = ({ samples }: { samples: Sample[] }) => {
   }));
 
   const metrics = [
-    { id: 'gold', label: 'Gold (Au)', unit: 'g/t', color: '#39D3C0' },
-    { id: 'silver', label: 'Silver (Ag)', unit: 'g/t', color: '#2F1B4E' },
-    { id: 'copper', label: 'Copper (Cu)', unit: '%', color: '#F24C6D' },
-    { id: 'iron', label: 'Iron (Fe)', unit: '%', color: '#0D0D2D' },
+    { id: 'gold', label: 'Gold (Au)', unit: 'g/t', color: '#25D366' },
+    { id: 'silver', label: 'Silver (Ag)', unit: 'g/t', color: '#111B21' },
+    { id: 'copper', label: 'Copper (Cu)', unit: '%', color: '#34B7F1' },
+    { id: 'iron', label: 'Iron (Fe)', unit: '%', color: '#128C7E' },
   ];
 
   const currentMetric = metrics.find(m => m.id === metric)!;
@@ -833,7 +839,7 @@ const AnalyticsView = ({ samples }: { samples: Sample[] }) => {
                   contentStyle={{ backgroundColor: '#0D0D2D', border: 'none', borderRadius: '16px', color: '#fff', fontSize: '10px' }}
                 />
                 <Legend iconType="circle" wrapperStyle={{ fontSize: '10px', paddingTop: '20px', fontWeight: 'bold' }} />
-                <Scatter name={`Correlation: ${currentMetric.label} vs ${currentCompMetric.label}`} data={chartData} fill="#39D3C0" />
+                <Scatter name={`Correlation: ${currentMetric.label} vs ${currentCompMetric.label}`} data={chartData} fill="#25D366" />
               </ScatterChart>
             )}
           </ResponsiveContainer>
@@ -1001,6 +1007,7 @@ export default function App() {
   }, [user, profile]);
 
   if (loading) return <LoadingScreen />;
+  if (user && !profile && !showOnboarding) return <LoadingScreen />;
   
   const handleAuth = async () => {
     const provider = new GoogleAuthProvider();
@@ -1064,18 +1071,18 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={{ user, profile, loading }}>
-      <div className={"min-h-screen transition-colors duration-500 " + (darkMode ? "dark bg-[#050510] text-white/90" : "bg-[#FCFAF7] text-[#0D0D2D]") + " font-sans selection:bg-[#39D3C0]/30 max-w-lg mx-auto shadow-[0_0_100px_rgba(13,13,45,0.05)] relative overflow-x-hidden border-x border-thriva-navy/5"}>
+      <div className={"min-h-screen transition-colors duration-500 " + (darkMode ? "dark bg-[#111B21] text-white/90" : "bg-[#F0F2F5] text-[#128C7E]") + " font-sans selection:bg-[#25D366]/30 max-w-lg mx-auto shadow-[0_0_100px_rgba(18,140,126,0.05)] relative overflow-x-hidden border-x border-thriva-navy/5"}>
         <SyncIndicator isOnline={isOnline} pendingCount={pendingSyncCount} />
         
         {/* Header */}
-        <header className={"border-b border-thriva-navy/5 p-4 pt-8 flex items-center justify-between sticky top-0 " + (darkMode ? "bg-[#050510]/60" : "bg-white/60") + " backdrop-blur-3xl z-[60] transition-all shadow-[0_4px_20px_rgba(0,0,0,0.01)] max-w-lg mx-auto"}>
+        <header className={"border-b border-thriva-navy/5 p-4 pt-8 flex items-center justify-between sticky top-0 " + (darkMode ? "bg-[#111B21]/60" : "bg-white/60") + " backdrop-blur-3xl z-[60] transition-all shadow-[0_4px_20px_rgba(0,0,0,0.01)] max-w-lg mx-auto"}>
           <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setView('dashboard')}>
-            <div className={"w-10 h-10 rounded-full " + (darkMode ? "bg-thriva-mint text-thriva-navy" : "bg-[#0D0D2D] text-[#39D3C0]") + " flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"}>
+            <div className={"w-10 h-10 rounded-full " + (darkMode ? "bg-thriva-mint text-thriva-navy" : "bg-[#128C7E] text-[#25D366]") + " flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"}>
               <FlaskConical size={20} strokeWidth={2.5} />
             </div>
             <div className="flex flex-col">
-              <span className="text-[10px] font-bold tracking-[0.3em] text-[#39D3C0] uppercase group-hover:tracking-[0.4em] transition-all leading-none mb-1">MetLyft</span>
-              <span className={"text-xl font-bold " + (darkMode ? "text-white" : "text-[#0D0D2D]") + " leading-tight flex items-center gap-1"}>Portal</span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-[#25D366] uppercase group-hover:tracking-[0.4em] transition-all leading-none mb-1">MetLyft</span>
+              <span className={"text-xl font-bold " + (darkMode ? "text-white" : "text-[#111B21]") + " leading-tight flex items-center gap-1"}>Portal</span>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -1100,7 +1107,7 @@ export default function App() {
               whileHover={{ scale: 1.05 }}
               className={"w-10 h-10 rounded-full border flex items-center justify-center shadow-sm " + (darkMode ? "bg-[#0D0D2D] border-white/10" : "bg-white border-[#0D0D2D]/5")}
             >
-              <div className={"w-2 h-2 rounded-full " + (isOnline ? "bg-[#39D3C0] mint-glow" : "bg-red-500")}></div>
+              <div className={"w-2 h-2 rounded-full " + (isOnline ? "bg-[#25D366] mint-glow" : "bg-red-500")}></div>
             </motion.button>
             <button onClick={handleLogout} className={(darkMode ? "text-white/40 hover:text-white" : "text-[#0D0D2D]/40 hover:text-[#0D0D2D]") + " transition-colors p-2"}><LogOut size={18} /></button>
           </div>
@@ -1202,26 +1209,26 @@ export default function App() {
                     {selectedSample.status === 'Finalized' ? (
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={[
-                          { name: 'Au', value: selectedSample.elements?.gold || 0, color: '#39D3C0' },
-                          { name: 'Ag', value: selectedSample.elements?.silver || 0, color: '#2F1B4E' },
-                          { name: 'Cu', value: selectedSample.elements?.copper || 0, color: '#F24C6D' },
-                          { name: 'Fe', value: selectedSample.elements?.iron || 0, color: '#0D0D2D' },
+                          { name: 'Au', value: selectedSample.elements?.gold || 0, color: '#25D366' },
+                          { name: 'Ag', value: selectedSample.elements?.silver || 0, color: '#111B21' },
+                          { name: 'Cu', value: selectedSample.elements?.copper || 0, color: '#34B7F1' },
+                          { name: 'Fe', value: selectedSample.elements?.iron || 0, color: '#128C7E' },
                         ]}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#0D0D2D08" vertical={false} />
-                          <XAxis dataKey="name" stroke="#0D0D2D40" fontSize={9} fontWeight={600} axisLine={false} tickLine={false} />
-                          <YAxis stroke="#0D0D2D40" fontSize={9} fontWeight={600} axisLine={false} tickLine={false} />
+                          <CartesianGrid strokeDasharray="3 3" stroke="#111B2108" vertical={false} />
+                          <XAxis dataKey="name" stroke="#111B2140" fontSize={9} fontWeight={600} axisLine={false} tickLine={false} />
+                          <YAxis stroke="#111B2140" fontSize={9} fontWeight={600} axisLine={false} tickLine={false} />
                           <Tooltip 
-                            contentStyle={{ backgroundColor: '#0D0D2D', border: 'none', borderRadius: '16px', color: '#fff', fontSize: '10px' }}
+                            contentStyle={{ backgroundColor: '#111B21', border: 'none', borderRadius: '16px', color: '#fff', fontSize: '10px' }}
                             itemStyle={{ color: '#fff', fontWeight: 'bold' }}
-                            cursor={{ fill: 'rgba(13, 13, 45, 0.02)' }}
+                            cursor={{ fill: 'rgba(17, 27, 33, 0.02)' }}
                           />
                           <Bar dataKey="value" radius={[6, 6, 0, 0]}>
-                            {(entry, index) => <Cell key={`cell-${index}`} fill={['#39D3C0', '#2F1B4E', '#F24C6D', '#0D0D2D'][index]} />}
+                            {(entry, index) => <Cell key={`cell-${index}`} fill={['#25D366', '#111B21', '#34B7F1', '#128C7E'][index]} />}
                           </Bar>
                         </BarChart>
                       </ResponsiveContainer>
                     ) : (
-                      <div className="h-full border border-dashed border-thriva-navy/10 rounded-3xl flex flex-col items-center justify-center space-y-3 bg-[#FCFAF7]/50">
+                      <div className="h-full border border-dashed border-thriva-navy/10 rounded-3xl flex flex-col items-center justify-center space-y-3 bg-[#F0F2F5]/50">
                         <motion.div animate={{ rotate: 360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }}>
                           <Clock className="text-thriva-navy/20" size={32} />
                         </motion.div>
@@ -1278,13 +1285,13 @@ export default function App() {
                   <div className="space-y-4">
                     {(selectedSample.history || []).slice().reverse().map((h, i) => (
                       <div key={i} className="flex gap-4 items-start p-5 bg-white border border-thriva-navy/5 rounded-[24px] shadow-sm transform transition-all hover:scale-[1.01]">
-                        <div className="w-10 h-10 rounded-2xl bg-[#FCFAF7] border border-thriva-navy/5 flex items-center justify-center text-thriva-navy/10 shrink-0 shadow-inner">
+                        <div className="w-10 h-10 rounded-2xl bg-[#F0F2F5] border border-thriva-navy/5 flex items-center justify-center text-thriva-navy/10 shrink-0 shadow-inner">
                            <History size={18} />
                         </div>
                         <div className="space-y-1">
                            <p className="text-[11px] font-bold text-thriva-navy tracking-tight">{h.action}</p>
                            <p className="text-[9px] text-thriva-navy/40 font-bold uppercase tracking-widest">{h.userName} • {new Date(h.timestamp).toLocaleString()}</p>
-                           {h.notes && <p className="text-[10px] text-thriva-navy/50 italic bg-[#FCFAF7] p-3 rounded-xl mt-2 border border-thriva-navy/5">"{h.notes}"</p>}
+                           {h.notes && <p className="text-[10px] text-thriva-navy/50 italic bg-[#F0F2F5] p-3 rounded-xl mt-2 border border-thriva-navy/5">"{h.notes}"</p>}
                         </div>
                       </div>
                     ))}

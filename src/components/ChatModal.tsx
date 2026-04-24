@@ -166,7 +166,7 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
         );
       case 'Messages':
         return (
-          <div className="flex flex-col h-full bg-[#FDFCFB]">
+          <div className="flex flex-col h-full bg-[#FFFFFF]">
             <div className="flex-1 overflow-y-auto p-6 space-y-6 pt-10" ref={scrollRef}>
               {messages.map((m, i) => (
                 <motion.div
@@ -252,7 +252,7 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
             initial={{ opacity: 0, scale: 0.98, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98, y: 30 }}
-            className="w-full h-full md:w-[420px] md:h-[85vh] md:max-h-[780px] bg-[#F9F7F5] md:rounded-[48px] shadow-[0_40px_100px_-20px_rgba(13,13,45,0.4)] flex flex-col relative overflow-hidden"
+            className="w-full h-full md:w-[420px] md:h-[85vh] md:max-h-[780px] bg-[#F0F2F5] md:rounded-[48px] shadow-[0_40px_100px_-20px_rgba(13,13,45,0.4)] flex flex-col relative overflow-hidden"
           >
             {/* Background Texture Overlay - Perfectly matching Thriva visual */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -265,7 +265,7 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
                 referrerPolicy="no-referrer"
               />
               {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-[#F9F7F5]/90 to-[#F9F7F5]" />
+              <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-[#F0F2F5]/90 to-[#F0F2F5]" />
               {/* Extra Glows */}
               <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-thriva-mint/10 blur-[100px] rounded-full" />
               <div className="absolute top-[20%] left-[-20%] w-[50%] h-[50%] bg-thriva-coral/5 blur-[100px] rounded-full" />

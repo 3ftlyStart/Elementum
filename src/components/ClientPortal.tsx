@@ -324,8 +324,8 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
               <AreaChart data={data}>
                 <defs>
                   <linearGradient id="colorAu" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#39D3C0" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#39D3C0" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#25D366" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#25D366" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
@@ -334,7 +334,7 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
                 <Tooltip 
                   contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 10px 40px rgba(0,0,0,0.05)', fontSize: '10px', fontWeight: 'bold' }}
                 />
-                <Area type="monotone" dataKey="au" stroke="#39D3C0" strokeWidth={3} fillOpacity={1} fill="url(#colorAu)" />
+                <Area type="monotone" dataKey="au" stroke="#25D366" strokeWidth={3} fillOpacity={1} fill="url(#colorAu)" />
                 <Area type="monotone" dataKey="ag" stroke="#0D0D2D" strokeWidth={2} strokeOpacity={0.1} fill="transparent" />
               </AreaChart>
             </ResponsiveContainer>
