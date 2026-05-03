@@ -126,7 +126,7 @@ export const InstrumentManager = ({ onCapture }: InstrumentManagerProps) => {
         {simulating && onCapture && activeReading && (
           <button 
             onClick={() => onCapture(activeReading)}
-            className="w-full mt-8 bg-[#FCFAF7] border border-thriva-navy/5 py-5 rounded-3xl text-thriva-navy text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-thriva-mint hover:text-white transition-all duration-300 shadow-inner"
+            className="w-full mt-8 bg-thriva-bg border border-thriva-navy/5 py-5 rounded-3xl text-thriva-navy text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-thriva-mint hover:text-white transition-all duration-300 shadow-inner"
           >
             Capture Atomic Reading
           </button>
@@ -140,7 +140,7 @@ export const InstrumentManager = ({ onCapture }: InstrumentManagerProps) => {
           {instruments.map(inst => (
             <div key={inst.id} className="p-6 bg-white border border-thriva-navy/5 rounded-[32px] flex items-center justify-between group hover:shadow-thriva transition-all duration-500 shadow-sm">
               <div className="flex items-center gap-5">
-                <div className={`w-14 h-14 rounded-3xl flex items-center justify-center transition-all ${inst.status === 'Connected' ? 'bg-thriva-mint/10 text-thriva-mint shadow-inner' : 'bg-[#FCFAF7] text-thriva-navy/10'}`}>
+                <div className={`w-14 h-14 rounded-3xl flex items-center justify-center transition-all ${inst.status === 'Connected' ? 'bg-thriva-mint/10 text-thriva-mint shadow-inner' : 'bg-thriva-bg text-thriva-navy/10'}`}>
                   {inst.type === 'Balance' ? <Scale size={24} /> : inst.type === 'AAS' ? <Activity size={24} /> : <Cpu size={24} />}
                 </div>
                 <div>

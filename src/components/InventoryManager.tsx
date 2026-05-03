@@ -258,7 +258,7 @@ export const InventoryManager = () => {
                 <div className="flex gap-1.5 items-center">
                   <button 
                     onClick={() => handleAdjustStock(item, -1, 'Manual adjustment (Decrease)')}
-                    className="w-8 h-8 rounded-xl bg-[#F0F2F5] border border-thriva-navy/5 flex items-center justify-center text-thriva-navy/30 hover:text-thriva-coral transition-colors"
+                    className="w-8 h-8 rounded-xl bg-thriva-bg border border-thriva-navy/5 flex items-center justify-center text-thriva-navy/30 hover:text-thriva-coral transition-colors"
                   >
                     <Minus size={14} />
                   </button>
@@ -272,7 +272,7 @@ export const InventoryManager = () => {
               </div>
 
               <div className="space-y-2">
-                <div className="h-1.5 bg-[#F0F2F5] rounded-full overflow-hidden shadow-inner">
+                <div className="h-1.5 bg-thriva-bg rounded-full overflow-hidden shadow-inner">
                   <motion.div 
                     initial={{ width: 0 }}
                     animate={{ width: `${progress}%` }}
@@ -314,7 +314,7 @@ export const InventoryManager = () => {
                       <div className="py-4 text-center text-[8px] text-thriva-navy/20 uppercase font-bold tracking-[0.1em]">No mutations logged</div>
                     ) : (
                       transactions[item.id].slice(0, 5).map(tx => (
-                        <div key={tx.id} className="flex justify-between items-center bg-[#F0F2F5] p-3 rounded-xl border border-thriva-navy/5 gap-3">
+                        <div key={tx.id} className="flex justify-between items-center bg-thriva-bg p-3 rounded-xl border border-thriva-navy/5 gap-3">
                           <div className="flex items-start gap-3 flex-1 overflow-hidden">
                             <div className={`w-2 h-2 rounded-full shrink-0 mt-1.5 ${tx.type === 'In' ? 'bg-thriva-mint' : 'bg-thriva-coral'}`}></div>
                             <div className="space-y-0.5 overflow-hidden">
@@ -344,28 +344,36 @@ export const InventoryManager = () => {
       {/* Add Item Modal */}
       <AnimatePresence>
         {showAddModal && (
-          <div className="fixed inset-0 z-[60] flex items-center justify-center p-6">
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-6 bg-thriva-navy/40 backdrop-blur-md">
             <motion.div 
                initial={{ opacity: 0 }}
                animate={{ opacity: 1 }}
                exit={{ opacity: 0 }}
                onClick={() => setShowAddModal(false)}
-               className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
+               className="absolute inset-0"
             />
             <motion.div 
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-900 border border-slate-800 rounded-[32px] w-full max-w-md p-8 relative z-10 space-y-6 overflow-y-auto max-h-[90vh]"
+              className="bg-white border border-thriva-navy/5 rounded-[48px] w-full max-w-md p-10 relative z-10 space-y-8 shadow-2xl max-h-[90vh] overflow-y-auto"
             >
-              <div className="flex justify-between items-center">
-                <h3 className="text-xl font-bold text-white font-serif">New Inventory SKU</h3>
-                <button onClick={() => setShowAddModal(false)} className="text-slate-500 hover:text-white transition-colors">
+              <div className="flex justify-between items-center border-b border-thriva-navy/5 pb-6">
+                <div className="flex items-center gap-4">
+                   <div className="w-14 h-14 rounded-3xl bg-thriva-bg flex items-center justify-center text-thriva-mint shadow-inner">
+                      <Package size={28} />
+                   </div>
+                   <div className="space-y-1">
+                     <h3 className="text-2xl font-display font-medium text-thriva-navy tracking-tight">New SKU</h3>
+                     <p className="text-[10px] text-thriva-navy/30 uppercase font-bold tracking-widest">Inventory sequence initiation</p>
+                   </div>
+                </div>
+                <button onClick={() => setShowAddModal(false)} className="w-10 h-10 rounded-full bg-thriva-bg flex items-center justify-center text-thriva-navy/20 hover:text-thriva-coral transition-all">
                   <X size={20} />
                 </button>
               </div>
 
-              <form className="space-y-4" onSubmit={async (e) => {
+              <form className="space-y-6" onSubmit={async (e) => {
                 e.preventDefault();
                 const fd = new FormData(e.currentTarget);
                 const newItem = {
@@ -386,24 +394,24 @@ export const InventoryManager = () => {
                   console.error("Failed to add SKU:", err);
                 }
               }}>
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Item Name</label>
-                  <input name="name" required className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan-500/50" />
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Item Name</label>
+                  <input name="name" required className="w-full bg-thriva-bg border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-all font-medium" />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Category</label>
-                    <select name="category" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Category</label>
+                    <select name="category" className="w-full bg-thriva-bg border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none cursor-pointer hover:border-thriva-mint/50 transition-all appearance-none font-medium">
                       <option value="Reagent">Reagent</option>
                       <option value="Consumable">Consumable</option>
                       <option value="Standard">Standard</option>
                       <option value="Safety">Safety</option>
                     </select>
                   </div>
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Unit</label>
-                    <select name="unit" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Unit</label>
+                    <select name="unit" className="w-full bg-thriva-bg border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none cursor-pointer hover:border-thriva-mint/50 transition-all appearance-none font-medium">
                       <option value="kg">kg</option>
                       <option value="L">L</option>
                       <option value="g">g</option>
@@ -414,27 +422,27 @@ export const InventoryManager = () => {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Initial Stock</label>
-                    <input name="currentStock" type="number" defaultValue="0" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan-500/50" />
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Initial Stock</label>
+                    <input name="currentStock" type="number" defaultValue="0" className="w-full bg-thriva-bg border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-all font-medium font-display" />
                   </div>
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Warning Level</label>
-                    <input name="minStockLevel" type="number" defaultValue="10" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan-500/50" />
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Warning Level</label>
+                    <input name="minStockLevel" type="number" defaultValue="10" className="w-full bg-thriva-bg border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-all font-medium font-display" />
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Storage Location</label>
-                  <input name="location" required placeholder="e.g. Rack B-1" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan-500/50" />
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Storage Location</label>
+                  <input name="location" required placeholder="e.g. Rack B-1" className="w-full bg-thriva-bg border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-all font-medium" />
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Preferred Supplier</label>
-                  <input name="supplier" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan-500/50" />
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Preferred Supplier</label>
+                  <input name="supplier" className="w-full bg-thriva-bg border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-all font-medium" />
                 </div>
 
-                <button type="submit" className="w-full bg-cyan-500 text-slate-950 font-bold py-4 rounded-2xl shadow-lg shadow-cyan-500/30 hover:bg-cyan-400 active:scale-95 transition-all">
+                <button type="submit" className="w-full bg-thriva-navy text-white font-bold py-5 rounded-[28px] shadow-2xl shadow-thriva-navy/30 hover:bg-thriva-mint hover:text-thriva-navy active:scale-95 transition-all duration-300 uppercase tracking-[0.2em] text-[11px] mt-4">
                   REGISTER SKU
                 </button>
               </form>

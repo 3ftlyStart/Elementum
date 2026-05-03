@@ -32,12 +32,13 @@ interface AdminDashboardProps {
   user: UserProfile;
   onNavigate: (view: any) => void;
   onUpdateSample: (id: string, data: Partial<Sample>) => void;
+  onRegisterClick: () => void;
 }
 
 const StatCard = ({ label, value, icon: Icon, trend }: any) => (
   <motion.div 
     whileHover={{ y: -4 }}
-    className="bg-white dark:bg-[#111B21] p-6 rounded-[32px] shadow-thriva border border-thriva-navy/5 flex flex-col gap-4 relative group transition-all"
+    className="bg-white dark:bg-thriva-dark-bg p-6 rounded-[32px] shadow-thriva border border-thriva-navy/5 flex flex-col gap-4 relative group transition-all"
   >
     <div className="flex items-center justify-between">
       <span className="text-[9px] uppercase tracking-[0.2em] text-thriva-navy/40 dark:text-white/40 font-bold">{label}</span>
@@ -56,7 +57,7 @@ const StatCard = ({ label, value, icon: Icon, trend }: any) => (
   </motion.div>
 );
 
-export const AdminDashboard = ({ samples, user, onNavigate, onUpdateSample }: AdminDashboardProps) => {
+export const AdminDashboard = ({ samples, user, onNavigate, onUpdateSample, onRegisterClick }: AdminDashboardProps) => {
   const finalizedSamples = samples.filter(s => s.status === 'Finalized');
   const revenueEst = finalizedSamples.length * 150; // Mock $150 per sample
   
@@ -86,7 +87,7 @@ export const AdminDashboard = ({ samples, user, onNavigate, onUpdateSample }: Ad
       </div>
 
       {/* Strategic Insight Chart */}
-      <div className="bg-[#111B21] rounded-[48px] p-8 space-y-6 shadow-2xl relative overflow-hidden group">
+      <div className="bg-thriva-navy rounded-[48px] p-8 space-y-6 shadow-2xl relative overflow-hidden group">
         <div className="absolute top-0 right-0 w-64 h-64 bg-thriva-mint/10 rounded-full blur-[100px] -mr-32 -mt-32" />
         <div className="flex justify-between items-center relative z-10">
           <div className="space-y-1">
@@ -105,11 +106,11 @@ export const AdminDashboard = ({ samples, user, onNavigate, onUpdateSample }: Ad
             <AreaChart data={weeklyData}>
               <defs>
                 <linearGradient id="adminColor" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#25D366" stopOpacity={0.4}/>
-                  <stop offset="95%" stopColor="#25D366" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="#3DC39E" stopOpacity={0.4}/>
+                  <stop offset="95%" stopColor="#3DC39E" stopOpacity={0}/>
                 </linearGradient>
               </defs>
-              <Area type="monotone" dataKey="count" stroke="#25D366" strokeWidth={3} fillOpacity={1} fill="url(#adminColor)" />
+              <Area type="monotone" dataKey="count" stroke="#3DC39E" strokeWidth={3} fillOpacity={1} fill="url(#adminColor)" />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -154,6 +155,27 @@ export const AdminDashboard = ({ samples, user, onNavigate, onUpdateSample }: Ad
               <ArrowUpRight size={14} />
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* Admin Quick Actions */}
+      <div className="space-y-4">
+        <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-thriva-navy/40 px-2">Administrative Control</h3>
+        <div className="grid grid-cols-2 gap-3">
+          <button 
+            onClick={onRegisterClick}
+            className="p-5 bg-thriva-navy text-white rounded-3xl flex flex-col gap-3 items-center justify-center hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-thriva-navy/20"
+          >
+            <FlaskConical size={24} className="text-thriva-mint" />
+            <span className="text-[10px] font-bold uppercase tracking-widest">Register Sample</span>
+          </button>
+          <button 
+            onClick={() => onNavigate('billing')}
+            className="p-5 bg-white border border-thriva-navy/5 rounded-3xl flex flex-col gap-3 items-center justify-center hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg"
+          >
+            <DollarSign size={24} className="text-thriva-coral" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy">Billing Portal</span>
+          </button>
         </div>
       </div>
     </div>

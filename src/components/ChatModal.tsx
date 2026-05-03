@@ -132,14 +132,14 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
               href="https://wa.me/263700000000" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="w-full bg-[#25D366] rounded-[28px] p-8 flex items-center justify-between group hover:bg-[#128C7E] transition-all transform hover:-translate-y-1 shadow-xl shadow-[#25D366]/20"
+              className="w-full bg-thriva-mint rounded-[28px] p-8 flex items-center justify-between group hover:bg-thriva-navy transition-all transform hover:-translate-y-1 shadow-xl shadow-thriva-mint/20"
             >
               <div className="text-left space-y-1">
-                <h4 className="font-bold text-white text-[17px]">WhatsApp Support</h4>
-                <p className="text-sm text-white/80 font-medium">Chat directly with a specialist</p>
+                <h4 className="font-bold text-thriva-navy group-hover:text-white text-[17px]">WhatsApp Support</h4>
+                <p className="text-sm text-thriva-navy/80 group-hover:text-white/80 font-medium">Chat directly with a specialist</p>
               </div>
-              <div className="text-[#25D366] group-hover:scale-110 transition-transform bg-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg">
-                <MessageCircle size={24} strokeWidth={2.5} fill="#25D366" className="text-white" />
+              <div className="text-thriva-mint group-hover:scale-110 transition-transform bg-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg">
+                <MessageCircle size={24} strokeWidth={2.5} fill="currentColor" className="text-white" />
               </div>
             </a>
 
@@ -252,7 +252,7 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
             initial={{ opacity: 0, scale: 0.98, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98, y: 30 }}
-            className="w-full h-full md:w-[420px] md:h-[85vh] md:max-h-[780px] bg-[#F0F2F5] md:rounded-[48px] shadow-[0_40px_100px_-20px_rgba(13,13,45,0.4)] flex flex-col relative overflow-hidden"
+            className="w-full h-full md:w-[420px] md:h-[85vh] md:max-h-[780px] bg-thriva-bg md:rounded-[48px] shadow-[0_40px_100px_-20px_rgba(0,109,119,0.4)] flex flex-col relative overflow-hidden"
           >
             {/* Background Texture Overlay - Perfectly matching Thriva visual */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -260,12 +260,12 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
                <motion.img 
                 initial={{ scale: 1.2, opacity: 0 }}
                 animate={{ scale: 1, opacity: 0.15 }}
-                src="https://picsum.photos/seed/thriva-style/1000/1000?blur=10" 
+                src="https://picsum.photos/seed/tropical/1000/1000?blur=10" 
                 className="w-full h-full object-cover transition-opacity duration-1000"
                 referrerPolicy="no-referrer"
               />
               {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-[#F0F2F5]/90 to-[#F0F2F5]" />
+              <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-thriva-bg/90 to-thriva-bg" />
               {/* Extra Glows */}
               <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-thriva-mint/10 blur-[100px] rounded-full" />
               <div className="absolute top-[20%] left-[-20%] w-[50%] h-[50%] bg-thriva-coral/5 blur-[100px] rounded-full" />
@@ -284,7 +284,7 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
                 href="https://wa.me/263700000000" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="p-2 hover:bg-[#25D366]/10 rounded-full transition-all text-[#25D366] hover:scale-110"
+                className="p-2 hover:bg-thriva-mint/10 rounded-full transition-all text-thriva-mint hover:scale-110"
                 title="WhatsApp Support"
               >
                 <MessageCircle size={22} fill="currentColor" strokeWidth={2.5} className="opacity-80" />

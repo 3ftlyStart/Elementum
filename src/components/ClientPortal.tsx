@@ -20,7 +20,8 @@ import {
   Mail,
   Building2,
   TrendingUp,
-  CircleDot
+  CircleDot,
+  Download
 } from 'lucide-react';
 import { 
   collection, 
@@ -33,6 +34,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { Sample, Invoice, UserProfile, Order, ClientProfile } from '../types';
+import { generateSamplePDF } from '../lib/pdfUtils';
 import { 
   ResponsiveContainer, 
   AreaChart, 
@@ -50,7 +52,7 @@ interface ClientPortalProps {
   user: UserProfile;
 }
 
-type ClientTab = 'dashboard' | 'assays' | 'orders' | 'analytics' | 'settings';
+type ClientTab = 'dashboard' | 'assays' | 'orders' | 'analytics' | 'invoices' | 'settings';
 
 export const ClientPortal = ({ user }: ClientPortalProps) => {
   const [samples, setSamples] = useState<Sample[]>([]);
@@ -98,6 +100,20 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
       setOrders(data);
     });
 
+    const qInvoices = query(
+      collection(db, 'invoices'),
+      where('clientId', '==', user.uid),
+      orderBy('date', 'desc')
+    );
+
+    const unsubscribeInvoices = onSnapshot(qInvoices, (snapshot) => {
+      const data = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Invoice[];
+      setInvoices(data);
+    });
+
     // Populate profile data for settings
     if (user.role === 'Client') {
       const client = user as ClientProfile;
@@ -112,6 +128,7 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
     return () => {
       unsubscribeSamples();
       unsubscribeOrders();
+      unsubscribeInvoices();
     };
   }, [user]);
 
@@ -197,7 +214,7 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
 
       {samples.length === 0 ? (
         <div className="bg-white border border-thriva-navy/5 p-20 rounded-[48px] text-center shadow-thriva">
-          <div className="w-16 h-16 bg-[#FCFAF7] rounded-3xl flex items-center justify-center mx-auto mb-6">
+          <div className="w-16 h-16 bg-thriva-bg rounded-3xl flex items-center justify-center mx-auto mb-6">
             <Info size={32} className="text-thriva-navy/5" />
           </div>
           <p className="text-[10px] text-thriva-navy/30 uppercase font-bold tracking-[0.2em] leading-loose">No diagnostic data available<br/>in current lifecycle</p>
@@ -205,19 +222,30 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
       ) : (
         samples.map(sample => (
           <div key={sample.id} className="bg-white border border-thriva-navy/5 p-8 rounded-[40px] space-y-6 group hover:shadow-thriva transition-all duration-500 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-1 h-full bg-[#FCFAF7] group-hover:bg-thriva-mint transition-colors" />
+            <div className="absolute top-0 left-0 w-1 h-full bg-thriva-bg group-hover:bg-thriva-mint transition-colors" />
             <div className="flex justify-between items-start">
               <div className="space-y-2">
                  <div className="flex items-center gap-3">
                    <span className="text-[11px] font-bold text-thriva-mint tracking-widest bg-thriva-mint/10 px-3 py-1 rounded-full uppercase">{sample.sampleId}</span>
-                   <span className={`px-2.5 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest border transition-all ${sample.status === 'Finalized' ? 'bg-thriva-mint text-white border-thriva-mint shadow-sm' : 'bg-[#FCFAF7] text-thriva-navy/30 border-thriva-navy/5'}`}>
+                   <span className={`px-2.5 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest border transition-all ${sample.status === 'Finalized' ? 'bg-thriva-mint text-white border-thriva-mint shadow-sm' : 'bg-thriva-bg text-thriva-navy/30 border-thriva-navy/5'}`}>
                      {sample.status}
                    </span>
                  </div>
                  <h4 className="text-xl font-display font-medium text-thriva-navy tracking-tight">{sample.sampleType} Molecular Analysis</h4>
               </div>
-              <div className="w-10 h-10 rounded-full bg-[#FCFAF7] flex items-center justify-center text-thriva-navy/20 group-hover:text-thriva-mint group-hover:bg-thriva-mint/10 transition-all">
-                <ChevronRight size={20} />
+              <div className="flex items-center gap-3">
+                {sample.status === 'Finalized' && (
+                  <button 
+                    onClick={() => generateSamplePDF(sample)}
+                    title="Export PDF Report"
+                    className="w-10 h-10 rounded-xl bg-thriva-bg flex items-center justify-center text-thriva-navy/40 hover:text-thriva-navy hover:bg-thriva-mint/10 transition-all border border-transparent hover:border-thriva-mint/20"
+                  >
+                    <Download size={18} />
+                  </button>
+                )}
+                <div className="w-10 h-10 rounded-full bg-thriva-bg flex items-center justify-center text-thriva-navy/20 group-hover:text-thriva-mint group-hover:bg-thriva-mint/10 transition-all">
+                  <ChevronRight size={20} />
+                </div>
               </div>
             </div>
             
@@ -233,7 +261,7 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
                   </div>
                 )}
                 {sample.elements.silver && (
-                  <div className="p-5 bg-[#FCFAF7] border border-thriva-navy/5 rounded-3xl space-y-2 transform transition-all group-hover:scale-[1.02]">
+                  <div className="p-5 bg-thriva-bg border border-thriva-navy/5 rounded-3xl space-y-2 transform transition-all group-hover:scale-[1.02]">
                     <p className="text-[9px] text-thriva-navy/30 uppercase font-bold tracking-widest">Verified Silver (Ag)</p>
                     <div className="flex items-end gap-2">
                       <p className="text-3xl font-display font-medium text-thriva-navy/60 leading-none">{sample.elements.silver.toFixed(3)}</p>
@@ -258,7 +286,7 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
 
       {orders.length === 0 ? (
         <div className="bg-white border border-thriva-navy/5 p-20 rounded-[48px] text-center shadow-thriva">
-          <div className="w-16 h-16 bg-[#FCFAF7] rounded-3xl flex items-center justify-center mx-auto mb-6">
+          <div className="w-16 h-16 bg-thriva-bg rounded-3xl flex items-center justify-center mx-auto mb-6">
             <Package size={32} className="text-thriva-navy/5" />
           </div>
           <p className="text-[10px] text-thriva-navy/30 uppercase font-bold tracking-[0.2em]">No equipment orders found</p>
@@ -298,6 +326,61 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
     </div>
   );
 
+  const renderInvoices = () => (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center px-4">
+        <h3 className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em]">Financial Documentation</h3>
+        <span className="text-[10px] font-bold text-thriva-navy/40 tracking-wider bg-thriva-navy/5 px-3 py-1 rounded-full">{invoices.length} Invoices</span>
+      </div>
+
+      {invoices.length === 0 ? (
+        <div className="bg-white border border-thriva-navy/5 p-20 rounded-[48px] text-center shadow-thriva">
+          <div className="w-16 h-16 bg-thriva-bg rounded-3xl flex items-center justify-center mx-auto mb-6">
+            <Receipt size={32} className="text-thriva-navy/5" />
+          </div>
+          <p className="text-[10px] text-thriva-navy/30 uppercase font-bold tracking-[0.2em]">No invoices issued yet</p>
+        </div>
+      ) : (
+        invoices.map(invoice => (
+          <div key={invoice.id} className="bg-white border border-thriva-navy/5 p-8 rounded-[40px] space-y-6 group hover:shadow-thriva transition-all duration-500">
+             <div className="flex justify-between items-start">
+               <div className="space-y-1">
+                 <p className="text-[10px] text-thriva-mint font-bold uppercase tracking-widest">{invoice.invoiceNumber}</p>
+                 <p className="text-sm font-bold text-thriva-navy/60">{new Date(invoice.date).toLocaleDateString()}</p>
+               </div>
+               <span className={`px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest border transition-all ${invoice.status === 'Paid' ? 'bg-thriva-mint text-white border-thriva-mint shadow-lg shadow-thriva-mint/20' : 'bg-thriva-navy/5 text-thriva-navy/40 border-thriva-navy/10'}`}>
+                 {invoice.status}
+               </span>
+             </div>
+
+             <div className="space-y-3 bg-thriva-bg/50 p-4 rounded-2xl">
+               {invoice.items.map((item, idx) => (
+                 <div key={idx} className="flex justify-between items-center text-xs">
+                   <div className="flex gap-3 items-center">
+                     <span className="w-6 h-6 bg-white border border-thriva-navy/5 rounded-lg flex items-center justify-center font-bold text-[10px]">{item.quantity}x</span>
+                     <span className="font-semibold text-thriva-navy/70">{item.description}</span>
+                   </div>
+                   <span className="font-bold text-thriva-navy">${item.total.toLocaleString()}</span>
+                 </div>
+               ))}
+             </div>
+
+             <div className="pt-4 border-t border-thriva-navy/5 flex justify-between items-end">
+                <div className="space-y-1">
+                  <p className="text-[8px] font-bold text-thriva-navy/20 uppercase tracking-widest">Billing Tier Summary</p>
+                  <p className="text-[10px] font-bold text-thriva-navy/40 uppercase">Subtotal: ${invoice.subtotal.toLocaleString()}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-[8px] font-bold text-thriva-navy/20 uppercase tracking-widest mb-1">Grand Total</p>
+                  <p className="text-3xl font-display font-medium text-thriva-navy tracking-tight">${invoice.total.toLocaleString()}</p>
+                </div>
+             </div>
+          </div>
+        ))
+      )}
+    </div>
+  );
+
   const renderAnalytics = () => {
     const data = samples
       .filter(s => s.status === 'Finalized' && s.elements?.gold)
@@ -324,18 +407,18 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
               <AreaChart data={data}>
                 <defs>
                   <linearGradient id="colorAu" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#25D366" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#25D366" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#3DC39E" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#3DC39E" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#002B2E08" />
                 <XAxis dataKey="name" hide />
                 <YAxis hide />
                 <Tooltip 
                   contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 10px 40px rgba(0,0,0,0.05)', fontSize: '10px', fontWeight: 'bold' }}
                 />
-                <Area type="monotone" dataKey="au" stroke="#25D366" strokeWidth={3} fillOpacity={1} fill="url(#colorAu)" />
-                <Area type="monotone" dataKey="ag" stroke="#0D0D2D" strokeWidth={2} strokeOpacity={0.1} fill="transparent" />
+                <Area type="monotone" dataKey="au" stroke="#3DC39E" strokeWidth={3} fillOpacity={1} fill="url(#colorAu)" />
+                <Area type="monotone" dataKey="ag" stroke="#FFEDA0" strokeWidth={2} strokeOpacity={0.1} fill="transparent" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -345,7 +428,7 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
         </div>
 
         <div className="grid grid-cols-1 gap-4">
-          <div className="p-8 bg-[#FCFAF7] rounded-[40px] space-y-4">
+          <div className="p-8 bg-thriva-bg rounded-[40px] space-y-4">
              <div className="flex items-center gap-3">
                <div className="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-thriva-mint shadow-sm">
                  <BarChart3 size={20} />
@@ -375,11 +458,11 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
                 <label className="flex items-center gap-2 text-[10px] font-bold text-thriva-navy/40 uppercase tracking-widest ml-2">
                   <Building2 size={12} /> Company Legal Name
                 </label>
-                <input 
+                  <input 
                   type="text"
                   value={profileData.companyName}
                   onChange={e => setProfileData({...profileData, companyName: e.target.value})}
-                  className="w-full bg-[#FCFAF7] border-none rounded-[24px] py-5 px-8 text-sm font-semibold text-thriva-navy focus:ring-2 focus:ring-thriva-mint transition-all"
+                  className="w-full bg-thriva-bg border-none rounded-[24px] py-5 px-8 text-sm font-semibold text-thriva-navy focus:ring-2 focus:ring-thriva-mint transition-all"
                   placeholder="e.g. Atlas Mining Operations"
                 />
               </div>
@@ -392,7 +475,7 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
                   type="text"
                   value={profileData.address}
                   onChange={e => setProfileData({...profileData, address: e.target.value})}
-                  className="w-full bg-[#FCFAF7] border-none rounded-[24px] py-5 px-8 text-sm font-semibold text-thriva-navy focus:ring-2 focus:ring-thriva-mint transition-all"
+                  className="w-full bg-thriva-bg border-none rounded-[24px] py-5 px-8 text-sm font-semibold text-thriva-navy focus:ring-2 focus:ring-thriva-mint transition-all"
                   placeholder="Street, City, Site Code"
                 />
               </div>
@@ -406,7 +489,7 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
                     type="tel"
                     value={profileData.contactNumber}
                     onChange={e => setProfileData({...profileData, contactNumber: e.target.value})}
-                    className="w-full bg-[#FCFAF7] border-none rounded-[24px] py-5 px-8 text-sm font-semibold text-thriva-navy focus:ring-2 focus:ring-thriva-mint transition-all"
+                    className="w-full bg-thriva-bg border-none rounded-[24px] py-5 px-8 text-sm font-semibold text-thriva-navy focus:ring-2 focus:ring-thriva-mint transition-all"
                     placeholder="+263 ..."
                   />
                 </div>
@@ -418,7 +501,7 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
                     type="email"
                     value={profileData.billingEmail}
                     onChange={e => setProfileData({...profileData, billingEmail: e.target.value})}
-                    className="w-full bg-[#FCFAF7] border-none rounded-[24px] py-5 px-8 text-sm font-semibold text-thriva-navy focus:ring-2 focus:ring-thriva-mint transition-all"
+                    className="w-full bg-thriva-bg border-none rounded-[24px] py-5 px-8 text-sm font-semibold text-thriva-navy focus:ring-2 focus:ring-thriva-mint transition-all"
                     placeholder="accounts@mining.com"
                   />
                 </div>
@@ -453,7 +536,7 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
       </div>
 
       <div className="flex gap-2 p-2 bg-white border border-thriva-navy/5 rounded-[32px] -mt-12 relative z-10 mx-auto w-fit shadow-2xl shadow-thriva-navy/5 overflow-x-auto noscroll max-w-full">
-        {(['dashboard', 'assays', 'orders', 'analytics', 'settings'] as ClientTab[]).map(tab => (
+        {(['dashboard', 'assays', 'orders', 'analytics', 'invoices', 'settings'] as ClientTab[]).map(tab => (
           <button 
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -463,6 +546,7 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
             {tab === 'assays' && <FlaskConical size={14} />}
             {tab === 'orders' && <Package size={14} />}
             {tab === 'analytics' && <BarChart3 size={14} />}
+            {tab === 'invoices' && <Receipt size={14} />}
             {tab === 'settings' && <Settings size={14} />}
             {tab}
           </button>
@@ -481,6 +565,7 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
           {activeTab === 'assays' && renderAssays()}
           {activeTab === 'orders' && renderOrders()}
           {activeTab === 'analytics' && renderAnalytics()}
+          {activeTab === 'invoices' && renderInvoices()}
           {activeTab === 'settings' && renderSettings()}
         </motion.div>
       </AnimatePresence>

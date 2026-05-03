@@ -39,8 +39,52 @@
           }
         },
         "method": { "type": "string", "enum": ["FireAssay", "AAS", "CarbonAnalysis", "WetChemistry"] },
-        "methodData": { "type": "object" },
-        "qaqc": { "type": "object" },
+        "methodData": {
+          "type": "object",
+          "properties": {
+            "fireAssay": {
+              "type": "object",
+              "properties": {
+                "crucibleNumber": { "type": "string" },
+                "fluxType": { "type": "string" },
+                "fluxWeight": { "type": "number" },
+                "fusionTime": { "type": "number" },
+                "cupellationTemp": { "type": "number" },
+                "beadWeight": { "type": "number" }
+              }
+            },
+            "aas": {
+              "type": "object",
+              "properties": {
+                "dilutionFactor": { "type": "number" },
+                "wavelength": { "type": "number" },
+                "lampCurrent": { "type": "number" },
+                "absorbance": { "type": "number" },
+                "rawReading": { "type": "number" }
+              }
+            },
+            "wetChemistry": {
+              "type": "object",
+              "properties": {
+                "reagentUsed": { "type": "string" },
+                "titrationVolume": { "type": "number" },
+                "normality": { "type": "number" }
+              }
+            }
+          }
+        },
+        "qaqc": {
+          "type": "object",
+          "properties": {
+            "isStandard": { "type": "boolean" },
+            "isDuplicate": { "type": "boolean" },
+            "standardReference": { "type": "string" },
+            "expectedValue": { "type": "number" },
+            "batchId": { "type": "string" },
+            "replicateNumber": { "type": "number" },
+            "varianceFromOriginal": { "type": "number" }
+          }
+        },
         "collectedAt": { "type": "string", "format": "date-time" },
         "submittedById": { "type": "string" },
         "elements": {

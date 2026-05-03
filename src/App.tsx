@@ -70,7 +70,9 @@ import {
   LayoutGrid,
   Moon,
   Sun,
-  ShoppingCart
+  ShoppingCart,
+  MessageCircle,
+  X
 } from 'lucide-react';
 import { 
   BarChart, 
@@ -125,6 +127,9 @@ import { AdminDashboard } from './components/AdminDashboard';
 import { TechnicianDashboard } from './components/TechnicianDashboard';
 import { StoreView } from './components/StoreView';
 import { CartDrawer } from './components/CartDrawer';
+import { SampleRegistrationModal } from './components/SampleRegistrationModal';
+import { generateHistoryPDF, generateSamplePDF } from './lib/pdfUtils';
+import ChatModal from './components/ChatModal';
 
 const HistoryView = ({ samples }: { samples: Sample[] }) => {
   const [startDate, setStartDate] = useState('');
@@ -145,13 +150,7 @@ const HistoryView = ({ samples }: { samples: Sample[] }) => {
   }).sort((a, b) => new Date(b.collectedAt).getTime() - new Date(a.collectedAt).getTime());
 
   const handleExport = () => {
-    const dataStr = JSON.stringify(filteredSamples, null, 2);
-    const blob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `MetLyft_History_${startDate || 'all'}_to_${endDate || 'all'}.json`;
-    link.click();
+    generateHistoryPDF(filteredSamples, { start: startDate, end: endDate });
   };
 
   return (
@@ -202,7 +201,7 @@ const HistoryView = ({ samples }: { samples: Sample[] }) => {
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <span className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-widest">{s.jobId}</span>
-                  <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold uppercase ${s.status === 'Finalized' ? 'bg-thriva-mint/10 text-thriva-mint' : 'bg-[#FCFAF7] text-thriva-navy/40 border border-thriva-navy/5'}`}>
+                  <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold uppercase ${s.status === 'Finalized' ? 'bg-thriva-mint/10 text-thriva-mint' : 'bg-thriva-bg text-thriva-navy/40 border border-thriva-navy/5'}`}>
                     {s.status}
                   </span>
                 </div>
@@ -211,9 +210,20 @@ const HistoryView = ({ samples }: { samples: Sample[] }) => {
                   {new Date(s.collectedAt).toLocaleString()}
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-xs font-bold text-thriva-navy/60">{s.sampleType}</div>
-                <div className="text-[9px] text-thriva-navy/30 uppercase tracking-widest font-bold">{s.source}</div>
+              <div className="flex items-center gap-3">
+                {s.status === 'Finalized' && (
+                  <button 
+                    onClick={() => generateSamplePDF(s)}
+                    title="Download Report"
+                    className="p-3 bg-thriva-bg rounded-xl text-thriva-navy/40 hover:text-thriva-mint hover:bg-thriva-mint/10 transition-all border border-transparent hover:border-thriva-mint/20"
+                  >
+                    <Download size={16} />
+                  </button>
+                )}
+                <div className="text-right">
+                  <div className="text-xs font-bold text-thriva-navy/60">{s.sampleType}</div>
+                  <div className="text-[9px] text-thriva-navy/30 uppercase tracking-widest font-bold">{s.source}</div>
+                </div>
               </div>
             </div>
           ))
@@ -309,7 +319,7 @@ const ControlRoom = ({ samples }: { samples: Sample[] }) => {
         {buckets.map(bucket => (
           <div key={bucket.label} className="bg-white dark:bg-[#0D0D2D] border border-thriva-navy/5 dark:border-white/5 shadow-thriva rounded-[32px] p-6 relative overflow-hidden group hover:shadow-thriva-hover transition-all duration-500">
             <div className="flex justify-between items-start relative z-10">
-              <div className={`w-10 h-10 rounded-2xl flex items-center justify-center bg-[#FCFAF7] dark:bg-[#050510] border border-thriva-navy/5 dark:border-white/5 ${bucket.color}`}>
+              <div className={`w-10 h-10 rounded-2xl flex items-center justify-center bg-thriva-bg dark:bg-thriva-dark-bg border border-thriva-navy/5 dark:border-white/5 ${bucket.color}`}>
                 <bucket.icon size={18} />
               </div>
               <span className="text-3xl font-display font-medium text-thriva-navy dark:text-white">
@@ -342,11 +352,11 @@ const ControlRoom = ({ samples }: { samples: Sample[] }) => {
              ]}>
                <defs>
                  <linearGradient id="colorVal" x1="0" y1="0" x2="0" y2="1">
-                   <stop offset="5%" stopColor="#25D366" stopOpacity={0.4}/>
-                   <stop offset="95%" stopColor="#25D366" stopOpacity={0}/>
+                   <stop offset="5%" stopColor="#3DC39E" stopOpacity={0.4}/>
+                   <stop offset="95%" stopColor="#3DC39E" stopOpacity={0}/>
                  </linearGradient>
                </defs>
-               <Area type="monotone" dataKey="val" stroke="#25D366" strokeWidth={3} fillOpacity={1} fill="url(#colorVal)" />
+               <Area type="monotone" dataKey="val" stroke="#3DC39E" strokeWidth={3} fillOpacity={1} fill="url(#colorVal)" />
              </AreaChart>
            </ResponsiveContainer>
         </div>
@@ -634,7 +644,7 @@ const PlantProfile = ({ samples }: { samples: Sample[] }) => {
               contentStyle={{ backgroundColor: '#128C7E', border: 'none', borderRadius: '16px', color: '#fff', fontSize: '10px' }} 
               itemStyle={{ color: '#fff', fontWeight: 'bold' }}
             />
-            <Line type="monotone" dataKey="au" stroke="#25D366" strokeWidth={4} dot={{ r: 6, fill: '#25D366', strokeWidth: 4, stroke: '#fff' }} activeDot={{ r: 8, strokeWidth: 0 }} />
+            <Line type="monotone" dataKey="au" stroke="#3DC39E" strokeWidth={4} dot={{ r: 6, fill: '#3DC39E', strokeWidth: 4, stroke: '#fff' }} activeDot={{ r: 8, strokeWidth: 0 }} />
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -744,10 +754,10 @@ const AnalyticsView = ({ samples }: { samples: Sample[] }) => {
   }));
 
   const metrics = [
-    { id: 'gold', label: 'Gold (Au)', unit: 'g/t', color: '#25D366' },
-    { id: 'silver', label: 'Silver (Ag)', unit: 'g/t', color: '#111B21' },
-    { id: 'copper', label: 'Copper (Cu)', unit: '%', color: '#34B7F1' },
-    { id: 'iron', label: 'Iron (Fe)', unit: '%', color: '#128C7E' },
+    { id: 'gold', label: 'Gold (Au)', unit: 'g/t', color: '#3DC39E' },
+    { id: 'silver', label: 'Silver (Ag)', unit: 'g/t', color: '#FFEDA0' },
+    { id: 'copper', label: 'Copper (Cu)', unit: '%', color: '#FF7E67' },
+    { id: 'iron', label: 'Iron (Fe)', unit: '%', color: '#002B2E' },
   ];
 
   const currentMetric = metrics.find(m => m.id === metric)!;
@@ -839,7 +849,7 @@ const AnalyticsView = ({ samples }: { samples: Sample[] }) => {
                   contentStyle={{ backgroundColor: '#0D0D2D', border: 'none', borderRadius: '16px', color: '#fff', fontSize: '10px' }}
                 />
                 <Legend iconType="circle" wrapperStyle={{ fontSize: '10px', paddingTop: '20px', fontWeight: 'bold' }} />
-                <Scatter name={`Correlation: ${currentMetric.label} vs ${currentCompMetric.label}`} data={chartData} fill="#25D366" />
+                <Scatter name={`Correlation: ${currentMetric.label} vs ${currentCompMetric.label}`} data={chartData} fill="#3DC39E" />
               </ScatterChart>
             )}
           </ResponsiveContainer>
@@ -853,7 +863,7 @@ const AnalyticsView = ({ samples }: { samples: Sample[] }) => {
                 <button
                   key={m.id}
                   onClick={() => setComparisonMetric(m.id as any)}
-                  className={`px-4 py-2 rounded-full text-[10px] font-bold border transition-all shadow-sm ${comparisonMetric === m.id ? 'bg-thriva-navy border-thriva-navy text-white shadow-lg' : 'bg-[#FCFAF7] border-thriva-navy/5 text-thriva-navy/40 hover:text-thriva-navy'}`}
+                  className={`px-4 py-2 rounded-full text-[10px] font-bold border transition-all shadow-sm ${comparisonMetric === m.id ? 'bg-thriva-navy border-thriva-navy text-white shadow-lg' : 'bg-thriva-bg border-thriva-navy/5 text-thriva-navy/40 hover:text-thriva-navy'}`}
                 >
                   {m.id.toUpperCase()}
                 </button>
@@ -870,7 +880,7 @@ const AnalyticsView = ({ samples }: { samples: Sample[] }) => {
           className="w-full bg-white border border-thriva-navy/5 p-6 rounded-[32px] flex items-center justify-between group hover:shadow-thriva transition-all duration-500 shadow-sm"
         >
           <div className="flex items-center gap-4">
-             <div className="w-12 h-12 rounded-2xl bg-[#FCFAF7] border border-thriva-navy/5 flex items-center justify-center text-thriva-navy shadow-inner group-hover:bg-thriva-mint group-hover:text-white transition-all">
+             <div className="w-12 h-12 rounded-2xl bg-thriva-bg border border-thriva-navy/5 flex items-center justify-center text-thriva-navy shadow-inner group-hover:bg-thriva-mint group-hover:text-white transition-all">
                <Download size={20} />
              </div>
              <div className="text-left">
@@ -878,7 +888,7 @@ const AnalyticsView = ({ samples }: { samples: Sample[] }) => {
                <p className="text-sm font-bold text-thriva-navy">Export Integrated Dataset</p>
              </div>
           </div>
-          <div className="w-10 h-10 rounded-full bg-[#FCFAF7] border border-thriva-navy/5 flex items-center justify-center group-hover:translate-x-2 transition-transform">
+          <div className="w-10 h-10 rounded-full bg-thriva-bg border border-thriva-navy/5 flex items-center justify-center group-hover:translate-x-2 transition-transform">
              <ChevronRight size={18} className="text-thriva-navy/20" />
           </div>
         </button>
@@ -893,21 +903,22 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [samples, setSamples] = useState<Sample[]>([]);
-  const [view, setView] = useState<'dashboard' | 'create' | 'detail' | 'analytics' | 'control' | 'plant' | 'bench' | 'history' | 'instruments' | 'inventory' | 'requisitions' | 'billing' | 'store'>('dashboard');
+  const [view, setView] = useState<'dashboard' | 'create' | 'detail' | 'analytics' | 'control' | 'plant' | 'bench' | 'history' | 'instruments' | 'inventory' | 'requisitions' | 'billing' | 'store'>('history');
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [inventory, setInventory] = useState<InventoryItem[]>([]);
   const [darkMode, setDarkMode] = useState(false);
   const toggleDarkMode = () => setDarkMode(!darkMode);
-  const [entryType, setEntryType] = useState<'sample' | 'job'>('sample');
   const [selectedSample, setSelectedSample] = useState<Sample | null>(null);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [pendingSyncCount, setPendingSyncCount] = useState(0);
   const [globalReading, setGlobalReading] = useState<InstrumentReading | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState<SampleStatus | 'All'>('All');
   const [priorityFilter, setPriorityFilter] = useState<Priority | 'All'>('All');
   const [typeFilter, setTypeFilter] = useState<SampleType | 'All'>('All');
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   const handleUpdateSample = async (sampleId: string, data: Partial<Sample>) => {
     const sample = samples.find(s => s.id === sampleId);
@@ -932,6 +943,45 @@ export default function App() {
     } else {
       // For simplicity, we only handle simple online updates here or the user needs to implement a more complex offline merge
       console.warn("Offline updates for complex objects not fully implemented in this demo POC");
+    }
+  };
+
+  const handleCreateJob = async (jobData: any) => {
+    const newJob = {
+      ...jobData,
+      id: `internal-${Date.now()}`, // fallback before Firestore id
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      createdBy: user!.uid
+    };
+
+    if (navigator.onLine) {
+      const docRef = await addDoc(collection(db, 'jobs'), newJob);
+      return docRef.id;
+    } else {
+      addToSyncQueue('job', newJob);
+      setPendingSyncCount(getSyncQueue().length);
+      return newJob.id;
+    }
+  };
+  const handleUpdateInventory = async (itemId: string, data: Partial<InventoryItem>) => {
+    if (navigator.onLine) {
+      await updateDoc(doc(db, 'inventory', itemId), {
+        ...data,
+        updatedAt: new Date().toISOString()
+      });
+    } else {
+      console.warn("Offline inventory updates not implemented");
+    }
+  };
+
+  const handleAddInventory = async (itemData: Omit<InventoryItem, 'id'>) => {
+    if (navigator.onLine) {
+      await addDoc(collection(db, 'inventory'), {
+        ...itemData,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
     }
   };
 
@@ -995,6 +1045,10 @@ export default function App() {
       setJobs(snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Job)));
     });
 
+    const unsubscribeInventory = onSnapshot(collection(db, 'inventory'), (snapshot) => {
+      setInventory(snapshot.docs.map(d => ({ id: d.id, ...d.data() } as InventoryItem)));
+    });
+
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Sample));
       setSamples(docs);
@@ -1003,6 +1057,7 @@ export default function App() {
     return () => {
       unsubscribe();
       unsubscribeJobs();
+      unsubscribeInventory();
     };
   }, [user, profile]);
 
@@ -1063,6 +1118,46 @@ export default function App() {
 
   const handleLogout = () => signOut(auth);
 
+  const handleRegisterSample = async (sampleData: any) => {
+    const historyEntry = {
+      timestamp: new Date().toISOString(),
+      action: 'System Registration',
+      userId: user!.uid,
+      userName: profile!.displayName,
+      notes: 'Sample registered at facility entrance.'
+    };
+    
+    const newSample = {
+      ...sampleData,
+      status: 'Received',
+      submittedById: user!.uid,
+      elements: {},
+      physicalProperties: {
+        mass: sampleData.mass,
+        form: 'rock'
+      },
+      method: sampleData.method,
+      methodData: {}, 
+      qaqc: {
+        isStandard: sampleData.qaqcType === 'crm',
+        isDuplicate: sampleData.qaqcType === 'duplicate',
+        batchId: sampleData.jobId !== 'PENDING' ? sampleData.jobId : undefined,
+      },
+      history: [historyEntry],
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString()
+    };
+    
+    if (navigator.onLine) {
+      await addDoc(collection(db, 'samples'), newSample);
+    } else {
+      addToSyncQueue('sample', newSample);
+      setPendingSyncCount(getSyncQueue().length);
+    }
+    
+    setIsRegistrationOpen(false);
+  };
+
   const filteredSamples = samples.filter(s => {
     return (statusFilter === 'All' || s.status === statusFilter) &&
            (priorityFilter === 'All' || s.priority === priorityFilter) &&
@@ -1071,18 +1166,18 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={{ user, profile, loading }}>
-      <div className={"min-h-screen transition-colors duration-500 " + (darkMode ? "dark bg-[#111B21] text-white/90" : "bg-[#F0F2F5] text-[#128C7E]") + " font-sans selection:bg-[#25D366]/30 max-w-lg mx-auto shadow-[0_0_100px_rgba(18,140,126,0.05)] relative overflow-x-hidden border-x border-thriva-navy/5"}>
+      <div className={"min-h-screen transition-colors duration-500 " + (darkMode ? "dark bg-thriva-dark-bg text-white/90" : "bg-thriva-bg text-thriva-navy") + " font-sans selection:bg-thriva-mint/30 max-w-lg mx-auto shadow-[0_0_100px_rgba(0,43,46,0.05)] relative overflow-x-hidden border-x border-thriva-navy/5"}>
         <SyncIndicator isOnline={isOnline} pendingCount={pendingSyncCount} />
         
         {/* Header */}
-        <header className={"border-b border-thriva-navy/5 p-4 pt-8 flex items-center justify-between sticky top-0 " + (darkMode ? "bg-[#111B21]/60" : "bg-white/60") + " backdrop-blur-3xl z-[60] transition-all shadow-[0_4px_20px_rgba(0,0,0,0.01)] max-w-lg mx-auto"}>
+        <header className={"border-b border-thriva-navy/5 p-4 pt-8 flex items-center justify-between sticky top-0 " + (darkMode ? "bg-thriva-dark-bg/60" : "bg-white/60") + " backdrop-blur-3xl z-[60] transition-all shadow-[0_4px_20px_rgba(0,0,0,0.01)] max-w-lg mx-auto"}>
           <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setView('dashboard')}>
-            <div className={"w-10 h-10 rounded-full " + (darkMode ? "bg-thriva-mint text-thriva-navy" : "bg-[#128C7E] text-[#25D366]") + " flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"}>
+            <div className={"w-10 h-10 rounded-full " + (darkMode ? "bg-thriva-mint text-thriva-navy" : "bg-thriva-navy text-thriva-mint") + " flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"}>
               <FlaskConical size={20} strokeWidth={2.5} />
             </div>
             <div className="flex flex-col">
-              <span className="text-[10px] font-bold tracking-[0.3em] text-[#25D366] uppercase group-hover:tracking-[0.4em] transition-all leading-none mb-1">MetLyft</span>
-              <span className={"text-xl font-bold " + (darkMode ? "text-white" : "text-[#111B21]") + " leading-tight flex items-center gap-1"}>Portal</span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-thriva-mint uppercase group-hover:tracking-[0.4em] transition-all leading-none mb-1">MetLyft</span>
+              <span className={"text-xl font-bold " + (darkMode ? "text-white" : "text-thriva-navy") + " leading-tight flex items-center gap-1"}>Portal</span>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -1105,20 +1200,19 @@ export default function App() {
             </button>
             <motion.button 
               whileHover={{ scale: 1.05 }}
-              className={"w-10 h-10 rounded-full border flex items-center justify-center shadow-sm " + (darkMode ? "bg-[#0D0D2D] border-white/10" : "bg-white border-[#0D0D2D]/5")}
+              className={"w-10 h-10 rounded-full border flex items-center justify-center shadow-sm " + (darkMode ? "bg-thriva-dark-bg border-white/10" : "bg-white border-thriva-navy/5")}
             >
-              <div className={"w-2 h-2 rounded-full " + (isOnline ? "bg-[#25D366] mint-glow" : "bg-red-500")}></div>
+              <div className={"w-2 h-2 rounded-full " + (isOnline ? "bg-thriva-mint mint-glow" : "bg-red-500")}></div>
             </motion.button>
-            <button onClick={handleLogout} className={(darkMode ? "text-white/40 hover:text-white" : "text-[#0D0D2D]/40 hover:text-[#0D0D2D]") + " transition-colors p-2"}><LogOut size={18} /></button>
+            <button onClick={handleLogout} className={(darkMode ? "text-white/40 hover:text-white" : "text-thriva-navy/40 hover:text-thriva-navy") + " transition-colors p-2"}><LogOut size={18} /></button>
           </div>
         </header>
 
         {/* Top Navigation Menu (Thriva style) */}
-        <nav className={`sticky top-[89px] ${darkMode ? 'bg-[#050510]/40' : 'bg-white/40'} backdrop-blur-2xl border-b border-thriva-navy/5 z-50 overflow-x-auto noscroll max-w-lg mx-auto`}>
+        <nav className={`sticky top-[89px] ${darkMode ? 'bg-thriva-dark-bg/40' : 'bg-white/40'} backdrop-blur-2xl border-b border-thriva-navy/5 z-50 overflow-x-auto noscroll max-w-lg mx-auto`}>
           <div className="flex items-center px-4 py-3 gap-2 min-w-max">
             {[
               { id: 'dashboard', label: 'Summary', icon: LayoutGrid, roles: ['Admin', 'Technician', 'Client'] },
-              { id: 'create', label: 'Register', icon: Plus, roles: ['Admin', 'Technician'] },
               { id: 'analytics', label: 'Insights', icon: BarChart3, roles: ['Admin', 'Technician'] },
               { id: 'history', label: 'Archive', icon: History, roles: ['Admin', 'Technician', 'Client'] },
               { id: 'inventory', label: 'Supplies', icon: Box, roles: ['Admin', 'Technician'] },
@@ -1131,7 +1225,7 @@ export default function App() {
               <button
                 key={item.id}
                 onClick={() => setView(item.id as any)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all whitespace-nowrap ${view === item.id ? (darkMode ? 'bg-thriva-mint text-thriva-navy shadow-lg shadow-thriva-mint/20' : 'bg-[#0D0D2D] text-white shadow-lg') : (darkMode ? 'bg-white/5 text-white/40 hover:bg-white/10' : 'bg-white/50 text-[#0D0D2D]/60 hover:bg-white')}`}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all whitespace-nowrap ${view === item.id ? (darkMode ? 'bg-thriva-mint text-thriva-navy shadow-lg shadow-thriva-mint/20' : 'bg-thriva-navy text-white shadow-lg') : (darkMode ? 'bg-white/5 text-white/40 hover:bg-white/10' : 'bg-white/50 text-thriva-navy/60 hover:bg-white')}`}
               >
                 {view === item.id && <item.icon size={12} />}
                 {item.label}
@@ -1153,9 +1247,20 @@ export default function App() {
                 {profile?.role === 'Client' ? (
                   <ClientPortal user={profile} />
                 ) : profile?.role === 'Admin' ? (
-                  <AdminDashboard samples={samples} user={profile} onNavigate={setView} onUpdateSample={handleUpdateSample} />
+                  <AdminDashboard samples={samples} user={profile} onNavigate={setView} onUpdateSample={handleUpdateSample} onRegisterClick={() => setIsRegistrationOpen(true)} />
                 ) : (
-                  <TechnicianDashboard samples={samples} user={profile} onNavigate={setView} onUpdateSample={handleUpdateSample} />
+                  <TechnicianDashboard 
+                    samples={samples} 
+                    jobs={jobs}
+                    inventory={inventory}
+                    user={profile} 
+                    onNavigate={setView} 
+                    onUpdateSample={handleUpdateSample} 
+                    onUpdateInventory={handleUpdateInventory}
+                    onAddInventory={handleAddInventory}
+                    onRegisterClick={() => setIsRegistrationOpen(true)} 
+                    onCreateJob={handleCreateJob}
+                  />
                 )}
               </motion.div>
             )}
@@ -1209,26 +1314,26 @@ export default function App() {
                     {selectedSample.status === 'Finalized' ? (
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={[
-                          { name: 'Au', value: selectedSample.elements?.gold || 0, color: '#25D366' },
-                          { name: 'Ag', value: selectedSample.elements?.silver || 0, color: '#111B21' },
-                          { name: 'Cu', value: selectedSample.elements?.copper || 0, color: '#34B7F1' },
-                          { name: 'Fe', value: selectedSample.elements?.iron || 0, color: '#128C7E' },
+                          { name: 'Au', value: selectedSample.elements?.gold || 0, color: '#3DC39E' },
+                          { name: 'Ag', value: selectedSample.elements?.silver || 0, color: '#FFEDA0' },
+                          { name: 'Cu', value: selectedSample.elements?.copper || 0, color: '#FF7E67' },
+                          { name: 'Fe', value: selectedSample.elements?.iron || 0, color: '#002B2E' },
                         ]}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#111B2108" vertical={false} />
-                          <XAxis dataKey="name" stroke="#111B2140" fontSize={9} fontWeight={600} axisLine={false} tickLine={false} />
-                          <YAxis stroke="#111B2140" fontSize={9} fontWeight={600} axisLine={false} tickLine={false} />
+                          <CartesianGrid strokeDasharray="3 3" stroke="#002B2E10" vertical={false} />
+                          <XAxis dataKey="name" stroke="#002B2E40" fontSize={9} fontWeight={600} axisLine={false} tickLine={false} />
+                          <YAxis stroke="#002B2E40" fontSize={9} fontWeight={600} axisLine={false} tickLine={false} />
                           <Tooltip 
-                            contentStyle={{ backgroundColor: '#111B21', border: 'none', borderRadius: '16px', color: '#fff', fontSize: '10px' }}
+                            contentStyle={{ backgroundColor: '#002B2E', border: 'none', borderRadius: '16px', color: '#fff', fontSize: '10px' }}
                             itemStyle={{ color: '#fff', fontWeight: 'bold' }}
-                            cursor={{ fill: 'rgba(17, 27, 33, 0.02)' }}
+                            cursor={{ fill: 'rgba(0, 43, 46, 0.05)' }}
                           />
                           <Bar dataKey="value" radius={[6, 6, 0, 0]}>
-                            {(entry, index) => <Cell key={`cell-${index}`} fill={['#25D366', '#111B21', '#34B7F1', '#128C7E'][index]} />}
+                            {(entry, index) => <Cell key={`cell-${index}`} fill={['#3DC39E', '#FFEDA0', '#FF7E67', '#002B2E'][index]} />}
                           </Bar>
                         </BarChart>
                       </ResponsiveContainer>
                     ) : (
-                      <div className="h-full border border-dashed border-thriva-navy/10 rounded-3xl flex flex-col items-center justify-center space-y-3 bg-[#F0F2F5]/50">
+                      <div className="h-full border border-dashed border-thriva-navy/10 rounded-3xl flex flex-col items-center justify-center space-y-3 bg-thriva-bg/50">
                         <motion.div animate={{ rotate: 360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }}>
                           <Clock className="text-thriva-navy/20" size={32} />
                         </motion.div>
@@ -1240,13 +1345,13 @@ export default function App() {
                   <div className="space-y-4 relative z-10">
                     <p className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em]">Core Assay Metrics</p>
                     <div className="grid grid-cols-2 gap-3">
-                      <div className="p-4 bg-[#FCFAF7] border border-thriva-navy/5 rounded-2xl shadow-inner group-hover:bg-white transition-colors">
+                      <div className="p-4 bg-thriva-bg border border-thriva-navy/5 rounded-2xl shadow-inner group-hover:bg-white transition-colors">
                         <p className="text-[8px] font-bold text-thriva-navy/30 uppercase tracking-widest mb-1">Gold (Au)</p>
                         <p className="text-xl font-display text-thriva-mint font-medium">
                           {selectedSample.elements?.gold?.toFixed(4) || '---'} <span className="text-[10px] text-thriva-navy/20">g/t</span>
                         </p>
                       </div>
-                      <div className="p-4 bg-[#FCFAF7] border border-thriva-navy/5 rounded-2xl shadow-inner group-hover:bg-white transition-colors">
+                      <div className="p-4 bg-thriva-bg border border-thriva-navy/5 rounded-2xl shadow-inner group-hover:bg-white transition-colors">
                         <p className="text-[8px] font-bold text-thriva-navy/30 uppercase tracking-widest mb-1">Silver (Ag)</p>
                         <p className="text-xl font-display text-thriva-navy/80 font-medium">
                           {selectedSample.elements?.silver?.toFixed(3) || '---'} <span className="text-[10px] text-thriva-navy/20">g/t</span>
@@ -1285,294 +1390,18 @@ export default function App() {
                   <div className="space-y-4">
                     {(selectedSample.history || []).slice().reverse().map((h, i) => (
                       <div key={i} className="flex gap-4 items-start p-5 bg-white border border-thriva-navy/5 rounded-[24px] shadow-sm transform transition-all hover:scale-[1.01]">
-                        <div className="w-10 h-10 rounded-2xl bg-[#F0F2F5] border border-thriva-navy/5 flex items-center justify-center text-thriva-navy/10 shrink-0 shadow-inner">
+                        <div className="w-10 h-10 rounded-2xl bg-thriva-bg border border-thriva-navy/5 flex items-center justify-center text-thriva-navy/10 shrink-0 shadow-inner">
                            <History size={18} />
                         </div>
                         <div className="space-y-1">
                            <p className="text-[11px] font-bold text-thriva-navy tracking-tight">{h.action}</p>
                            <p className="text-[9px] text-thriva-navy/40 font-bold uppercase tracking-widest">{h.userName} • {new Date(h.timestamp).toLocaleString()}</p>
-                           {h.notes && <p className="text-[10px] text-thriva-navy/50 italic bg-[#F0F2F5] p-3 rounded-xl mt-2 border border-thriva-navy/5">"{h.notes}"</p>}
+                           {h.notes && <p className="text-[10px] text-thriva-navy/50 italic bg-thriva-bg p-3 rounded-xl mt-2 border border-thriva-navy/5">"{h.notes}"</p>}
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
-              </motion.div>
-            )}
-
-            {view === 'create' && (
-              <motion.div 
-                key="create"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="p-6 space-y-8"
-              >
-                <div className="space-y-2">
-                  <h2 className="text-3xl font-display font-medium text-thriva-navy tracking-tight">Registration</h2>
-                  <p className="text-[10px] text-thriva-navy/40 uppercase tracking-widest font-bold">Laboratory Reception & Logging</p>
-                </div>
-
-                <div className="flex p-1 bg-white border border-thriva-navy/5 shadow-sm rounded-2xl">
-                  {['Sample', 'Job'].map(t => (
-                    <button 
-                      key={t}
-                      onClick={() => setEntryType(t.toLowerCase() as 'sample' | 'job')}
-                      className={`flex-1 py-3 rounded-xl text-[10px] font-bold tracking-widest uppercase transition-all ${entryType === t.toLowerCase() ? 'bg-thriva-navy text-white shadow-lg shadow-thriva-navy/10' : 'text-thriva-navy/40 hover:text-thriva-navy'}`}
-                    >
-                      {t}
-                    </button>
-                  ))}
-                </div>
-
-                {entryType === 'sample' ? (
-                  <form className="space-y-8" onSubmit={async (e) => {
-                    e.preventDefault();
-                    setFormErrors({});
-                    const formData = new FormData(e.currentTarget);
-                    const errors: Record<string, string> = {};
-
-                    // Validation
-                    const sampleId = formData.get('sampleId') as string;
-                    if (!sampleId || !/^S-\d{5,15}$/.test(sampleId)) {
-                      errors.sampleId = "Sample ID must follow format S-12345 (prefix S- followed by 5-15 digits)";
-                    }
-
-                    const clientName = formData.get('clientName') as string;
-                    if (!clientName || clientName.trim().length < 2) {
-                      errors.clientName = "Client Name is required (min 2 chars)";
-                    }
-
-                    const mass = formData.get('mass') as string;
-                    if (!mass || isNaN(Number(mass)) || Number(mass) <= 0) {
-                      errors.mass = "Initial mass must be a positive number";
-                    }
-
-                    if (Object.keys(errors).length > 0) {
-                      setFormErrors(errors);
-                      return;
-                    }
-
-                    const priority = formData.get('priority') as Priority;
-                    const historyEntry = {
-                      timestamp: new Date().toISOString(),
-                      action: 'System Registration',
-                      userId: user!.uid,
-                      userName: profile!.displayName,
-                      notes: 'Sample registered at facility entrance.'
-                    };
-                    const newSample = {
-                      jobId: formData.get('jobId') || 'PENDING',
-                      sampleId: sampleId,
-                      clientName: clientName,
-                      source: formData.get('source') || 'Mining',
-                      sampleType: formData.get('sampleType') || 'Ore',
-                      priority: priority || 'Standard',
-                      status: 'Received',
-                      collectedAt: formData.get('collectedDate') ? new Date(formData.get('collectedDate') as string).toISOString() : new Date().toISOString(),
-                      submittedById: user!.uid,
-                      elements: {},
-                      physicalProperties: {
-                        mass: Number(mass),
-                        form: 'rock'
-                      },
-                      qaqc: {
-                        isStandard: formData.get('qaqcType') === 'crm',
-                        isDuplicate: formData.get('qaqcType') === 'duplicate',
-                      },
-                      history: [historyEntry],
-                      notes: formData.get('notes') || '',
-                      updatedAt: new Date().toISOString(),
-                      createdAt: new Date().toISOString()
-                    };
-                    
-                    if (navigator.onLine) {
-                      await addDoc(collection(db, 'samples'), newSample);
-                    } else {
-                      addToSyncQueue('sample', newSample);
-                      setPendingSyncCount(getSyncQueue().length);
-                    }
-                    
-                    setView('dashboard');
-                  }}>
-                            {/* Source Categorization */}
-                            <div className="space-y-2">
-                              <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Source Point</label>
-                              <select 
-                                name="source"
-                                className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-colors shadow-thriva"
-                              >
-                                <option value="Mining">Mining (Face/Grab)</option>
-                                <option value="BallMill">Ball Mill (Discharge)</option>
-                                <option value="ILR">ILR (Reactor)</option>
-                                <option value="CIL">CIL (Tanks)</option>
-                                <option value="PlantFeed">Plant Feed</option>
-                                <option value="PlantTails">Plant Tails</option>
-                              </select>
-                            </div>
-
-                            <div className="space-y-2">
-                              <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Collected Date</label>
-                              <input 
-                                type="date"
-                                name="collectedDate"
-                                defaultValue={new Date().toISOString().split('T')[0]}
-                                className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-colors shadow-thriva font-bold text-sm"
-                              />
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                              <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Job Reference</label>
-                                <select 
-                                  name="jobId"
-                                  className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-colors shadow-thriva font-bold text-sm"
-                                >
-                                  <option value="PENDING">PENDING BATCH</option>
-                                  {jobs.map(j => (
-                                    <option key={j.id} value={j.jobId}>{j.name} [{j.jobId}]</option>
-                                  ))}
-                                </select>
-                              </div>
-
-                              <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Internal Code (QR)</label>
-                                <input 
-                                  name="sampleId"
-                                  defaultValue={`S-${Math.floor(10000 + Math.random() * 90000)}`}
-                                  className={`w-full bg-white border ${formErrors.sampleId ? 'border-red-500' : 'border-thriva-navy/10'} rounded-xl px-4 py-4 text-thriva-mint font-mono text-sm outline-none focus:border-thriva-mint shadow-thriva`}
-                                />
-                                {formErrors.sampleId && <p className="text-[9px] text-red-500 font-bold mt-1 ml-2 uppercase">{formErrors.sampleId}</p>}
-                              </div>
-                            </div>
-
-                            <div className="space-y-2">
-                              <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Client / Department</label>
-                              <input 
-                                name="clientName"
-                                placeholder="Client name or internal dept..."
-                                className={`w-full bg-white border ${formErrors.clientName ? 'border-red-500' : 'border-thriva-navy/10'} rounded-xl px-4 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-colors shadow-thriva font-bold text-sm`}
-                              />
-                              {formErrors.clientName && <p className="text-[9px] text-red-500 font-bold mt-1 ml-2 uppercase">{formErrors.clientName}</p>}
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                              <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Sample Mass (g)</label>
-                                <input 
-                                  name="mass"
-                                  type="number"
-                                  placeholder="Initial weight"
-                                  className={`w-full bg-white border ${formErrors.mass ? 'border-red-500' : 'border-thriva-navy/10'} rounded-xl px-4 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-colors shadow-thriva font-bold text-sm`}
-                                />
-                                {formErrors.mass && <p className="text-[9px] text-red-500 font-bold mt-1 ml-2 uppercase">{formErrors.mass}</p>}
-                              </div>
-
-                              <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Processing Priority</label>
-                                <select 
-                                  name="priority"
-                                  defaultValue="Standard"
-                                  className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-colors shadow-thriva font-bold text-sm"
-                                >
-                                  <option value="Low">Low</option>
-                                  <option value="Standard">Standard</option>
-                                  <option value="High">High</option>
-                                  <option value="Emergency">Emergency</option>
-                                </select>
-                              </div>
-                  </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                              <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">QA/QC Type</label>
-                                <select 
-                                  name="qaqcType"
-                                  className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-colors shadow-thriva font-bold text-sm"
-                                >
-                                  <option value="none">Standard Sample</option>
-                                  <option value="crm">Certified Reference (CRM)</option>
-                                  <option value="blank">Blank</option>
-                                  <option value="duplicate">Laboratory Duplicate</option>
-                                </select>
-                              </div>
-
-                              <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Field Notes</label>
-                                <input 
-                                  name="notes"
-                                  placeholder="Physical obs..."
-                                  className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-4 text-thriva-navy outline-none focus:border-thriva-mint placeholder:text-slate-300 shadow-thriva font-bold text-sm"
-                                />
-                              </div>
-                            </div>
-
-                  <button 
-                    type="submit"
-                    className="w-full bg-thriva-mint hover:scale-[1.02] text-thriva-navy font-bold text-sm py-6 rounded-full active:scale-[0.98] transition-all shadow-xl shadow-thriva-mint/20"
-                  >
-                    REGISTER TO SYSTEM
-                  </button>
-                </form>
-              ) : (
-                <form className="space-y-8" onSubmit={async (e) => {
-                  e.preventDefault();
-                  const formData = new FormData(e.currentTarget);
-                  const newJob = {
-                    jobId: `JOB-${Math.floor(100+Math.random()*900)}`,
-                    name: formData.get('name') || 'Unnamed Batch',
-                    site: formData.get('site') || 'Western Sector',
-                    shift: formData.get('shift') || 'Morning',
-                    status: 'Open',
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString(),
-                    createdBy: user!.uid
-                  };
-                  
-                  if (navigator.onLine) {
-                    await addDoc(collection(db, 'jobs'), newJob);
-                  } else {
-                    addToSyncQueue('job', newJob);
-                    setPendingSyncCount(getSyncQueue().length);
-                  }
-                  
-                  setEntryType('sample');
-                }}>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Batch Name / Reference</label>
-                    <input 
-                      name="name" 
-                      required 
-                      placeholder="e.g. Shift B - Ore Feed" 
-                      className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-4 text-thriva-navy outline-none focus:border-thriva-mint shadow-thriva font-bold text-sm" 
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                       <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Production Site</label>
-                       <select name="site" className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-4 text-thriva-navy outline-none shadow-thriva font-bold text-sm">
-                          <option value="Western Sector">Western Sector</option>
-                          <option value="Pit Alpha">Pit Alpha</option>
-                          <option value="Level 400">Level 400</option>
-                       </select>
-                    </div>
-                    <div className="space-y-2">
-                       <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Active Shift</label>
-                       <select name="shift" className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-4 text-thriva-navy outline-none shadow-thriva font-bold text-sm">
-                          <option value="Morning">Morning</option>
-                          <option value="Afternoon">Afternoon</option>
-                          <option value="Night">Night</option>
-                       </select>
-                    </div>
-                  </div>
-                  <button 
-                    type="submit"
-                    className="w-full bg-thriva-navy text-white font-bold text-sm py-6 rounded-full hover:bg-thriva-banner transition-all shadow-xl shadow-thriva-navy/20"
-                  >
-                    OPEN NEW BATCH
-                  </button>
-                </form>
-              )}
               </motion.div>
             )}
 
@@ -1672,8 +1501,78 @@ export default function App() {
             cart={cart} 
             setCart={setCart} 
             user={user} 
+            onNavigate={setView}
+          />
+
+          <SampleRegistrationModal 
+            isOpen={isRegistrationOpen}
+            onClose={() => setIsRegistrationOpen(false)}
+            jobs={jobs}
+            onSubmit={handleRegisterSample}
+            user={user}
+            profile={profile}
           />
         </main>
+
+        {/* Floating Side Buttons (as in landing page) */}
+        <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-center gap-3">
+          <AnimatePresence>
+            {!isChatOpen && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0, y: 20, scale: 0.5 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 20, scale: 0.5 }}
+                  className="group flex flex-col items-center relative"
+                >
+                  <button 
+                    onClick={() => setIsRegistrationOpen(true)}
+                    title="Register Sample"
+                    className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 ${darkMode ? 'bg-thriva-mint text-thriva-navy shadow-thriva-mint/30' : 'bg-thriva-navy text-white shadow-thriva-navy/30'}`}
+                  >
+                    <FlaskConical size={28} strokeWidth={1.5} />
+                  </button>
+                  <div className="absolute right-16 px-3 py-1 bg-thriva-navy text-white text-[9px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-widest">
+                    Register Sample
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20, scale: 0.5 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 20, scale: 0.5 }}
+                  className="group flex flex-col items-center relative"
+                >
+                  <button 
+                    onClick={() => setView('analytics')}
+                    title="Insights"
+                    className={`w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 border ${darkMode ? 'bg-white/5 text-white border-white/10 hover:bg-white/10' : 'bg-white text-thriva-navy border-thriva-navy/5 shadow-sm'}`}
+                  >
+                    <Activity size={28} strokeWidth={1.5} className="text-thriva-mint" />
+                  </button>
+                  <div className="absolute right-16 px-3 py-1 bg-thriva-navy text-white text-[9px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-widest">
+                    Insights
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
+
+          <motion.button
+            whileHover={{ scale: 1.1, y: -5 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsChatOpen(!isChatOpen)}
+            className={`p-3 rounded-full transition-all ${darkMode ? 'text-thriva-mint' : 'text-thriva-navy'} bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/10 shadow-xl`}
+          >
+            {isChatOpen ? (
+              <X size={28} className="opacity-80 hover:opacity-100 transition-opacity" />
+            ) : (
+              <MessageCircle size={28} fill="currentColor" className="opacity-80 hover:opacity-100 transition-opacity" />
+            )}
+          </motion.button>
+        </div>
+
+        <ChatModal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
 
       {/* No bottom nav as per top menu request */}
       </div>

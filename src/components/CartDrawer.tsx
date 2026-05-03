@@ -21,9 +21,10 @@ interface CartDrawerProps {
   cart: CartItem[];
   setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
   user: UserProfile | null;
+  onNavigate?: (view: any) => void;
 }
 
-export const CartDrawer = ({ isOpen, onClose, cart, setCart, user }: CartDrawerProps) => {
+export const CartDrawer = ({ isOpen, onClose, cart, setCart, user, onNavigate }: CartDrawerProps) => {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -92,7 +93,7 @@ export const CartDrawer = ({ isOpen, onClose, cart, setCart, user }: CartDrawerP
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed inset-y-0 right-0 w-full max-w-sm bg-[#FCFAF7] dark:bg-[#050510] z-[101] shadow-2xl flex flex-col pt-8"
+              className="fixed inset-y-0 right-0 w-full max-w-sm bg-thriva-bg dark:bg-thriva-dark-bg z-[101] shadow-2xl flex flex-col pt-8"
             >
               <div className="px-6 flex justify-between items-center mb-8">
                   <div className="flex items-center gap-3">
@@ -108,9 +109,27 @@ export const CartDrawer = ({ isOpen, onClose, cart, setCart, user }: CartDrawerP
 
               <div className="flex-1 overflow-y-auto px-6 space-y-4 noscroll">
                 {cart.length === 0 ? (
-                  <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-30">
-                    <ShoppingCart size={48} strokeWidth={1} />
-                    <p className="font-bold text-[10px] uppercase tracking-widest">Cart is Empty</p>
+                  <div className="h-full flex flex-col items-center justify-center text-center space-y-6">
+                    <div className="w-20 h-20 bg-thriva-navy/5 rounded-full flex items-center justify-center text-thriva-navy/20">
+                      <ShoppingCart size={40} strokeWidth={1} />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="font-bold text-[10px] uppercase tracking-widest text-thriva-navy/40">Cart is Empty</p>
+                      <p className="text-[9px] text-thriva-navy/20 uppercase tracking-widest font-bold">Laboratory supplies required</p>
+                    </div>
+                    {onNavigate && (
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => {
+                          onNavigate('store');
+                          onClose();
+                        }}
+                        className="bg-thriva-mint text-thriva-navy px-6 py-3 rounded-2xl text-[10px] font-bold uppercase tracking-widest shadow-lg shadow-thriva-mint/20 flex items-center gap-2"
+                      >
+                        Browse Products
+                      </motion.button>
+                    )}
                   </div>
                 ) : (
                   cart.map(item => (
@@ -120,11 +139,11 @@ export const CartDrawer = ({ isOpen, onClose, cart, setCart, user }: CartDrawerP
                         <h4 className="text-xs font-bold text-thriva-navy dark:text-white">{item.name}</h4>
                         <div className="flex justify-between items-center">
                           <div className="text-xs text-thriva-mint font-bold">${item.price.toFixed(2)}</div>
-                          <div className="flex items-center gap-2 bg-[#F0F2F5] dark:bg-[#050510] rounded-xl p-1 border border-thriva-navy/5">
+                          <div className="flex items-center gap-2 bg-thriva-bg dark:bg-thriva-dark-bg rounded-xl p-1 border border-thriva-navy/5">
                             <motion.button 
                               whileTap={{ scale: 0.8 }}
                               onClick={() => updateQuantity(item.id, -1)} 
-                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-white dark:bg-[#111B21] text-thriva-navy/60 hover:text-thriva-coral hover:shadow-sm transition-all border border-thriva-navy/5"
+                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-white dark:bg-thriva-dark-bg text-thriva-navy/60 hover:text-thriva-coral hover:shadow-sm transition-all border border-thriva-navy/5"
                             >
                               <Minus size={12} />
                             </motion.button>
@@ -143,7 +162,7 @@ export const CartDrawer = ({ isOpen, onClose, cart, setCart, user }: CartDrawerP
                             <motion.button 
                               whileTap={{ scale: 0.8 }}
                               onClick={() => updateQuantity(item.id, 1)} 
-                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-white dark:bg-[#111B21] text-thriva-navy/60 hover:text-thriva-mint hover:shadow-sm transition-all border border-thriva-navy/5"
+                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-white dark:bg-thriva-dark-bg text-thriva-navy/60 hover:text-thriva-mint hover:shadow-sm transition-all border border-thriva-navy/5"
                             >
                               <Plus size={12} />
                             </motion.button>
@@ -208,8 +227,8 @@ export const CartDrawer = ({ isOpen, onClose, cart, setCart, user }: CartDrawerP
                   </div>
 
                   <div className="space-y-4">
-                    <div className="flex gap-4 p-4 bg-[#FCFAF7] dark:bg-[#050510] rounded-[24px] border border-thriva-navy/5">
-                      <div className="w-12 h-12 bg-white dark:bg-[#0D0D2D] rounded-xl flex items-center justify-center text-thriva-navy dark:text-thriva-mint shadow-sm">
+                    <div className="flex gap-4 p-4 bg-thriva-bg dark:bg-thriva-dark-bg rounded-[24px] border border-thriva-navy/5">
+                      <div className="w-12 h-12 bg-white dark:bg-thriva-dark-bg rounded-xl flex items-center justify-center text-thriva-navy dark:text-thriva-mint shadow-sm">
                         <Truck size={24} />
                       </div>
                       <div>

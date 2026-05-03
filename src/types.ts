@@ -19,16 +19,27 @@ export interface MethodSpecificData {
   fireAssay?: {
     crucibleNumber: string;
     fluxType: string;
+    fluxWeight?: number; // grams
+    fusionTime?: number; // minutes
+    cupellationTemp?: number; // Celsius
     beadWeight?: number; // mg
   };
   aas?: {
     dilutionFactor: number;
+    wavelength?: number; // nm
+    lampCurrent?: number; // mA
     absorbance?: number;
     rawReading?: number;
   };
   carbon?: {
     isLoaded: boolean;
     efficiency?: number;
+    weight?: number; // grams
+  };
+  wetChemistry?: {
+    reagentUsed: string;
+    titrationVolume?: number; // ml
+    normality?: number;
   };
 }
 
@@ -36,6 +47,9 @@ export interface QAQC {
   isStandard: boolean;
   isDuplicate: boolean;
   standardReference?: string;
+  expectedValue?: number;
+  batchId?: string;
+  replicateNumber?: number;
   varianceFromOriginal?: number; // percentage
 }
 

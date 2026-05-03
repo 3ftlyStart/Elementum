@@ -75,7 +75,7 @@ export const LandingPage = ({ onSignUp, onSignIn, onStoreClick, darkMode, onTogg
   const headerScale = useTransform(scrollY, [0, 100], [1, 0.95]);
 
   return (
-    <div className={`min-h-screen transition-colors duration-500 ${darkMode ? 'dark bg-[#111B21] text-white/90' : 'bg-thriva-bg text-thriva-navy'} font-sans selection:bg-thriva-mint/20 relative overflow-x-hidden`}>
+    <div className={`min-h-screen transition-colors duration-500 ${darkMode ? 'dark bg-thriva-dark-bg text-white/90' : 'bg-thriva-bg text-thriva-navy'} font-sans selection:bg-thriva-mint/20 relative overflow-x-hidden`}>
       
       {/* Top Banner - Fixed Height */}
       <div className={`${darkMode ? 'bg-thriva-mint text-thriva-navy' : 'bg-thriva-banner text-white'} py-3 px-4 text-center text-xs md:text-sm font-semibold tracking-tight relative z-[60]`}>
@@ -87,7 +87,7 @@ export const LandingPage = ({ onSignUp, onSignIn, onStoreClick, darkMode, onTogg
         style={{ top: headerY, scale: headerScale }}
         className="fixed left-0 right-0 z-50 px-4 md:px-8 pointer-events-none"
       >
-        <header className={`max-w-5xl mx-auto ${darkMode ? 'bg-[#111B21]/90 text-white border-white/10' : 'bg-white/90 text-thriva-navy border-white/50'} backdrop-blur-xl rounded-full h-16 md:h-20 shadow-2xl shadow-thriva-navy/5 flex items-center justify-between px-6 md:px-10 border pointer-events-auto`}>
+        <header className={`max-w-5xl mx-auto ${darkMode ? 'bg-thriva-dark-bg/90 text-white border-white/10' : 'bg-white/90 text-thriva-navy border-white/50'} backdrop-blur-xl rounded-full h-16 md:h-20 shadow-2xl shadow-thriva-navy/5 flex items-center justify-between px-6 md:px-10 border pointer-events-auto`}>
           {/* Logo Section */}
           <div className="flex items-center gap-2 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <div className="flex items-center">
@@ -146,7 +146,7 @@ export const LandingPage = ({ onSignUp, onSignIn, onStoreClick, darkMode, onTogg
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className={`fixed top-0 right-0 h-full w-full max-w-sm z-[80] shadow-2xl flex flex-col ${darkMode ? 'bg-[#111B21] text-white' : 'bg-white text-thriva-navy'}`}
+              className={`fixed top-0 right-0 h-full w-full max-w-sm z-[80] shadow-2xl flex flex-col ${darkMode ? 'bg-thriva-dark-bg text-white' : 'bg-white text-thriva-navy'}`}
             >
               <div className="p-6 flex justify-between items-center border-b border-white/5">
                 <div className="flex items-center gap-2">
@@ -163,12 +163,12 @@ export const LandingPage = ({ onSignUp, onSignIn, onStoreClick, darkMode, onTogg
 
               <div className="flex-1 overflow-y-auto p-6 space-y-8">
                 <nav className="space-y-4">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">Navigation</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-thriva-mint/40">Navigation</p>
                   {[
                     { label: 'How it works', href: '#how' },
                     { label: 'Onboarding', href: '#onboarding' },
                     { label: 'Results', href: '#results' },
-                    { label: 'Supply Store', onClick: onStoreClick },
+                    { label: 'Online Store', onClick: onStoreClick },
                     { label: 'Documentation', href: '#' },
                   ].map((item) => (
                     item.onClick ? (
@@ -195,7 +195,7 @@ export const LandingPage = ({ onSignUp, onSignIn, onStoreClick, darkMode, onTogg
                 </nav>
 
                 <div className="space-y-4">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">Account</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-thriva-mint/40">Account</p>
                   <button 
                     onClick={() => { onSignIn(); setIsMenuOpen(false); }}
                     className="w-full flex items-center gap-4 p-3 rounded-2xl bg-thriva-navy text-white hover:bg-thriva-navy/80 transition-colors"
@@ -532,7 +532,7 @@ export const LandingPage = ({ onSignUp, onSignIn, onStoreClick, darkMode, onTogg
       </main>
 
       {/* Refined Footer - Thriva Minimal */}
-      <footer className={`py-24 px-6 ${darkMode ? 'bg-[#111B21] border-t border-white/5' : 'bg-white border-t border-slate-100'}`}>
+      <footer className={`py-24 px-6 ${darkMode ? 'bg-thriva-dark-bg border-t border-white/5' : 'bg-white border-t border-slate-100'}`}>
         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-16">
           <div className="md:col-span-1 space-y-6">
             <div className="flex items-center gap-2">
@@ -549,8 +549,7 @@ export const LandingPage = ({ onSignUp, onSignIn, onStoreClick, darkMode, onTogg
               <nav className={`flex flex-col gap-3 font-medium text-sm ${darkMode ? 'text-white/40' : 'text-slate-500'}`}>
                 <a href="#results" className="hover:text-thriva-mint transition-colors">Assay Testing</a>
                 <a href="#how" className="hover:text-thriva-mint transition-colors">Stream Analytics</a>
-                <button onClick={onStoreClick} className="text-left hover:text-thriva-mint transition-colors">Supply Store</button>
-                <a href="#how" className="hover:text-thriva-mint transition-colors">Inventory Management</a>
+                <button onClick={onStoreClick} className="text-left hover:text-thriva-mint transition-colors">Online Store</button>
               </nav>
             </div>
             <div className="space-y-4">
@@ -568,7 +567,7 @@ export const LandingPage = ({ onSignUp, onSignIn, onStoreClick, darkMode, onTogg
                   href="https://wa.me/263700000000" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center text-[#25D366] hover:bg-[#25D366] hover:text-white transition-all transform hover:-translate-y-1 shadow-sm"
+                  className="w-10 h-10 rounded-full bg-thriva-mint/10 flex items-center justify-center text-thriva-mint hover:bg-thriva-mint hover:text-white transition-all transform hover:-translate-y-1 shadow-sm"
                   title="WhatsApp Support"
                 >
                   <MessageCircle size={20} fill="currentColor" />

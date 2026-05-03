@@ -116,7 +116,7 @@ export const StoreView = ({ cart, setCart, user, onOpenCart }: StoreViewProps) =
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <div className="min-h-screen bg-[#FCFAF7] dark:bg-[#050510] relative">
+    <div className="min-h-screen bg-thriva-bg dark:bg-thriva-dark-bg relative">
       {/* Search & Header */}
       <div className="p-6 space-y-6">
         <div className="flex justify-between items-center">
