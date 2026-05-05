@@ -7,11 +7,11 @@ export const generateSamplePDF = (sample: Sample) => {
   
   // Header
   doc.setFontSize(22);
-  doc.setTextColor(0, 43, 46); // thriva-navy
-  doc.text('THRIVA ANALYTICS', 105, 20, { align: 'center' });
+  doc.setTextColor(0, 43, 46); // brand-navy
+  doc.text('METLYFT ANALYTICS', 105, 20, { align: 'center' });
   
   doc.setFontSize(10);
-  doc.setTextColor(61, 195, 158); // thriva-mint
+  doc.setTextColor(61, 195, 158); // brand-mint
   doc.text('OFFICIAL CERTIFICATE OF ANALYSIS', 105, 28, { align: 'center' });
   
   doc.setDrawColor(0, 43, 46, 0.1);
@@ -63,7 +63,7 @@ export const generateSamplePDF = (sample: Sample) => {
   doc.setTextColor(0, 43, 46);
   doc.text('__________________________', 20, finalY + 25);
   doc.text('Lab Director Authorization', 20, finalY + 32);
-  doc.text('Generated on Thriva Cloud Platform', 105, 280, { align: 'center' });
+  doc.text('Generated on MetLyft Cloud Platform', 105, 280, { align: 'center' });
   
   doc.save(`analysis-report-${sample.sampleId}.pdf`);
 };
@@ -74,7 +74,7 @@ export const generateHistoryPDF = (samples: Sample[], dateRange: { start?: strin
   // Header
   doc.setFontSize(22);
   doc.setTextColor(0, 43, 46);
-  doc.text('THRIVA ANALYTICS', 105, 20, { align: 'center' });
+  doc.text('METLYFT ANALYTICS', 105, 20, { align: 'center' });
   
   doc.setFontSize(10);
   doc.setTextColor(61, 195, 158);
@@ -102,5 +102,5 @@ export const generateHistoryPDF = (samples: Sample[], dateRange: { start?: strin
     styles: { fontSize: 8 }
   });
   
-  doc.save(`thriva-history-${new Date().getTime()}.pdf`);
+  doc.save(`metlyft-history-${new Date().getTime()}.pdf`);
 };

@@ -157,44 +157,44 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
     return (
       <div className="space-y-8">
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-white p-6 rounded-[32px] border border-thriva-navy/5 shadow-sm space-y-2">
-            <p className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-widest">Active Stream</p>
+          <div className="bg-white p-6 rounded-[32px] border border-brand-navy/5 shadow-sm space-y-2">
+            <p className="text-[9px] font-bold text-brand-navy/30 uppercase tracking-widest">Active Stream</p>
             <div className="flex items-end gap-2">
-              <span className="text-3xl font-display font-medium text-thriva-navy tracking-tight">{stats.pending}</span>
-              <span className="text-[10px] font-bold text-thriva-mint uppercase mb-1">In Processing</span>
+              <span className="text-3xl font-display font-medium text-brand-navy tracking-tight">{stats.pending}</span>
+              <span className="text-[10px] font-bold text-brand-mint uppercase mb-1">In Processing</span>
             </div>
           </div>
-          <div className="bg-white p-6 rounded-[32px] border border-thriva-navy/5 shadow-sm space-y-2">
-            <p className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-widest">Efficiency</p>
+          <div className="bg-white p-6 rounded-[32px] border border-brand-navy/5 shadow-sm space-y-2">
+            <p className="text-[9px] font-bold text-brand-navy/30 uppercase tracking-widest">Efficiency</p>
             <div className="flex items-end gap-2">
-              <span className="text-3xl font-display font-medium text-thriva-navy tracking-tight">{stats.finalized}</span>
-              <span className="text-[10px] font-bold text-thriva-coral uppercase mb-1">Finalized</span>
+              <span className="text-3xl font-display font-medium text-brand-navy tracking-tight">{stats.finalized}</span>
+              <span className="text-[10px] font-bold text-brand-coral uppercase mb-1">Finalized</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-thriva-navy p-8 rounded-[40px] text-white space-y-6 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-thriva-mint/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
+        <div className="bg-brand-navy p-8 rounded-[40px] text-white space-y-6 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-brand-mint/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
           <div className="space-y-1 relative z-10">
-            <h4 className="text-xs font-bold text-thriva-mint uppercase tracking-widest">Current Market Index</h4>
+            <h4 className="text-xs font-bold text-brand-mint uppercase tracking-widest">Current Market Index</h4>
             <p className="text-4xl font-display font-medium tracking-tight">$2,342.10 <span className="text-sm opacity-40 font-sans">/oz Au</span></p>
           </div>
-          <div className="flex items-center gap-2 text-thriva-mint bg-white/5 w-fit px-3 py-1 rounded-full text-[10px] font-bold relative z-10">
+          <div className="flex items-center gap-2 text-brand-mint bg-white/5 w-fit px-3 py-1 rounded-full text-[10px] font-bold relative z-10">
             <TrendingUp size={14} /> +0.42% Today
           </div>
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em] px-2">Diagnostic Timeline</h3>
-          <div className="h-48 w-full bg-white rounded-[32px] border border-thriva-navy/5 p-4 flex items-end gap-2">
+          <h3 className="text-[10px] font-bold text-brand-navy/30 uppercase tracking-[0.2em] px-2">Assay Timeline</h3>
+          <div className="h-48 w-full bg-white rounded-[32px] border border-brand-navy/5 p-4 flex items-end gap-2">
             {[4, 7, 5, 9, 6, 8, 3, 10, 5, 7].map((h, i) => (
               <motion.div 
                 key={i}
                 initial={{ height: 0 }}
                 animate={{ height: `${h * 8}%` }}
-                className="flex-1 bg-thriva-navy/5 rounded-t-lg hover:bg-thriva-mint/40 transition-colors cursor-help group relative"
+                className="flex-1 bg-brand-navy/5 rounded-t-lg hover:bg-brand-mint/40 transition-colors cursor-help group relative"
               >
-                <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-thriva-navy text-white text-[8px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-brand-navy text-white text-[8px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                   Batch {i+1}
                 </div>
               </motion.div>
@@ -208,64 +208,64 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
   const renderAssays = () => (
     <div className="space-y-6">
       <div className="flex justify-between items-center px-4">
-        <h3 className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em]">Recent Diagnostics</h3>
-        <span className="text-[10px] font-bold text-thriva-navy/40 tracking-wider bg-thriva-navy/5 px-3 py-1 rounded-full">{samples.length} Records</span>
+        <h3 className="text-[10px] font-bold text-brand-navy/30 uppercase tracking-[0.2em]">Recent Assays</h3>
+        <span className="text-[10px] font-bold text-brand-navy/40 tracking-wider bg-brand-navy/5 px-3 py-1 rounded-full">{samples.length} Records</span>
       </div>
 
       {samples.length === 0 ? (
-        <div className="bg-white border border-thriva-navy/5 p-20 rounded-[48px] text-center shadow-thriva">
-          <div className="w-16 h-16 bg-thriva-bg rounded-3xl flex items-center justify-center mx-auto mb-6">
-            <Info size={32} className="text-thriva-navy/5" />
+        <div className="bg-white border border-brand-navy/5 p-20 rounded-[48px] text-center shadow-brand">
+          <div className="w-16 h-16 bg-brand-bg rounded-3xl flex items-center justify-center mx-auto mb-6">
+            <Info size={32} className="text-brand-navy/5" />
           </div>
-          <p className="text-[10px] text-thriva-navy/30 uppercase font-bold tracking-[0.2em] leading-loose">No diagnostic data available<br/>in current lifecycle</p>
+          <p className="text-[10px] text-brand-navy/30 uppercase font-bold tracking-[0.2em] leading-loose">No assay data available<br/>in current lifecycle</p>
         </div>
       ) : (
         samples.map(sample => (
-          <div key={sample.id} className="bg-white border border-thriva-navy/5 p-8 rounded-[40px] space-y-6 group hover:shadow-thriva transition-all duration-500 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-1 h-full bg-thriva-bg group-hover:bg-thriva-mint transition-colors" />
+          <div key={sample.id} className="bg-white border border-brand-navy/5 p-8 rounded-[40px] space-y-6 group hover:shadow-brand transition-all duration-500 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-brand-bg group-hover:bg-brand-mint transition-colors" />
             <div className="flex justify-between items-start">
               <div className="space-y-2">
                  <div className="flex items-center gap-3">
-                   <span className="text-[11px] font-bold text-thriva-mint tracking-widest bg-thriva-mint/10 px-3 py-1 rounded-full uppercase">{sample.sampleId}</span>
-                   <span className={`px-2.5 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest border transition-all ${sample.status === 'Finalized' ? 'bg-thriva-mint text-white border-thriva-mint shadow-sm' : 'bg-thriva-bg text-thriva-navy/30 border-thriva-navy/5'}`}>
+                   <span className="text-[11px] font-bold text-brand-mint tracking-widest bg-brand-mint/10 px-3 py-1 rounded-full uppercase">{sample.sampleId}</span>
+                   <span className={`px-2.5 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest border transition-all ${sample.status === 'Finalized' ? 'bg-brand-mint text-white border-brand-mint shadow-sm' : 'bg-brand-bg text-brand-navy/30 border-brand-navy/5'}`}>
                      {sample.status}
                    </span>
                  </div>
-                 <h4 className="text-xl font-display font-medium text-thriva-navy tracking-tight">{sample.sampleType} Molecular Analysis</h4>
+                 <h4 className="text-xl font-display font-medium text-brand-navy tracking-tight">{sample.sampleType} Elemental Analysis</h4>
               </div>
               <div className="flex items-center gap-3">
                 {sample.status === 'Finalized' && (
                   <button 
                     onClick={() => generateSamplePDF(sample)}
                     title="Export PDF Report"
-                    className="w-10 h-10 rounded-xl bg-thriva-bg flex items-center justify-center text-thriva-navy/40 hover:text-thriva-navy hover:bg-thriva-mint/10 transition-all border border-transparent hover:border-thriva-mint/20"
+                    className="w-10 h-10 rounded-xl bg-brand-bg flex items-center justify-center text-brand-navy/40 hover:text-brand-navy hover:bg-brand-mint/10 transition-all border border-transparent hover:border-brand-mint/20"
                   >
                     <Download size={18} />
                   </button>
                 )}
-                <div className="w-10 h-10 rounded-full bg-thriva-bg flex items-center justify-center text-thriva-navy/20 group-hover:text-thriva-mint group-hover:bg-thriva-mint/10 transition-all">
+                <div className="w-10 h-10 rounded-full bg-brand-bg flex items-center justify-center text-brand-navy/20 group-hover:text-brand-mint group-hover:bg-brand-mint/10 transition-all">
                   <ChevronRight size={20} />
                 </div>
               </div>
             </div>
             
             {sample.status === 'Finalized' && sample.elements && (
-              <div className="grid grid-cols-2 gap-6 pt-6 border-t border-thriva-navy/5 relative z-10">
+              <div className="grid grid-cols-2 gap-6 pt-6 border-t border-brand-navy/5 relative z-10">
                 {sample.elements.gold && (
-                  <div className="p-5 bg-thriva-navy rounded-3xl space-y-2 shadow-xl shadow-thriva-navy/10 transform transition-all group-hover:scale-[1.02]">
+                  <div className="p-5 bg-brand-navy rounded-3xl space-y-2 shadow-xl shadow-brand-navy/10 transform transition-all group-hover:scale-[1.02]">
                     <p className="text-[9px] text-white/40 uppercase font-bold tracking-widest">Verified Gold (Au)</p>
                     <div className="flex items-end gap-2">
-                      <p className="text-3xl font-display font-medium text-thriva-mint leading-none">{sample.elements.gold.toFixed(4)}</p>
+                      <p className="text-3xl font-display font-medium text-brand-mint leading-none">{sample.elements.gold.toFixed(4)}</p>
                       <span className="text-[10px] text-white/40 font-bold mb-1 uppercase tracking-widest">g/t</span>
                     </div>
                   </div>
                 )}
                 {sample.elements.silver && (
-                  <div className="p-5 bg-thriva-bg border border-thriva-navy/5 rounded-3xl space-y-2 transform transition-all group-hover:scale-[1.02]">
-                    <p className="text-[9px] text-thriva-navy/30 uppercase font-bold tracking-widest">Verified Silver (Ag)</p>
+                  <div className="p-5 bg-brand-bg border border-brand-navy/5 rounded-3xl space-y-2 transform transition-all group-hover:scale-[1.02]">
+                    <p className="text-[9px] text-brand-navy/30 uppercase font-bold tracking-widest">Verified Silver (Ag)</p>
                     <div className="flex items-end gap-2">
-                      <p className="text-3xl font-display font-medium text-thriva-navy/60 leading-none">{sample.elements.silver.toFixed(3)}</p>
-                      <span className="text-[10px] text-thriva-navy/20 font-bold mb-1 uppercase tracking-widest">g/t</span>
+                      <p className="text-3xl font-display font-medium text-brand-navy/60 leading-none">{sample.elements.silver.toFixed(3)}</p>
+                      <span className="text-[10px] text-brand-navy/20 font-bold mb-1 uppercase tracking-widest">g/t</span>
                     </div>
                   </div>
                 )}
@@ -280,26 +280,26 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
   const renderOrders = () => (
     <div className="space-y-6">
       <div className="flex justify-between items-center px-4">
-        <h3 className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em]">Procurement History</h3>
-        <span className="text-[10px] font-bold text-thriva-navy/40 tracking-wider bg-thriva-navy/5 px-3 py-1 rounded-full">{orders.length} Shipments</span>
+        <h3 className="text-[10px] font-bold text-brand-navy/30 uppercase tracking-[0.2em]">Procurement History</h3>
+        <span className="text-[10px] font-bold text-brand-navy/40 tracking-wider bg-brand-navy/5 px-3 py-1 rounded-full">{orders.length} Shipments</span>
       </div>
 
       {orders.length === 0 ? (
-        <div className="bg-white border border-thriva-navy/5 p-20 rounded-[48px] text-center shadow-thriva">
-          <div className="w-16 h-16 bg-thriva-bg rounded-3xl flex items-center justify-center mx-auto mb-6">
-            <Package size={32} className="text-thriva-navy/5" />
+        <div className="bg-white border border-brand-navy/5 p-20 rounded-[48px] text-center shadow-brand">
+          <div className="w-16 h-16 bg-brand-bg rounded-3xl flex items-center justify-center mx-auto mb-6">
+            <Package size={32} className="text-brand-navy/5" />
           </div>
-          <p className="text-[10px] text-thriva-navy/30 uppercase font-bold tracking-[0.2em]">No equipment orders found</p>
+          <p className="text-[10px] text-brand-navy/30 uppercase font-bold tracking-[0.2em]">No equipment orders found</p>
         </div>
       ) : (
         orders.map(order => (
-          <div key={order.id} className="bg-white border border-thriva-navy/5 p-8 rounded-[40px] space-y-6 group hover:shadow-thriva transition-all duration-500">
+          <div key={order.id} className="bg-white border border-brand-navy/5 p-8 rounded-[40px] space-y-6 group hover:shadow-brand transition-all duration-500">
              <div className="flex justify-between items-start">
                <div className="space-y-1">
-                 <p className="text-[10px] text-thriva-mint font-bold uppercase tracking-widest">ORD-{order.id.slice(0, 8).toUpperCase()}</p>
-                 <p className="text-sm font-bold text-thriva-navy/60">{new Date(order.createdAt).toLocaleDateString()}</p>
+                 <p className="text-[10px] text-brand-mint font-bold uppercase tracking-widest">ORD-{order.id.slice(0, 8).toUpperCase()}</p>
+                 <p className="text-sm font-bold text-brand-navy/60">{new Date(order.createdAt).toLocaleDateString()}</p>
                </div>
-               <span className={`px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest border transition-all ${order.status === 'Paid' ? 'bg-thriva-mint text-white border-thriva-mint' : 'bg-thriva-navy text-white border-thriva-navy'}`}>
+               <span className={`px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest border transition-all ${order.status === 'Paid' ? 'bg-brand-mint text-white border-brand-mint' : 'bg-brand-navy text-white border-brand-navy'}`}>
                  {order.status}
                </span>
              </div>
@@ -308,17 +308,17 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
                {order.items.map((item, idx) => (
                  <div key={idx} className="flex justify-between items-center text-xs">
                    <div className="flex gap-3 items-center">
-                     <span className="w-6 h-6 bg-thriva-navy/5 rounded-lg flex items-center justify-center font-bold text-[10px]">{item.quantity}x</span>
-                     <span className="font-semibold text-thriva-navy/70">{item.name}</span>
+                     <span className="w-6 h-6 bg-brand-navy/5 rounded-lg flex items-center justify-center font-bold text-[10px]">{item.quantity}x</span>
+                     <span className="font-semibold text-brand-navy/70">{item.name}</span>
                    </div>
-                   <span className="font-bold text-thriva-navy">${(item.price * item.quantity).toFixed(2)}</span>
+                   <span className="font-bold text-brand-navy">${(item.price * item.quantity).toFixed(2)}</span>
                  </div>
                ))}
              </div>
 
-             <div className="pt-4 border-t border-thriva-navy/5 flex justify-between items-center">
-                <span className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-widest">Order Total</span>
-                <span className="text-2xl font-display font-medium text-thriva-navy">${order.total.toFixed(2)}</span>
+             <div className="pt-4 border-t border-brand-navy/5 flex justify-between items-center">
+                <span className="text-[10px] font-bold text-brand-navy/30 uppercase tracking-widest">Order Total</span>
+                <span className="text-2xl font-display font-medium text-brand-navy">${order.total.toFixed(2)}</span>
              </div>
           </div>
         ))
@@ -329,50 +329,50 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
   const renderInvoices = () => (
     <div className="space-y-6">
       <div className="flex justify-between items-center px-4">
-        <h3 className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em]">Financial Documentation</h3>
-        <span className="text-[10px] font-bold text-thriva-navy/40 tracking-wider bg-thriva-navy/5 px-3 py-1 rounded-full">{invoices.length} Invoices</span>
+        <h3 className="text-[10px] font-bold text-brand-navy/30 uppercase tracking-[0.2em]">Financial Documentation</h3>
+        <span className="text-[10px] font-bold text-brand-navy/40 tracking-wider bg-brand-navy/5 px-3 py-1 rounded-full">{invoices.length} Invoices</span>
       </div>
 
       {invoices.length === 0 ? (
-        <div className="bg-white border border-thriva-navy/5 p-20 rounded-[48px] text-center shadow-thriva">
-          <div className="w-16 h-16 bg-thriva-bg rounded-3xl flex items-center justify-center mx-auto mb-6">
-            <Receipt size={32} className="text-thriva-navy/5" />
+        <div className="bg-white border border-brand-navy/5 p-20 rounded-[48px] text-center shadow-brand">
+          <div className="w-16 h-16 bg-brand-bg rounded-3xl flex items-center justify-center mx-auto mb-6">
+            <Receipt size={32} className="text-brand-navy/5" />
           </div>
-          <p className="text-[10px] text-thriva-navy/30 uppercase font-bold tracking-[0.2em]">No invoices issued yet</p>
+          <p className="text-[10px] text-brand-navy/30 uppercase font-bold tracking-[0.2em]">No invoices issued yet</p>
         </div>
       ) : (
         invoices.map(invoice => (
-          <div key={invoice.id} className="bg-white border border-thriva-navy/5 p-8 rounded-[40px] space-y-6 group hover:shadow-thriva transition-all duration-500">
+          <div key={invoice.id} className="bg-white border border-brand-navy/5 p-8 rounded-[40px] space-y-6 group hover:shadow-brand transition-all duration-500">
              <div className="flex justify-between items-start">
                <div className="space-y-1">
-                 <p className="text-[10px] text-thriva-mint font-bold uppercase tracking-widest">{invoice.invoiceNumber}</p>
-                 <p className="text-sm font-bold text-thriva-navy/60">{new Date(invoice.date).toLocaleDateString()}</p>
+                 <p className="text-[10px] text-brand-mint font-bold uppercase tracking-widest">{invoice.invoiceNumber}</p>
+                 <p className="text-sm font-bold text-brand-navy/60">{new Date(invoice.date).toLocaleDateString()}</p>
                </div>
-               <span className={`px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest border transition-all ${invoice.status === 'Paid' ? 'bg-thriva-mint text-white border-thriva-mint shadow-lg shadow-thriva-mint/20' : 'bg-thriva-navy/5 text-thriva-navy/40 border-thriva-navy/10'}`}>
+               <span className={`px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest border transition-all ${invoice.status === 'Paid' ? 'bg-brand-mint text-white border-brand-mint shadow-lg shadow-brand-mint/20' : 'bg-brand-navy/5 text-brand-navy/40 border-brand-navy/10'}`}>
                  {invoice.status}
                </span>
              </div>
 
-             <div className="space-y-3 bg-thriva-bg/50 p-4 rounded-2xl">
+             <div className="space-y-3 bg-brand-bg/50 p-4 rounded-2xl">
                {invoice.items.map((item, idx) => (
                  <div key={idx} className="flex justify-between items-center text-xs">
                    <div className="flex gap-3 items-center">
-                     <span className="w-6 h-6 bg-white border border-thriva-navy/5 rounded-lg flex items-center justify-center font-bold text-[10px]">{item.quantity}x</span>
-                     <span className="font-semibold text-thriva-navy/70">{item.description}</span>
+                     <span className="w-6 h-6 bg-white border border-brand-navy/5 rounded-lg flex items-center justify-center font-bold text-[10px]">{item.quantity}x</span>
+                     <span className="font-semibold text-brand-navy/70">{item.description}</span>
                    </div>
-                   <span className="font-bold text-thriva-navy">${item.total.toLocaleString()}</span>
+                   <span className="font-bold text-brand-navy">${item.total.toLocaleString()}</span>
                  </div>
                ))}
              </div>
 
-             <div className="pt-4 border-t border-thriva-navy/5 flex justify-between items-end">
+             <div className="pt-4 border-t border-brand-navy/5 flex justify-between items-end">
                 <div className="space-y-1">
-                  <p className="text-[8px] font-bold text-thriva-navy/20 uppercase tracking-widest">Billing Tier Summary</p>
-                  <p className="text-[10px] font-bold text-thriva-navy/40 uppercase">Subtotal: ${invoice.subtotal.toLocaleString()}</p>
+                  <p className="text-[8px] font-bold text-brand-navy/20 uppercase tracking-widest">Billing Tier Summary</p>
+                  <p className="text-[10px] font-bold text-brand-navy/40 uppercase">Subtotal: ${invoice.subtotal.toLocaleString()}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[8px] font-bold text-thriva-navy/20 uppercase tracking-widest mb-1">Grand Total</p>
-                  <p className="text-3xl font-display font-medium text-thriva-navy tracking-tight">${invoice.total.toLocaleString()}</p>
+                  <p className="text-[8px] font-bold text-brand-navy/20 uppercase tracking-widest mb-1">Grand Total</p>
+                  <p className="text-3xl font-display font-medium text-brand-navy tracking-tight">${invoice.total.toLocaleString()}</p>
                 </div>
              </div>
           </div>
@@ -394,14 +394,14 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
     return (
       <div className="space-y-8">
         <div className="flex justify-between items-center px-4">
-          <h3 className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em]">Molecular Trends</h3>
+          <h3 className="text-[10px] font-bold text-brand-navy/30 uppercase tracking-[0.2em]">Elemental Trends</h3>
           <div className="flex items-center gap-2">
-            <span className="flex items-center gap-1 text-[10px] font-bold text-thriva-mint"><CircleDot size={10} /> Au</span>
-            <span className="flex items-center gap-1 text-[10px] font-bold text-thriva-navy/20"><CircleDot size={10} /> Ag</span>
+            <span className="flex items-center gap-1 text-[10px] font-bold text-brand-mint"><CircleDot size={10} /> Au</span>
+            <span className="flex items-center gap-1 text-[10px] font-bold text-brand-navy/20"><CircleDot size={10} /> Ag</span>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-[40px] border border-thriva-navy/5 shadow-thriva">
+        <div className="bg-white p-6 rounded-[40px] border border-brand-navy/5 shadow-brand">
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={data}>
@@ -423,22 +423,22 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
             </ResponsiveContainer>
           </div>
           <div className="pt-6 text-center">
-            <p className="text-[10px] text-thriva-navy/30 font-bold uppercase tracking-widest">Variance Analysis (Last 10 Batches)</p>
+            <p className="text-[10px] text-brand-navy/30 font-bold uppercase tracking-widest">Variance Analysis (Last 10 Batches)</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4">
-          <div className="p-8 bg-thriva-bg rounded-[40px] space-y-4">
+          <div className="p-8 bg-brand-bg rounded-[40px] space-y-4">
              <div className="flex items-center gap-3">
-               <div className="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-thriva-mint shadow-sm">
+               <div className="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-brand-mint shadow-sm">
                  <BarChart3 size={20} />
                </div>
                <div>
-                  <h4 className="text-sm font-bold text-thriva-navy">Performance Delta</h4>
-                  <p className="text-[10px] text-thriva-navy/40 font-medium">Monthly Recovery Optimization</p>
+                  <h4 className="text-sm font-bold text-brand-navy">Performance Delta</h4>
+                  <p className="text-[10px] text-brand-navy/40 font-medium">Monthly Recovery Optimization</p>
                </div>
              </div>
-             <p className="text-xs text-thriva-navy/60 leading-relaxed font-medium">Your site is performing at <span className="text-thriva-mint font-bold">+12.4%</span> above regional baseline recovery targets.</p>
+             <p className="text-xs text-brand-navy/60 leading-relaxed font-medium">Your site is performing at <span className="text-brand-mint font-bold">+12.4%</span> above regional baseline recovery targets.</p>
           </div>
         </div>
       </div>
@@ -448,60 +448,60 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
   const renderSettings = () => (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex justify-between items-center px-4">
-        <h3 className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em]">Profile Configuration</h3>
+        <h3 className="text-[10px] font-bold text-brand-navy/30 uppercase tracking-[0.2em]">Profile Configuration</h3>
       </div>
 
       <form onSubmit={handleUpdateProfile} className="space-y-6">
-        <div className="bg-white p-8 rounded-[40px] border border-thriva-navy/5 shadow-thriva space-y-8">
+        <div className="bg-white p-8 rounded-[40px] border border-brand-navy/5 shadow-brand space-y-8">
             <div className="grid grid-cols-1 gap-6">
               <div className="space-y-3">
-                <label className="flex items-center gap-2 text-[10px] font-bold text-thriva-navy/40 uppercase tracking-widest ml-2">
+                <label className="flex items-center gap-2 text-[10px] font-bold text-brand-navy/40 uppercase tracking-widest ml-2">
                   <Building2 size={12} /> Company Legal Name
                 </label>
                   <input 
                   type="text"
                   value={profileData.companyName}
                   onChange={e => setProfileData({...profileData, companyName: e.target.value})}
-                  className="w-full bg-thriva-bg border-none rounded-[24px] py-5 px-8 text-sm font-semibold text-thriva-navy focus:ring-2 focus:ring-thriva-mint transition-all"
+                  className="w-full bg-brand-bg border-none rounded-[24px] py-5 px-8 text-sm font-semibold text-brand-navy focus:ring-2 focus:ring-brand-mint transition-all"
                   placeholder="e.g. Atlas Mining Operations"
                 />
               </div>
 
               <div className="space-y-3">
-                <label className="flex items-center gap-2 text-[10px] font-bold text-thriva-navy/40 uppercase tracking-widest ml-2">
+                <label className="flex items-center gap-2 text-[10px] font-bold text-brand-navy/40 uppercase tracking-widest ml-2">
                   <MapPin size={12} /> Operations Address
                 </label>
                 <input 
                   type="text"
                   value={profileData.address}
                   onChange={e => setProfileData({...profileData, address: e.target.value})}
-                  className="w-full bg-thriva-bg border-none rounded-[24px] py-5 px-8 text-sm font-semibold text-thriva-navy focus:ring-2 focus:ring-thriva-mint transition-all"
+                  className="w-full bg-brand-bg border-none rounded-[24px] py-5 px-8 text-sm font-semibold text-brand-navy focus:ring-2 focus:ring-brand-mint transition-all"
                   placeholder="Street, City, Site Code"
                 />
               </div>
 
               <div className="grid grid-cols-1 gap-6">
                 <div className="space-y-3">
-                  <label className="flex items-center gap-2 text-[10px] font-bold text-thriva-navy/40 uppercase tracking-widest ml-2">
+                  <label className="flex items-center gap-2 text-[10px] font-bold text-brand-navy/40 uppercase tracking-widest ml-2">
                     <Phone size={12} /> Site Contact
                   </label>
                   <input 
                     type="tel"
                     value={profileData.contactNumber}
                     onChange={e => setProfileData({...profileData, contactNumber: e.target.value})}
-                    className="w-full bg-thriva-bg border-none rounded-[24px] py-5 px-8 text-sm font-semibold text-thriva-navy focus:ring-2 focus:ring-thriva-mint transition-all"
+                    className="w-full bg-brand-bg border-none rounded-[24px] py-5 px-8 text-sm font-semibold text-brand-navy focus:ring-2 focus:ring-brand-mint transition-all"
                     placeholder="+263 ..."
                   />
                 </div>
                 <div className="space-y-3">
-                  <label className="flex items-center gap-2 text-[10px] font-bold text-thriva-navy/40 uppercase tracking-widest ml-2">
+                  <label className="flex items-center gap-2 text-[10px] font-bold text-brand-navy/40 uppercase tracking-widest ml-2">
                     <Mail size={12} /> Billing Email
                   </label>
                   <input 
                     type="email"
                     value={profileData.billingEmail}
                     onChange={e => setProfileData({...profileData, billingEmail: e.target.value})}
-                    className="w-full bg-thriva-bg border-none rounded-[24px] py-5 px-8 text-sm font-semibold text-thriva-navy focus:ring-2 focus:ring-thriva-mint transition-all"
+                    className="w-full bg-brand-bg border-none rounded-[24px] py-5 px-8 text-sm font-semibold text-brand-navy focus:ring-2 focus:ring-brand-mint transition-all"
                     placeholder="accounts@mining.com"
                   />
                 </div>
@@ -512,7 +512,7 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
         <button 
           type="submit"
           disabled={isUpdating}
-          className="w-full bg-thriva-navy text-white font-bold py-6 rounded-full shadow-2xl hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50 uppercase text-[11px] tracking-[0.2em]"
+          className="w-full bg-brand-navy text-white font-bold py-6 rounded-full shadow-2xl hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50 uppercase text-[11px] tracking-[0.2em]"
         >
           {isUpdating ? 'Synchronizing...' : 'Save Configuration'}
         </button>
@@ -522,12 +522,12 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
 
   return (
     <div className="p-6 space-y-8 pb-32">
-      <div className="bg-thriva-navy -mx-6 -mt-6 p-10 pb-20 rounded-b-[48px] shadow-2xl shadow-thriva-navy/20 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-thriva-mint/10 rounded-full blur-[80px] -mr-32 -mt-32" />
+      <div className="bg-brand-navy -mx-6 -mt-6 p-10 pb-20 rounded-b-[48px] shadow-2xl shadow-brand-navy/20 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-brand-mint/10 rounded-full blur-[80px] -mr-32 -mt-32" />
         <div className="relative z-10 flex justify-between items-center">
           <div className="space-y-2">
             <h2 className="text-3xl font-display font-medium text-white tracking-tight">Portal: {profileData.companyName || user.displayName}</h2>
-            <p className="text-[10px] text-thriva-mint uppercase tracking-[0.2em] font-bold">Standard Client Tier</p>
+            <p className="text-[10px] text-brand-mint uppercase tracking-[0.2em] font-bold">Standard Client Tier</p>
           </div>
           <div className="w-14 h-14 rounded-3xl bg-white/10 backdrop-blur-md flex items-center justify-center text-white border border-white/20 shadow-xl">
              <LayoutDashboard size={28} />
@@ -535,12 +535,12 @@ export const ClientPortal = ({ user }: ClientPortalProps) => {
         </div>
       </div>
 
-      <div className="flex gap-2 p-2 bg-white border border-thriva-navy/5 rounded-[32px] -mt-12 relative z-10 mx-auto w-fit shadow-2xl shadow-thriva-navy/5 overflow-x-auto noscroll max-w-full">
+      <div className="flex gap-2 p-2 bg-white border border-brand-navy/5 rounded-[32px] -mt-12 relative z-10 mx-auto w-fit shadow-2xl shadow-brand-navy/5 overflow-x-auto noscroll max-w-full">
         {(['dashboard', 'assays', 'orders', 'analytics', 'invoices', 'settings'] as ClientTab[]).map(tab => (
           <button 
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`flex items-center gap-3 px-6 py-3.5 rounded-full text-[9px] font-bold uppercase tracking-[0.2em] transition-all duration-300 whitespace-nowrap ${activeTab === tab ? 'bg-thriva-mint text-thriva-navy shadow-lg shadow-thriva-mint/20' : 'text-thriva-navy/30 hover:text-thriva-navy'}`}
+            className={`flex items-center gap-3 px-6 py-3.5 rounded-full text-[9px] font-bold uppercase tracking-[0.2em] transition-all duration-300 whitespace-nowrap ${activeTab === tab ? 'bg-brand-mint text-white shadow-lg shadow-brand-mint/20' : 'text-brand-navy/30 hover:text-brand-navy'}`}
           >
             {tab === 'dashboard' && <LayoutDashboard size={14} />}
             {tab === 'assays' && <FlaskConical size={14} />}

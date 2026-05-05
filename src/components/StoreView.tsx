@@ -116,21 +116,21 @@ export const StoreView = ({ cart, setCart, user, onOpenCart }: StoreViewProps) =
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <div className="min-h-screen bg-thriva-bg dark:bg-thriva-dark-bg relative">
+    <div className="min-h-screen bg-brand-bg dark:bg-brand-dark-bg relative">
       {/* Search & Header */}
       <div className="p-6 space-y-6">
         <div className="flex justify-between items-center">
             <div className="space-y-1">
-                <h2 className="text-3xl font-display font-medium text-thriva-navy dark:text-white tracking-tight">MetLyft Supply</h2>
-                <p className="text-[10px] text-thriva-navy/40 dark:text-white/40 uppercase tracking-widest font-bold">Standard Reference & Consumables</p>
+                <h2 className="text-3xl font-display font-medium text-brand-navy dark:text-white tracking-tight">MetLyft Supply</h2>
+                <p className="text-[10px] text-brand-navy/40 dark:text-white/40 uppercase tracking-widest font-bold">Standard Reference & Consumables</p>
             </div>
             <button 
               onClick={onOpenCart}
-              className="relative w-12 h-12 bg-white dark:bg-[#0D0D2D] rounded-2xl flex items-center justify-center text-thriva-navy dark:text-thriva-mint shadow-sm border border-thriva-navy/5"
+              className="relative w-12 h-12 bg-white dark:bg-[#0D0D2D] rounded-2xl flex items-center justify-center text-brand-navy dark:text-brand-mint shadow-sm border border-brand-navy/5"
             >
               <ShoppingBag size={20} />
               {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 w-5 h-5 bg-thriva-coral text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg">
+                <span className="absolute -top-2 -right-2 w-5 h-5 bg-brand-coral text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg">
                   {cartCount}
                 </span>
               )}
@@ -138,10 +138,10 @@ export const StoreView = ({ cart, setCart, user, onOpenCart }: StoreViewProps) =
         </div>
 
         <div className="relative group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-thriva-navy/30" size={18} />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-navy/30" size={18} />
             <input 
               placeholder="Search equipment or standards..." 
-              className="w-full bg-white dark:bg-[#0D0D2D] border border-thriva-navy/10 rounded-2xl py-4 pl-12 pr-6 text-sm font-semibold text-thriva-navy dark:text-white placeholder:text-thriva-navy/30 outline-none focus:border-thriva-mint transition-all shadow-sm"
+              className="w-full bg-white dark:bg-[#0D0D2D] border border-brand-navy/10 rounded-2xl py-4 pl-12 pr-6 text-sm font-semibold text-brand-navy dark:text-white placeholder:text-brand-navy/30 outline-none focus:border-brand-mint transition-all shadow-sm"
             />
         </div>
 
@@ -151,7 +151,7 @@ export const StoreView = ({ cart, setCart, user, onOpenCart }: StoreViewProps) =
                 <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all whitespace-nowrap shadow-sm ${selectedCategory === cat ? 'bg-thriva-navy dark:bg-thriva-mint text-white dark:text-thriva-navy' : 'bg-white dark:bg-[#0D0D2D] text-thriva-navy/40 border border-thriva-navy/5'}`}
+                    className={`px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all whitespace-nowrap shadow-sm ${selectedCategory === cat ? 'bg-brand-navy dark:bg-brand-mint text-white dark:text-brand-navy' : 'bg-white dark:bg-[#0D0D2D] text-brand-navy/40 border border-brand-navy/5'}`}
                 >
                     {cat}
                 </button>
@@ -164,7 +164,7 @@ export const StoreView = ({ cart, setCart, user, onOpenCart }: StoreViewProps) =
                 <motion.div 
                     layout
                     key={product.id}
-                    className="bg-white dark:bg-[#0D0D2D] rounded-[32px] overflow-hidden border border-thriva-navy/5 shadow-thriva group"
+                    className="bg-white dark:bg-[#0D0D2D] rounded-[32px] overflow-hidden border border-brand-navy/5 shadow-brand group"
                 >
                     <div className="h-48 overflow-hidden relative">
                         <img 
@@ -173,7 +173,7 @@ export const StoreView = ({ cart, setCart, user, onOpenCart }: StoreViewProps) =
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
                         />
                         <div className="absolute top-4 left-4">
-                            <span className="bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[8px] font-bold uppercase tracking-widest text-thriva-navy">
+                            <span className="bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[8px] font-bold uppercase tracking-widest text-brand-navy">
                                 {product.category}
                             </span>
                         </div>
@@ -181,17 +181,17 @@ export const StoreView = ({ cart, setCart, user, onOpenCart }: StoreViewProps) =
                     <div className="p-6 space-y-4">
                         <div className="flex justify-between items-start">
                             <div className="space-y-1">
-                                <h3 className="font-bold text-thriva-navy dark:text-white">{product.name}</h3>
-                                <p className="text-xs text-thriva-navy/40 leading-relaxed line-clamp-2">{product.description}</p>
+                                <h3 className="font-bold text-brand-navy dark:text-white">{product.name}</h3>
+                                <p className="text-xs text-brand-navy/40 leading-relaxed line-clamp-2">{product.description}</p>
                             </div>
                         </div>
                         <div className="flex justify-between items-center pt-2">
-                            <div className="text-xl font-display font-medium text-thriva-navy dark:text-thriva-mint">
+                            <div className="text-xl font-display font-medium text-brand-navy dark:text-brand-mint">
                                 ${product.price.toFixed(2)}
                             </div>
                             <button 
                                 onClick={() => addToCart(product)}
-                                className="bg-thriva-navy dark:bg-thriva-mint text-white dark:text-thriva-navy p-3 rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-lg"
+                                className="bg-brand-navy dark:bg-brand-mint text-white dark:text-brand-navy p-3 rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-lg"
                             >
                                 <Plus size={18} strokeWidth={2.5} />
                             </button>

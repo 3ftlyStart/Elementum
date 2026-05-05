@@ -86,23 +86,23 @@ export const CartDrawer = ({ isOpen, onClose, cart, setCart, user, onNavigate }:
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={onClose}
-              className="fixed inset-0 bg-thriva-navy/40 backdrop-blur-sm z-[100]"
+              className="fixed inset-0 bg-brand-navy/40 backdrop-blur-sm z-[100]"
             />
             <motion.div 
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed inset-y-0 right-0 w-full max-w-sm bg-thriva-bg dark:bg-thriva-dark-bg z-[101] shadow-2xl flex flex-col pt-8"
+              className="fixed inset-y-0 right-0 w-full max-w-sm bg-brand-bg dark:bg-brand-dark-bg z-[101] shadow-2xl flex flex-col pt-8"
             >
               <div className="px-6 flex justify-between items-center mb-8">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-thriva-navy dark:bg-thriva-mint rounded-2xl flex items-center justify-center text-white dark:text-thriva-navy shadow-lg">
+                    <div className="w-10 h-10 bg-linear-to-tr from-brand-mint to-brand-navy rounded-2xl flex items-center justify-center text-white shadow-lg">
                       <ShoppingBag size={20} />
                     </div>
-                    <h3 className="font-display text-2xl font-medium tracking-tight text-thriva-navy dark:text-white">Your Cart</h3>
+                    <h3 className="font-display text-2xl font-medium tracking-tight text-brand-navy dark:text-white">Your Cart</h3>
                   </div>
-                  <button onClick={onClose} className="p-2 text-thriva-navy/20 hover:text-thriva-navy transition-colors">
+                  <button onClick={onClose} className="p-2 text-brand-navy/20 hover:text-brand-navy transition-colors">
                     <X size={24} />
                   </button>
               </div>
@@ -110,12 +110,12 @@ export const CartDrawer = ({ isOpen, onClose, cart, setCart, user, onNavigate }:
               <div className="flex-1 overflow-y-auto px-6 space-y-4 noscroll">
                 {cart.length === 0 ? (
                   <div className="h-full flex flex-col items-center justify-center text-center space-y-6">
-                    <div className="w-20 h-20 bg-thriva-navy/5 rounded-full flex items-center justify-center text-thriva-navy/20">
+                    <div className="w-20 h-20 bg-brand-navy/5 rounded-full flex items-center justify-center text-brand-navy/20">
                       <ShoppingCart size={40} strokeWidth={1} />
                     </div>
                     <div className="space-y-1">
-                      <p className="font-bold text-[10px] uppercase tracking-widest text-thriva-navy/40">Cart is Empty</p>
-                      <p className="text-[9px] text-thriva-navy/20 uppercase tracking-widest font-bold">Laboratory supplies required</p>
+                      <p className="font-bold text-[10px] uppercase tracking-widest text-brand-navy/40">Cart is Empty</p>
+                      <p className="text-[9px] text-brand-navy/20 uppercase tracking-widest font-bold">Laboratory supplies required</p>
                     </div>
                     {onNavigate && (
                       <motion.button
@@ -125,7 +125,7 @@ export const CartDrawer = ({ isOpen, onClose, cart, setCart, user, onNavigate }:
                           onNavigate('store');
                           onClose();
                         }}
-                        className="bg-thriva-mint text-thriva-navy px-6 py-3 rounded-2xl text-[10px] font-bold uppercase tracking-widest shadow-lg shadow-thriva-mint/20 flex items-center gap-2"
+                        className="bg-brand-mint text-brand-navy px-6 py-3 rounded-2xl text-[10px] font-bold uppercase tracking-widest shadow-lg shadow-brand-mint/20 flex items-center gap-2"
                       >
                         Browse Products
                       </motion.button>
@@ -133,17 +133,17 @@ export const CartDrawer = ({ isOpen, onClose, cart, setCart, user, onNavigate }:
                   </div>
                 ) : (
                   cart.map(item => (
-                    <div key={item.id} className="bg-white dark:bg-[#0D0D2D] p-4 rounded-2xl border border-thriva-navy/5 flex gap-4">
+                    <div key={item.id} className="bg-white dark:bg-[#0D0D2D] p-4 rounded-2xl border border-brand-navy/5 flex gap-4">
                       <img src={item.image} className="w-16 h-16 rounded-xl object-cover" />
                       <div className="flex-1 space-y-1">
-                        <h4 className="text-xs font-bold text-thriva-navy dark:text-white">{item.name}</h4>
+                        <h4 className="text-xs font-bold text-brand-navy dark:text-white">{item.name}</h4>
                         <div className="flex justify-between items-center">
-                          <div className="text-xs text-thriva-mint font-bold">${item.price.toFixed(2)}</div>
-                          <div className="flex items-center gap-2 bg-thriva-bg dark:bg-thriva-dark-bg rounded-xl p-1 border border-thriva-navy/5">
+                          <div className="text-xs text-brand-mint font-bold">${item.price.toFixed(2)}</div>
+                          <div className="flex items-center gap-2 bg-brand-bg dark:bg-brand-dark-bg rounded-xl p-1 border border-brand-navy/5">
                             <motion.button 
                               whileTap={{ scale: 0.8 }}
                               onClick={() => updateQuantity(item.id, -1)} 
-                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-white dark:bg-thriva-dark-bg text-thriva-navy/60 hover:text-thriva-coral hover:shadow-sm transition-all border border-thriva-navy/5"
+                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-white dark:bg-brand-dark-bg text-brand-navy/60 hover:text-brand-coral hover:shadow-sm transition-all border border-brand-navy/5"
                             >
                               <Minus size={12} />
                             </motion.button>
@@ -154,7 +154,7 @@ export const CartDrawer = ({ isOpen, onClose, cart, setCart, user, onNavigate }:
                                 animate={{ y: 0, opacity: 1 }}
                                 exit={{ y: -5, opacity: 0 }}
                                 transition={{ duration: 0.15 }}
-                                className="text-xs font-bold w-6 text-center text-thriva-navy dark:text-thriva-mint"
+                                className="text-xs font-bold w-6 text-center text-brand-navy dark:text-brand-mint"
                               >
                                 {item.quantity}
                               </motion.span>
@@ -162,7 +162,7 @@ export const CartDrawer = ({ isOpen, onClose, cart, setCart, user, onNavigate }:
                             <motion.button 
                               whileTap={{ scale: 0.8 }}
                               onClick={() => updateQuantity(item.id, 1)} 
-                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-white dark:bg-thriva-dark-bg text-thriva-navy/60 hover:text-thriva-mint hover:shadow-sm transition-all border border-thriva-navy/5"
+                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-white dark:bg-brand-dark-bg text-brand-navy/60 hover:text-brand-mint hover:shadow-sm transition-all border border-brand-navy/5"
                             >
                               <Plus size={12} />
                             </motion.button>
@@ -176,13 +176,13 @@ export const CartDrawer = ({ isOpen, onClose, cart, setCart, user, onNavigate }:
 
               <div className="p-8 bg-white dark:bg-[#0D0D2D] rounded-t-[48px] shadow-2xl space-y-6">
                 <div className="flex justify-between items-center px-2">
-                  <span className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em]">Total Amount</span>
-                  <span className="text-2xl font-display font-medium text-thriva-navy dark:text-white">${total.toFixed(2)}</span>
+                  <span className="text-[10px] font-bold text-brand-navy/30 uppercase tracking-[0.2em]">Total Amount</span>
+                  <span className="text-2xl font-display font-medium text-brand-navy dark:text-white">${total.toFixed(2)}</span>
                 </div>
                 <button 
                   disabled={cart.length === 0}
                   onClick={handleCheckout}
-                  className="w-full bg-thriva-navy dark:bg-thriva-mint text-white dark:text-thriva-navy font-bold py-6 rounded-full shadow-2xl disabled:opacity-20 active:scale-[0.98] transition-all flex items-center justify-center gap-3 uppercase text-[11px] tracking-widest"
+                  className="w-full bg-brand-navy dark:bg-brand-mint text-white dark:text-brand-navy font-bold py-6 rounded-full shadow-2xl disabled:opacity-20 active:scale-[0.98] transition-all flex items-center justify-center gap-3 uppercase text-[11px] tracking-widest"
                 >
                   <CreditCard size={18} />
                   Express Checkout
@@ -201,7 +201,7 @@ export const CartDrawer = ({ isOpen, onClose, cart, setCart, user, onNavigate }:
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => !orderComplete && !isProcessing && setIsCheckoutOpen(false)}
-              className="absolute inset-0 bg-thriva-navy/60 backdrop-blur-md"
+              className="absolute inset-0 bg-brand-navy/60 backdrop-blur-md"
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -211,64 +211,64 @@ export const CartDrawer = ({ isOpen, onClose, cart, setCart, user, onNavigate }:
             >
               {orderComplete ? (
                 <div className="p-12 text-center space-y-6">
-                  <div className="w-20 h-20 bg-thriva-mint/10 rounded-full mx-auto flex items-center justify-center text-thriva-mint">
+                  <div className="w-20 h-20 bg-brand-mint/10 rounded-full mx-auto flex items-center justify-center text-brand-mint">
                     <CheckCircle2 size={48} className="animate-bounce" />
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-2xl font-display font-medium text-thriva-navy dark:text-white">Order Confirmed!</h3>
-                    <p className="text-xs text-thriva-navy/40 leading-relaxed italic">Your laboratory standards are being prepared for dispatch.</p>
+                    <h3 className="text-2xl font-display font-medium text-brand-navy dark:text-white">Order Confirmed!</h3>
+                    <p className="text-xs text-brand-navy/40 leading-relaxed italic">Your laboratory standards are being prepared for dispatch.</p>
                   </div>
                 </div>
               ) : (
                 <div className="p-8 space-y-8">
                   <div className="text-center space-y-2">
-                     <h3 className="text-2xl font-display font-medium text-thriva-navy dark:text-white">Express Checkout</h3>
-                     <p className="text-[10px] text-thriva-navy/30 uppercase tracking-[0.2em] font-bold italic">MetLyft Internal Billing</p>
+                     <h3 className="text-2xl font-display font-medium text-brand-navy dark:text-white">Express Checkout</h3>
+                     <p className="text-[10px] text-brand-navy/30 uppercase tracking-[0.2em] font-bold italic">MetLyft Internal Billing</p>
                   </div>
 
                   <div className="space-y-4">
-                    <div className="flex gap-4 p-4 bg-thriva-bg dark:bg-thriva-dark-bg rounded-[24px] border border-thriva-navy/5">
-                      <div className="w-12 h-12 bg-white dark:bg-thriva-dark-bg rounded-xl flex items-center justify-center text-thriva-navy dark:text-thriva-mint shadow-sm">
+                    <div className="flex gap-4 p-4 bg-brand-bg dark:bg-brand-dark-bg rounded-[24px] border border-brand-navy/5">
+                      <div className="w-12 h-12 bg-white dark:bg-brand-dark-bg rounded-xl flex items-center justify-center text-brand-navy dark:text-brand-mint shadow-sm">
                         <Truck size={24} />
                       </div>
                       <div>
-                        <p className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-widest">Delivery Option</p>
-                        <p className="text-xs font-bold text-thriva-navy dark:text-white">Express Site Delivery (24-48h)</p>
+                        <p className="text-[9px] font-bold text-brand-navy/30 uppercase tracking-widest">Delivery Option</p>
+                        <p className="text-xs font-bold text-brand-navy dark:text-white">Express Site Delivery (24-48h)</p>
                       </div>
                     </div>
 
-                    <div className="p-6 bg-thriva-navy/5 rounded-[32px] border border-thriva-navy/5 space-y-4">
+                    <div className="p-6 bg-brand-navy/5 rounded-[32px] border border-brand-navy/5 space-y-4">
                       <div className="flex justify-between text-xs">
-                        <span className="text-thriva-navy/40">Subtotal</span>
-                        <span className="font-bold text-thriva-navy dark:text-white">${total.toFixed(2)}</span>
+                        <span className="text-brand-navy/40">Subtotal</span>
+                        <span className="font-bold text-brand-navy dark:text-white">${total.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between text-xs">
-                        <span className="text-thriva-navy/40">Shipping</span>
-                        <span className="font-bold text-thriva-mint">FREE</span>
+                        <span className="text-brand-navy/40">Shipping</span>
+                        <span className="font-bold text-brand-mint">FREE</span>
                       </div>
-                      <div className="pt-4 border-t border-thriva-navy/10 flex justify-between items-center">
-                        <span className="text-sm font-bold text-thriva-navy dark:text-white">Order Total</span>
-                        <span className="text-xl font-display font-medium text-thriva-navy dark:text-white">${total.toFixed(2)}</span>
+                      <div className="pt-4 border-t border-brand-navy/10 flex justify-between items-center">
+                        <span className="text-sm font-bold text-brand-navy dark:text-white">Order Total</span>
+                        <span className="text-xl font-display font-medium text-brand-navy dark:text-white">${total.toFixed(2)}</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex gap-3 items-center p-4 bg-thriva-mint/5 rounded-2xl">
-                    <ShieldCheck size={20} className="text-thriva-mint" />
-                    <p className="text-[10px] text-thriva-mint font-bold uppercase tracking-widest">Encrypted Site Transaction</p>
+                  <div className="flex gap-3 items-center p-4 bg-brand-mint/5 rounded-2xl">
+                    <ShieldCheck size={20} className="text-brand-mint" />
+                    <p className="text-[10px] text-brand-mint font-bold uppercase tracking-widest">Encrypted Site Transaction</p>
                   </div>
 
                   <button 
                     onClick={completeOrder}
                     disabled={isProcessing}
-                    className="w-full bg-thriva-navy dark:bg-thriva-mint text-white dark:text-thriva-navy font-bold py-6 rounded-full shadow-2xl active:scale-[0.98] transition-all flex items-center justify-center gap-3 uppercase text-[11px] tracking-widest disabled:opacity-50"
+                    className="w-full bg-brand-navy dark:bg-brand-mint text-white dark:text-brand-navy font-bold py-6 rounded-full shadow-2xl active:scale-[0.98] transition-all flex items-center justify-center gap-3 uppercase text-[11px] tracking-widest disabled:opacity-50"
                   >
                     {isProcessing ? 'Processing...' : 'CONFIRM & DISPATCH'}
                   </button>
                   {!isProcessing && (
                     <button 
                       onClick={() => setIsCheckoutOpen(false)}
-                      className="w-full py-2 text-[10px] font-bold text-thriva-navy/20 uppercase tracking-widest hover:text-thriva-navy transition-colors"
+                      className="w-full py-2 text-[10px] font-bold text-brand-navy/20 uppercase tracking-widest hover:text-brand-navy transition-colors"
                     >
                       Cancel Transaction
                     </button>

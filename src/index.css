@@ -7,35 +7,35 @@
   --font-serif: "Playfair Display", "Georgia", serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
-  /* Thriva Brand Palette - Scraped from thriva.co */
-  --color-thriva-navy: #002B2E; /* Deep Forest Navy */
-  --color-thriva-mint: #3DC39E; /* Thriva Mint */
-  --color-thriva-yellow: #FFEDA0; /* Highlight Yellow */
-  --color-thriva-banner: #002B2E;
-  --color-thriva-coral: #FF7E67; /* Accent Coral */
-  --color-thriva-bg: #FCFAF7; /* Thriva Bone/Cream */
-  --color-thriva-off-white: #FFFFFF;
+  /* MetLyft Intense Emerald Palette - Based on new logo */
+  --color-brand-navy: #002B1D; /* Deep Forest Green */
+  --color-brand-mint: #00D05C; /* Vibrant Logo Emerald */
+  --color-brand-yellow: #CFFF00; /* Neon Lime Highlight */
+  --color-brand-banner: #002B1D;
+  --color-brand-coral: #FF3D00; /* High Contrast Alert */
+  --color-brand-bg: #F5FAF7; /* Soft Green-tinted off-white */
+  --color-brand-off-white: #FFFFFF;
   
-  /* Dark Mode Palette - Deep Ocean */
-  --color-thriva-dark-bg: #001A1C;
-  --color-thriva-dark-card: #002B2E;
-  --color-thriva-dark-border: rgba(61, 195, 158, 0.1);
+  /* Dark Mode Palette - Deep Jungle Tech */
+  --color-brand-dark-bg: #0A110E;
+  --color-brand-dark-card: #141F1B;
+  --color-brand-dark-border: rgba(0, 208, 92, 0.15);
 
   /* Interaction Colors */
-  --color-thriva-mint-hover: #34AF8E;
-  --color-thriva-navy-hover: #003D42;
+  --color-brand-mint-hover: #00E667;
+  --color-brand-navy-hover: #003624;
   
   /* Overrides */
-  --color-primary: var(--color-thriva-mint);
-  --color-secondary: var(--color-thriva-navy);
+  --color-primary: var(--color-brand-mint);
+  --color-secondary: var(--color-brand-navy);
   
   /* Custom Shadows */
-  --shadow-thriva: 0 15px 40px rgba(13, 13, 45, 0.08);
-  --shadow-thriva-hover: 0 25px 60px rgba(13, 13, 45, 0.12);
+  --shadow-brand: 0 15px 40px rgba(13, 13, 45, 0.08);
+  --shadow-brand-hover: 0 25px 60px rgba(13, 13, 45, 0.12);
 }
 
 body {
-  @apply bg-thriva-bg text-thriva-navy antialiased font-sans min-h-screen relative overflow-x-hidden transition-colors duration-500;
+  @apply bg-brand-bg text-brand-navy antialiased font-sans min-h-screen relative overflow-x-hidden transition-colors duration-500;
 }
 
 @layer utilities {
@@ -45,13 +45,13 @@ body {
 }
 
 @layer utilities {
-  /* Glass effect modified for Thriva light theme */
+  /* Glass effect modified for Brand light theme */
   .glass-panel {
     @apply bg-white/60 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(10,48,68,0.03)];
   }
 
   .mint-glow {
-    @apply shadow-[0_0_30px_rgba(61,195,158,0.15)];
+    @apply shadow-[0_0_30px_rgba(0,208,92,0.15)];
   }
 
   .futuristic-card {

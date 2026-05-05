@@ -14,6 +14,7 @@ import {
   AlertTriangle
 } from 'lucide-react';
 import { Sample, UserProfile } from '../types';
+import Logo from './Logo';
 import { 
   BarChart, 
   Bar, 
@@ -38,18 +39,18 @@ interface AdminDashboardProps {
 const StatCard = ({ label, value, icon: Icon, trend }: any) => (
   <motion.div 
     whileHover={{ y: -4 }}
-    className="bg-white dark:bg-thriva-dark-bg p-6 rounded-[32px] shadow-thriva border border-thriva-navy/5 flex flex-col gap-4 relative group transition-all"
+    className="bg-white dark:bg-brand-dark-bg p-6 rounded-[32px] shadow-brand border border-brand-navy/5 flex flex-col gap-4 relative group transition-all"
   >
     <div className="flex items-center justify-between">
-      <span className="text-[9px] uppercase tracking-[0.2em] text-thriva-navy/40 dark:text-white/40 font-bold">{label}</span>
-      <div className="w-8 h-8 rounded-full bg-thriva-mint/10 flex items-center justify-center text-thriva-mint">
+      <span className="text-[9px] uppercase tracking-[0.2em] text-brand-navy/40 dark:text-white/40 font-bold">{label}</span>
+      <div className="w-8 h-8 rounded-full bg-brand-mint/10 flex items-center justify-center text-brand-mint">
         <Icon size={14} />
       </div>
     </div>
     <div className="flex items-end justify-between">
-      <div className="text-4xl font-display font-medium text-thriva-navy dark:text-white tracking-tight leading-none">{value}</div>
+      <div className="text-4xl font-display font-medium text-brand-navy dark:text-white tracking-tight leading-none">{value}</div>
       {trend && (
-        <div className="flex items-center text-[10px] font-bold text-thriva-mint">
+        <div className="flex items-center text-[10px] font-bold text-brand-mint">
           <ArrowUpRight size={12} /> {trend}
         </div>
       )}
@@ -74,8 +75,8 @@ export const AdminDashboard = ({ samples, user, onNavigate, onUpdateSample, onRe
   return (
     <div className="p-6 space-y-8">
       <div className="space-y-2">
-        <h2 className="text-3xl font-display font-medium text-thriva-navy dark:text-white tracking-tight">Executive Summary</h2>
-        <p className="text-[10px] text-thriva-navy/40 dark:text-white/40 uppercase tracking-widest font-bold">Lab Performance & Financial Overview</p>
+        <h2 className="text-3xl font-display font-medium text-brand-navy dark:text-white tracking-tight">Executive Summary</h2>
+        <p className="text-[10px] text-brand-navy/40 dark:text-white/40 uppercase tracking-widest font-bold">Lab Performance & Financial Overview</p>
       </div>
 
       {/* Primary Metrics */}
@@ -87,8 +88,8 @@ export const AdminDashboard = ({ samples, user, onNavigate, onUpdateSample, onRe
       </div>
 
       {/* Strategic Insight Chart */}
-      <div className="bg-thriva-navy rounded-[48px] p-8 space-y-6 shadow-2xl relative overflow-hidden group">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-thriva-mint/10 rounded-full blur-[100px] -mr-32 -mt-32" />
+      <div className="bg-brand-navy rounded-[48px] p-8 space-y-6 shadow-2xl relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-brand-mint/10 rounded-full blur-[100px] -mr-32 -mt-32" />
         <div className="flex justify-between items-center relative z-10">
           <div className="space-y-1">
             <h3 className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/40">Weekly Operations Volume</h3>
@@ -96,7 +97,7 @@ export const AdminDashboard = ({ samples, user, onNavigate, onUpdateSample, onRe
           </div>
           <button 
             onClick={() => onNavigate('analytics')}
-            className="text-[10px] text-thriva-mint font-bold px-3 py-1 bg-thriva-mint/10 rounded-full border border-thriva-mint/20 hover:bg-thriva-mint hover:text-thriva-navy transition-all"
+            className="text-[10px] text-brand-mint font-bold px-3 py-1 bg-brand-mint/10 rounded-full border border-brand-mint/20 hover:bg-brand-mint hover:text-brand-navy transition-all"
           >
             VIEW INSIGHTS
           </button>
@@ -119,38 +120,38 @@ export const AdminDashboard = ({ samples, user, onNavigate, onUpdateSample, onRe
       {/* Notifications/Tasks */}
       <div className="space-y-4">
         <div className="flex justify-between items-center px-2">
-          <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-thriva-navy/40">Admin Alert System</h3>
-          <span className="flex h-2 w-2 rounded-full bg-thriva-coral animate-ping"></span>
+          <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-navy/40">Admin Alert System</h3>
+          <span className="flex h-2 w-2 rounded-full bg-brand-coral animate-ping"></span>
         </div>
         
         <div className="space-y-3">
-          <div className="bg-white border border-thriva-navy/5 p-5 rounded-3xl flex items-center gap-4 group hover:shadow-thriva transition-all">
-            <div className="w-10 h-10 rounded-2xl bg-thriva-coral/10 flex items-center justify-center text-thriva-coral">
+          <div className="bg-white border border-brand-navy/5 p-5 rounded-3xl flex items-center gap-4 group hover:shadow-brand transition-all">
+            <div className="w-10 h-10 rounded-2xl bg-brand-coral/10 flex items-center justify-center text-brand-coral">
               <AlertTriangle size={18} />
             </div>
             <div className="flex-1">
-              <p className="text-xs font-bold text-thriva-navy">Low Supply Alert</p>
-              <p className="text-[10px] text-thriva-navy/40 uppercase tracking-widest font-bold">Lead Monoxide (Litharge) &lt; 15%</p>
+              <p className="text-xs font-bold text-brand-navy">Low Supply Alert</p>
+              <p className="text-[10px] text-brand-navy/40 uppercase tracking-widest font-bold">Lead Monoxide (Litharge) &lt; 15%</p>
             </div>
             <button 
               onClick={() => onNavigate('inventory')}
-              className="w-8 h-8 rounded-full bg-thriva-navy/5 flex items-center justify-center text-thriva-navy/20 group-hover:bg-thriva-navy group-hover:text-white transition-all"
+              className="w-8 h-8 rounded-full bg-brand-navy/5 flex items-center justify-center text-brand-navy/20 group-hover:bg-brand-navy group-hover:text-white transition-all"
             >
               <ArrowUpRight size={14} />
             </button>
           </div>
 
-          <div className="bg-white border border-thriva-navy/5 p-5 rounded-3xl flex items-center gap-4 group hover:shadow-thriva transition-all">
-            <div className="w-10 h-10 rounded-2xl bg-thriva-mint/10 flex items-center justify-center text-thriva-mint">
+          <div className="bg-white border border-brand-navy/5 p-5 rounded-3xl flex items-center gap-4 group hover:shadow-brand transition-all">
+            <div className="w-10 h-10 rounded-2xl bg-brand-mint/10 flex items-center justify-center text-brand-mint">
               <CheckCircle2 size={18} />
             </div>
             <div className="flex-1">
-              <p className="text-xs font-bold text-thriva-navy">Billing Cycle Ready</p>
-              <p className="text-[10px] text-thriva-navy/40 uppercase tracking-widest font-bold">12 invoices pending review</p>
+              <p className="text-xs font-bold text-brand-navy">Billing Cycle Ready</p>
+              <p className="text-[10px] text-brand-navy/40 uppercase tracking-widest font-bold">12 invoices pending review</p>
             </div>
             <button 
               onClick={() => onNavigate('billing')}
-              className="w-8 h-8 rounded-full bg-thriva-navy/5 flex items-center justify-center text-thriva-navy/20 group-hover:bg-thriva-navy group-hover:text-white transition-all"
+              className="w-8 h-8 rounded-full bg-brand-navy/5 flex items-center justify-center text-brand-navy/20 group-hover:bg-brand-navy group-hover:text-white transition-all"
             >
               <ArrowUpRight size={14} />
             </button>
@@ -160,21 +161,21 @@ export const AdminDashboard = ({ samples, user, onNavigate, onUpdateSample, onRe
 
       {/* Admin Quick Actions */}
       <div className="space-y-4">
-        <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-thriva-navy/40 px-2">Administrative Control</h3>
+        <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-navy/40 px-2">Administrative Control</h3>
         <div className="grid grid-cols-2 gap-3">
           <button 
             onClick={onRegisterClick}
-            className="p-5 bg-thriva-navy text-white rounded-3xl flex flex-col gap-3 items-center justify-center hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-thriva-navy/20"
+            className="p-5 bg-brand-navy text-white rounded-3xl flex flex-col gap-3 items-center justify-center hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-brand-navy/20"
           >
-            <FlaskConical size={24} className="text-thriva-mint" />
+            <Logo iconOnly size="md" />
             <span className="text-[10px] font-bold uppercase tracking-widest">Register Sample</span>
           </button>
           <button 
             onClick={() => onNavigate('billing')}
-            className="p-5 bg-white border border-thriva-navy/5 rounded-3xl flex flex-col gap-3 items-center justify-center hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg"
+            className="p-5 bg-white border border-brand-navy/5 rounded-3xl flex flex-col gap-3 items-center justify-center hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg"
           >
-            <DollarSign size={24} className="text-thriva-coral" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy">Billing Portal</span>
+            <DollarSign size={24} className="text-brand-coral" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-brand-navy">Billing Portal</span>
           </button>
         </div>
       </div>

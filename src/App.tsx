@@ -1,5 +1,5 @@
 /**
- * Elementum Assay Lab - Main Application
+ * MetLyft Assay Lab - Main Application
  * Mobile-first metallurgical assay tracking.
  */
 
@@ -94,6 +94,7 @@ import {
 } from 'recharts';
 
 import { auth, db } from './lib/firebase';
+import Logo from './components/Logo';
 import { 
   getSyncQueue, 
   addToSyncQueue, 
@@ -156,35 +157,35 @@ const HistoryView = ({ samples }: { samples: Sample[] }) => {
   return (
     <div className="p-6 space-y-8">
       <div className="space-y-2">
-        <h2 className="text-3xl font-display font-medium text-thriva-navy tracking-tight">Data Archive</h2>
-        <p className="text-[10px] text-thriva-navy/40 uppercase tracking-widest font-bold">Historical Sample Records</p>
+        <h2 className="text-3xl font-display font-medium text-brand-navy tracking-tight">Data Archive</h2>
+        <p className="text-[10px] text-brand-navy/40 uppercase tracking-widest font-bold">Historical Sample Records</p>
       </div>
 
-      <div className="bg-white border border-thriva-navy/5 p-6 rounded-[32px] shadow-thriva space-y-6">
+      <div className="bg-white border border-brand-navy/5 p-6 rounded-[32px] shadow-brand space-y-6">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">From Date</label>
+            <label className="text-[10px] font-bold uppercase tracking-widest text-brand-navy/40 ml-2">From Date</label>
             <input 
               type="date" 
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full bg-[#FCFAF7] border border-thriva-navy/10 rounded-xl px-4 py-3 text-xs text-thriva-navy outline-none focus:border-thriva-mint/50" 
+              className="w-full bg-[#FCFAF7] border border-brand-navy/10 rounded-xl px-4 py-3 text-xs text-brand-navy outline-none focus:border-brand-mint/50" 
             />
           </div>
           <div className="space-y-2">
-            <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">To Date</label>
+            <label className="text-[10px] font-bold uppercase tracking-widest text-brand-navy/40 ml-2">To Date</label>
             <input 
               type="date" 
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full bg-[#FCFAF7] border border-thriva-navy/10 rounded-xl px-4 py-3 text-xs text-thriva-navy outline-none focus:border-thriva-mint/50" 
+              className="w-full bg-[#FCFAF7] border border-brand-navy/10 rounded-xl px-4 py-3 text-xs text-brand-navy outline-none focus:border-brand-mint/50" 
             />
           </div>
         </div>
         <button 
           onClick={handleExport}
           disabled={filteredSamples.length === 0}
-          className="w-full bg-thriva-navy disabled:opacity-20 hover:bg-thriva-banner text-white font-bold text-[10px] uppercase tracking-widest py-4 rounded-full transition-all shadow-xl shadow-thriva-navy/20 flex items-center justify-center gap-2"
+          className="w-full bg-brand-navy disabled:opacity-20 hover:bg-brand-banner text-white font-bold text-[10px] uppercase tracking-widest py-4 rounded-full transition-all shadow-xl shadow-brand-navy/20 flex items-center justify-center gap-2"
         >
           <Download size={14} /> Export Results ({filteredSamples.length})
         </button>
@@ -192,21 +193,21 @@ const HistoryView = ({ samples }: { samples: Sample[] }) => {
 
       <div className="space-y-3">
         {filteredSamples.length === 0 ? (
-          <div className="p-12 text-center opacity-40 font-mono text-[10px] uppercase tracking-widest text-thriva-navy">
+          <div className="p-12 text-center opacity-40 font-mono text-[10px] uppercase tracking-widest text-brand-navy">
             No records for this range
           </div>
         ) : (
           filteredSamples.map(s => (
-            <div key={s.id} className="bg-white border border-thriva-navy/5 p-5 rounded-2xl shadow-sm flex items-center justify-between group hover:shadow-thriva transition-all duration-300">
+            <div key={s.id} className="bg-white border border-brand-navy/5 p-5 rounded-2xl shadow-sm flex items-center justify-between group hover:shadow-brand transition-all duration-300">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-widest">{s.jobId}</span>
-                  <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold uppercase ${s.status === 'Finalized' ? 'bg-thriva-mint/10 text-thriva-mint' : 'bg-thriva-bg text-thriva-navy/40 border border-thriva-navy/5'}`}>
+                   <span className="text-[9px] font-bold text-brand-navy/30 uppercase tracking-widest">{s.jobId}</span>
+                  <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold uppercase ${s.status === 'Finalized' ? 'bg-brand-mint/10 text-brand-mint' : 'bg-brand-bg text-brand-navy/40 border border-brand-navy/5'}`}>
                     {s.status}
                   </span>
                 </div>
-                <div className="text-sm font-bold text-thriva-navy">{s.clientName}</div>
-                <div className="text-[9px] text-thriva-navy/40 font-mono">
+                <div className="text-sm font-bold text-brand-navy">{s.clientName}</div>
+                <div className="text-[9px] text-brand-navy/40 font-mono">
                   {new Date(s.collectedAt).toLocaleString()}
                 </div>
               </div>
@@ -215,14 +216,14 @@ const HistoryView = ({ samples }: { samples: Sample[] }) => {
                   <button 
                     onClick={() => generateSamplePDF(s)}
                     title="Download Report"
-                    className="p-3 bg-thriva-bg rounded-xl text-thriva-navy/40 hover:text-thriva-mint hover:bg-thriva-mint/10 transition-all border border-transparent hover:border-thriva-mint/20"
+                    className="p-3 bg-brand-bg rounded-xl text-brand-navy/40 hover:text-brand-mint hover:bg-brand-mint/10 transition-all border border-transparent hover:border-brand-mint/20"
                   >
                     <Download size={16} />
                   </button>
                 )}
                 <div className="text-right">
-                  <div className="text-xs font-bold text-thriva-navy/60">{s.sampleType}</div>
-                  <div className="text-[9px] text-thriva-navy/30 uppercase tracking-widest font-bold">{s.source}</div>
+                  <div className="text-xs font-bold text-brand-navy/60">{s.sampleType}</div>
+                  <div className="text-[9px] text-brand-navy/30 uppercase tracking-widest font-bold">{s.source}</div>
                 </div>
               </div>
             </div>
@@ -256,7 +257,7 @@ const useAuth = () => useContext(AuthContext);
 // --- Components ---
 
 const LoadingScreen = () => (
-  <div className="fixed inset-0 bg-thriva-navy flex items-center justify-center">
+  <div className="fixed inset-0 bg-brand-navy flex items-center justify-center">
     <motion.div 
       animate={{ 
         rotate: 360,
@@ -266,21 +267,21 @@ const LoadingScreen = () => (
         rotate: { duration: 3, repeat: Infinity, ease: "linear" },
         scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
       }}
-      className="text-thriva-mint"
+      className="text-white"
     >
-      <FlaskConical size={64} strokeWidth={1.5} />
+      <Logo iconOnly size="lg" />
     </motion.div>
   </div>
 );
 
 const SyncIndicator = ({ isOnline, pendingCount }: { isOnline: boolean, pendingCount: number }) => (
-  <div className={`fixed top-4 right-4 z-50 flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all ${isOnline ? 'bg-thriva-navy/90 border-white/10 text-white/50' : 'bg-thriva-coral/10 border-thriva-coral/30 text-thriva-coral'}`}>
-    {isOnline ? (pendingCount > 0 ? <CloudSync size={12} className="text-thriva-mint animate-pulse" /> : <Wifi size={12} className="text-thriva-mint" />) : <WifiOff size={12} />}
+  <div className={`fixed top-4 right-4 z-50 flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all ${isOnline ? 'bg-brand-navy/90 border-white/10 text-white/50' : 'bg-brand-coral/10 border-brand-coral/30 text-brand-coral'}`}>
+    {isOnline ? (pendingCount > 0 ? <CloudSync size={12} className="text-brand-mint animate-pulse" /> : <Wifi size={12} className="text-brand-mint" />) : <WifiOff size={12} />}
     <span className="text-[10px] font-bold uppercase tracking-widest">
       {isOnline ? (pendingCount > 0 ? `Syncing ${pendingCount}...` : 'Live') : 'Offline'}
     </span>
     {pendingCount > 0 && (
-      <div className="w-1.5 h-1.5 rounded-full bg-thriva-mint animate-pulse" />
+      <div className="w-1.5 h-1.5 rounded-full bg-brand-mint animate-pulse" />
     )}
   </div>
 );
@@ -288,58 +289,58 @@ const SyncIndicator = ({ isOnline, pendingCount }: { isOnline: boolean, pendingC
 const StatCard = ({ label, value, icon: Icon }: any) => (
   <motion.div 
     whileHover={{ y: -4 }}
-    className="bg-white dark:bg-[#0D0D2D] p-6 rounded-[32px] shadow-thriva border border-thriva-navy/5 flex flex-col gap-4 relative group transition-all hover:shadow-thriva-hover"
+    className="bg-white dark:bg-[#0D0D2D] p-6 rounded-[32px] shadow-brand border border-brand-navy/5 flex flex-col gap-4 relative group transition-all hover:shadow-brand-hover"
   >
     <div className="flex items-center justify-between">
-      <span className="text-[9px] uppercase tracking-[0.2em] text-thriva-navy/40 dark:text-white/40 font-bold">{label}</span>
-      <div className="w-8 h-8 rounded-full bg-thriva-mint/10 flex items-center justify-center text-thriva-mint">
+      <span className="text-[9px] uppercase tracking-[0.2em] text-brand-navy/40 dark:text-white/40 font-bold">{label}</span>
+      <div className="w-8 h-8 rounded-full bg-brand-mint/10 flex items-center justify-center text-brand-mint">
         <Icon size={14} />
       </div>
     </div>
-    <div className="text-4xl font-display font-medium text-thriva-navy dark:text-white tracking-tight leading-none">{value}</div>
+    <div className="text-4xl font-display font-medium text-brand-navy dark:text-white tracking-tight leading-none">{value}</div>
   </motion.div>
 );
 
 const ControlRoom = ({ samples }: { samples: Sample[] }) => {
   const buckets = [
-    { label: 'Drying', status: 'Received', color: 'text-thriva-mint', icon: Clock },
-    { label: 'Smelting', status: 'Preparation', color: 'text-thriva-coral', icon: Flame },
-    { label: 'Analysis', status: 'Analysis', color: 'text-thriva-mint', icon: Monitor },
-    { label: 'Reporting', status: 'Finalized', color: 'text-thriva-navy dark:text-thriva-mint', icon: CheckCircle2 },
+    { label: 'Drying', status: 'Received', color: 'text-brand-mint', icon: Clock },
+    { label: 'Smelting', status: 'Preparation', color: 'text-brand-coral', icon: Flame },
+    { label: 'Analysis', status: 'Analysis', color: 'text-brand-mint', icon: Monitor },
+    { label: 'Reporting', status: 'Finalized', color: 'text-brand-navy dark:text-brand-mint', icon: CheckCircle2 },
   ];
 
   return (
     <div className="p-6 space-y-8">
       <div className="space-y-2">
-        <h2 className="text-3xl font-display font-medium text-thriva-navy dark:text-white tracking-tight">Control Room</h2>
-        <p className="text-[10px] text-thriva-navy/40 dark:text-white/40 uppercase tracking-widest font-bold">Real-time Operations Throughput</p>
+        <h2 className="text-3xl font-display font-medium text-brand-navy dark:text-white tracking-tight">Control Room</h2>
+        <p className="text-[10px] text-brand-navy/40 dark:text-white/40 uppercase tracking-widest font-bold">Real-time Operations Throughput</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         {buckets.map(bucket => (
-          <div key={bucket.label} className="bg-white dark:bg-[#0D0D2D] border border-thriva-navy/5 dark:border-white/5 shadow-thriva rounded-[32px] p-6 relative overflow-hidden group hover:shadow-thriva-hover transition-all duration-500">
+          <div key={bucket.label} className="bg-white dark:bg-[#0D0D2D] border border-brand-navy/5 dark:border-white/5 shadow-brand rounded-[32px] p-6 relative overflow-hidden group hover:shadow-brand-hover transition-all duration-500">
             <div className="flex justify-between items-start relative z-10">
-              <div className={`w-10 h-10 rounded-2xl flex items-center justify-center bg-thriva-bg dark:bg-thriva-dark-bg border border-thriva-navy/5 dark:border-white/5 ${bucket.color}`}>
+              <div className={`w-10 h-10 rounded-2xl flex items-center justify-center bg-brand-bg dark:bg-brand-dark-bg border border-brand-navy/5 dark:border-white/5 ${bucket.color}`}>
                 <bucket.icon size={18} />
               </div>
-              <span className="text-3xl font-display font-medium text-thriva-navy dark:text-white">
+              <span className="text-3xl font-display font-medium text-brand-navy dark:text-white">
                 {samples.filter(s => s.status === bucket.status).length}
               </span>
             </div>
-            <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.2em] text-thriva-navy/40 dark:text-white/40 relative z-10">{bucket.label}</p>
+            <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-navy/40 dark:text-white/40 relative z-10">{bucket.label}</p>
             <div className={`absolute bottom-0 left-0 h-1 bg-current opacity-20 ${bucket.color}`} style={{ width: '100%' }}></div>
           </div>
         ))}
       </div>
 
       <div className="bg-[#0D0D2D] rounded-[48px] p-8 space-y-6 shadow-2xl relative overflow-hidden group">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-thriva-mint/10 rounded-full blur-[100px] -mr-32 -mt-32" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-brand-mint/10 rounded-full blur-[100px] -mr-32 -mt-32" />
         <div className="flex justify-between items-center relative z-10">
           <div className="space-y-1">
             <h3 className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/40">Plant Efficiency</h3>
             <p className="text-xs font-medium text-white/60">Automated Throughput Metric</p>
           </div>
-          <span className="text-xs text-thriva-mint font-bold px-3 py-1 bg-thriva-mint/10 rounded-full border border-thriva-mint/20">LIVE + 94.2%</span>
+          <span className="text-xs text-brand-mint font-bold px-3 py-1 bg-brand-mint/10 rounded-full border border-brand-mint/20">LIVE + 94.2%</span>
         </div>
         <div className="h-44 relative z-10">
            <ResponsiveContainer width="100%" height="100%">
@@ -393,24 +394,24 @@ const LabBench = ({ sample, onUpdate, currentReading }: {
     <div className="p-6 space-y-8 pb-32">
        <div className="flex justify-between items-start">
          <div className="space-y-1">
-           <h2 className="text-3xl font-display font-medium text-thriva-navy tracking-tight">{sample.jobId}</h2>
-           <p className="text-[10px] font-bold text-thriva-mint uppercase tracking-widest flex items-center gap-2">
+           <h2 className="text-3xl font-display font-medium text-brand-navy tracking-tight">{sample.jobId}</h2>
+           <p className="text-[10px] font-bold text-brand-mint uppercase tracking-widest flex items-center gap-2">
              <Layers size={12} /> Laboratory Bench Workflow
            </p>
          </div>
-         <div className="px-3 py-1 bg-white border border-thriva-navy/5 rounded-full text-[9px] font-bold text-thriva-navy/40 uppercase tracking-widest shadow-sm">
+         <div className="px-3 py-1 bg-white border border-brand-navy/5 rounded-full text-[9px] font-bold text-brand-navy/40 uppercase tracking-widest shadow-sm">
            {sample.source} Point
          </div>
        </div>
 
        {/* Guidance Indicator */}
-       <div className="bg-thriva-mint/5 border border-thriva-mint/10 p-5 rounded-[24px] flex gap-4 items-center shadow-sm">
-         <div className="w-12 h-12 rounded-2xl bg-thriva-mint/10 flex items-center justify-center text-thriva-mint shadow-inner">
+       <div className="bg-brand-mint/5 border border-brand-mint/10 p-5 rounded-[24px] flex gap-4 items-center shadow-sm">
+         <div className="w-12 h-12 rounded-2xl bg-brand-mint/10 flex items-center justify-center text-brand-mint shadow-inner">
            <Compass size={24} />
          </div>
          <div className="flex-1">
-           <p className="text-[10px] font-bold text-thriva-mint uppercase tracking-[0.2em]">Protocol Guidance</p>
-           <p className="text-[11px] text-thriva-navy/60 font-medium leading-relaxed">
+           <p className="text-[10px] font-bold text-brand-mint uppercase tracking-[0.2em]">Protocol Guidance</p>
+           <p className="text-[11px] text-brand-navy/60 font-medium leading-relaxed">
              {sample.source === 'Mining' ? 'Primary Ore detected. Protocol: 50g Fire Assay with Silver inquart.' : 
               sample.source === 'CIL' ? 'Solution detected. Protocol: AAS Direct Aspiration (Au/Ag).' :
               'Standard metallurgical processing protocol active.'}
@@ -420,24 +421,24 @@ const LabBench = ({ sample, onUpdate, currentReading }: {
 
        <div className="space-y-6">
          <div className="space-y-4">
-           <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-thriva-navy/30 ml-2">Physical Properties</label>
+           <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-navy/30 ml-2">Physical Properties</label>
            <div className="grid grid-cols-2 gap-4">
-             <div className="bg-white border border-thriva-navy/5 p-5 rounded-[24px] shadow-thriva flex flex-col gap-2 group hover:border-thriva-mint/30 transition-colors">
-               <span className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-widest">Analysis Mass (g)</span>
+             <div className="bg-white border border-brand-navy/5 p-5 rounded-[24px] shadow-brand flex flex-col gap-2 group hover:border-brand-mint/30 transition-colors">
+               <span className="text-[9px] font-bold text-brand-navy/30 uppercase tracking-widest">Analysis Mass (g)</span>
                <input 
                  type="number" 
                  value={mass}
                  onChange={(e) => setMass(Number(e.target.value))}
-                 className="bg-transparent text-thriva-navy font-display text-2xl outline-none"
+                 className="bg-transparent text-brand-navy font-display text-2xl outline-none"
                  placeholder="0.00"
                />
              </div>
-             <div className="bg-white border border-thriva-navy/5 p-5 rounded-[24px] shadow-thriva flex flex-col gap-2 group hover:border-thriva-mint/30 transition-colors">
-               <span className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-widest">Moisture (%)</span>
+             <div className="bg-white border border-brand-navy/5 p-5 rounded-[24px] shadow-brand flex flex-col gap-2 group hover:border-brand-mint/30 transition-colors">
+               <span className="text-[9px] font-bold text-brand-navy/30 uppercase tracking-widest">Moisture (%)</span>
                <input 
                  type="number" 
                  defaultValue={sample.physicalProperties?.moistureContent || 0}
-                 className="bg-transparent text-thriva-navy font-display text-2xl outline-none"
+                 className="bg-transparent text-brand-navy font-display text-2xl outline-none"
                  placeholder="0.0"
                />
              </div>
@@ -445,13 +446,13 @@ const LabBench = ({ sample, onUpdate, currentReading }: {
          </div>
 
          <div className="space-y-4">
-           <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-thriva-navy/30 ml-2">Analytical Method</label>
+           <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-navy/30 ml-2">Analytical Method</label>
            <div className="flex gap-2 overflow-x-auto pb-2 noscroll px-1">
              {(['FireAssay', 'AAS', 'CarbonAnalysis'] as AssayMethod[]).map(m => (
                <button 
                  key={m}
                  onClick={() => setMethod(m)}
-                 className={`px-5 py-3 rounded-full text-[10px] font-bold uppercase tracking-wider border whitespace-nowrap transition-all ${method === m ? 'bg-thriva-navy border-thriva-navy text-white shadow-lg' : 'bg-white border-thriva-navy/5 text-thriva-navy/40 hover:text-thriva-navy'}`}
+                 className={`px-5 py-3 rounded-full text-[10px] font-bold uppercase tracking-wider border whitespace-nowrap transition-all ${method === m ? 'bg-brand-navy border-brand-navy text-white shadow-lg' : 'bg-white border-brand-navy/5 text-brand-navy/40 hover:text-brand-navy'}`}
                >
                  {m.replace(/([A-Z])/g, ' $1').trim()}
                </button>
@@ -460,25 +461,25 @@ const LabBench = ({ sample, onUpdate, currentReading }: {
          </div>
 
          {/* Method Specific Inputs */}
-         <div className="bg-[#FCFAF7] border border-thriva-navy/5 rounded-[40px] p-8 space-y-8 shadow-inner">
+         <div className="bg-[#FCFAF7] border border-brand-navy/5 rounded-[40px] p-8 space-y-8 shadow-inner">
             {method === 'FireAssay' && (
               <div className="grid grid-cols-1 gap-8">
                  <div className="grid grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-widest ml-2">Crucible Serial</label>
+                      <label className="text-[10px] font-bold text-brand-navy/30 uppercase tracking-widest ml-2">Crucible Serial</label>
                       <input 
                         value={crucible}
                         onChange={(e) => setCrucible(e.target.value)}
-                        className="w-full bg-white border border-thriva-navy/10 rounded-xl p-4 text-thriva-navy font-bold shadow-sm uppercase placeholder:text-thriva-navy/20" 
+                        className="w-full bg-white border border-brand-navy/10 rounded-xl p-4 text-brand-navy font-bold shadow-sm uppercase placeholder:text-brand-navy/20" 
                         placeholder="CR-000" 
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-widest ml-2">Flux Type</label>
+                      <label className="text-[10px] font-bold text-brand-navy/30 uppercase tracking-widest ml-2">Flux Type</label>
                       <select 
                         value={fluxType}
                         onChange={(e) => setFluxType(e.target.value)}
-                        className="w-full bg-white border border-thriva-navy/10 rounded-xl p-4 text-thriva-navy font-bold shadow-sm"
+                        className="w-full bg-white border border-brand-navy/10 rounded-xl p-4 text-brand-navy font-bold shadow-sm"
                       >
                         <option value="Standard Fusion">Standard Fusion</option>
                         <option value="Litharge High">Litharge High</option>
@@ -490,20 +491,20 @@ const LabBench = ({ sample, onUpdate, currentReading }: {
                  
                  <div className="grid grid-cols-2 gap-6">
                     <div className="space-y-3">
-                      <label className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-widest ml-2">Bead Weight (mg)</label>
+                      <label className="text-[10px] font-bold text-brand-navy/30 uppercase tracking-widest ml-2">Bead Weight (mg)</label>
                       <div className="relative">
                          <input 
                            type="number"
                            step="0.001"
                            value={bead}
                            onChange={(e) => setBead(Number(e.target.value))}
-                           className="w-full bg-white border border-thriva-navy/10 rounded-2xl p-4 text-thriva-mint font-display text-2xl outline-none focus:border-thriva-mint shadow-sm pr-12" 
+                           className="w-full bg-white border border-brand-navy/10 rounded-2xl p-4 text-brand-mint font-display text-2xl outline-none focus:border-brand-mint shadow-sm pr-12" 
                            placeholder="1.23"
                          />
                          {currentReading && (
                            <button 
                              onClick={handleCapture}
-                             className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-xl bg-thriva-mint/10 text-thriva-mint hover:bg-thriva-mint hover:text-white transition-all shadow-sm"
+                             className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-xl bg-brand-mint/10 text-brand-mint hover:bg-brand-mint hover:text-white transition-all shadow-sm"
                              title="Capture from Balance"
                            >
                              <Zap size={14} />
@@ -512,8 +513,8 @@ const LabBench = ({ sample, onUpdate, currentReading }: {
                       </div>
                     </div>
                     <div className="space-y-3">
-                      <label className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-widest ml-2">Calculated Au (g/t)</label>
-                      <div className="w-full h-full bg-thriva-navy rounded-2xl p-4 text-thriva-mint font-display text-2xl flex items-center justify-center font-medium shadow-xl">
+                      <label className="text-[10px] font-bold text-brand-navy/30 uppercase tracking-widest ml-2">Calculated Au (g/t)</label>
+                      <div className="w-full h-full bg-brand-navy rounded-2xl p-4 text-brand-mint font-display text-2xl flex items-center justify-center font-medium shadow-xl">
                         {calculatedAu.toFixed(3)}
                       </div>
                     </div>
@@ -524,43 +525,43 @@ const LabBench = ({ sample, onUpdate, currentReading }: {
             {method === 'AAS' && (
               <div className="grid grid-cols-1 gap-8">
                  <div className="space-y-4">
-                    <label className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em] text-center block">Raw Absorbance Reading</label>
+                    <label className="text-[10px] font-bold text-brand-navy/30 uppercase tracking-[0.2em] text-center block">Raw Absorbance Reading</label>
                     <div className="flex items-center justify-center py-6 gap-6">
                       {currentReading && (
                          <button 
                            onClick={handleCapture}
-                           className="px-6 py-3 rounded-full bg-thriva-mint text-thriva-navy text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-thriva-mint/20 hover:scale-105 active:scale-95 transition-all"
+                           className="px-6 py-3 rounded-full bg-brand-mint text-brand-navy text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-brand-mint/20 hover:scale-105 active:scale-95 transition-all"
                          >
                            <Activity size={16} /> Capture AAS
                          </button>
                       )}
                       {!currentReading && (
                         <>
-                          <button onClick={()=>setAbs(Math.max(0, abs - 0.001))} className="w-12 h-12 rounded-full border border-thriva-navy/10 flex items-center justify-center text-thriva-navy/40 hover:bg-white hover:text-thriva-navy transition-all shadow-sm">-</button>
-                          <span className="text-6xl font-display font-medium text-thriva-navy tracking-tighter">{abs.toFixed(3)}</span>
-                          <button onClick={()=>setAbs(abs + 0.001)} className="w-12 h-12 rounded-full border border-thriva-navy/10 flex items-center justify-center text-thriva-navy/40 hover:bg-white hover:text-thriva-navy transition-all shadow-sm">+</button>
+                          <button onClick={()=>setAbs(Math.max(0, abs - 0.001))} className="w-12 h-12 rounded-full border border-brand-navy/10 flex items-center justify-center text-brand-navy/40 hover:bg-white hover:text-brand-navy transition-all shadow-sm">-</button>
+                          <span className="text-6xl font-display font-medium text-brand-navy tracking-tighter">{abs.toFixed(3)}</span>
+                          <button onClick={()=>setAbs(abs + 0.001)} className="w-12 h-12 rounded-full border border-brand-navy/10 flex items-center justify-center text-brand-navy/40 hover:bg-white hover:text-brand-navy transition-all shadow-sm">+</button>
                         </>
                       )}
                     </div>
                     {currentReading && (
-                       <div className="text-center font-display text-4xl text-thriva-navy animate-pulse">
+                       <div className="text-center font-display text-4xl text-brand-navy animate-pulse">
                          {currentReading.value.toFixed(3)}
                        </div>
                     )}
                  </div>
                  <div className="grid grid-cols-2 gap-6">
                     <div className="space-y-3">
-                      <label className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-widest ml-2">Dilution Factor</label>
+                      <label className="text-[10px] font-bold text-brand-navy/30 uppercase tracking-widest ml-2">Dilution Factor</label>
                       <input 
                         type="number" 
                         value={dilution}
                         onChange={(e) => setDilution(Number(e.target.value))}
-                        className="w-full bg-white border border-thriva-navy/10 rounded-xl p-4 text-thriva-navy font-bold shadow-sm" 
+                        className="w-full bg-white border border-brand-navy/10 rounded-xl p-4 text-brand-navy font-bold shadow-sm" 
                       />
                     </div>
                     <div className="space-y-3">
-                      <label className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-widest ml-2">Final Au (ppm)</label>
-                      <div className="w-full bg-thriva-mint rounded-xl p-4 text-thriva-navy font-display text-2xl flex items-center justify-center font-medium shadow-lg">
+                      <label className="text-[10px] font-bold text-brand-navy/30 uppercase tracking-widest ml-2">Final Au (ppm)</label>
+                      <div className="w-full bg-brand-mint rounded-xl p-4 text-brand-navy font-display text-2xl flex items-center justify-center font-medium shadow-lg">
                         {calculatedAu.toFixed(3)}
                       </div>
                     </div>
@@ -587,7 +588,7 @@ const LabBench = ({ sample, onUpdate, currentReading }: {
                } : sample.methodData?.aas
              }
            })}
-           className="w-full bg-thriva-navy text-white font-bold py-6 rounded-full shadow-2xl shadow-thriva-navy/20 flex items-center justify-center gap-3 hover:bg-thriva-banner active:scale-[0.98] transition-all text-sm tracking-widest uppercase"
+           className="w-full bg-brand-navy text-white font-bold py-6 rounded-full shadow-2xl shadow-brand-navy/20 flex items-center justify-center gap-3 hover:bg-brand-banner active:scale-[0.98] transition-all text-sm tracking-widest uppercase"
           >
            <ShieldCheck size={20} />
            RECORD SECURE OBSERVATION
@@ -613,28 +614,28 @@ const PlantProfile = ({ samples }: { samples: Sample[] }) => {
   return (
     <div className="p-6 space-y-8 pb-32">
       <div className="space-y-1">
-        <h2 className="text-3xl font-display font-medium text-thriva-navy tracking-tight">Plant Profile</h2>
-        <p className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em]">Real-time Adsorption Monitoring</p>
+        <h2 className="text-3xl font-display font-medium text-brand-navy tracking-tight">Plant Profile</h2>
+        <p className="text-[10px] font-bold text-brand-navy/40 uppercase tracking-[0.2em]">Real-time Adsorption Monitoring</p>
       </div>
 
       {alerts.length > 0 && (
         <motion.div 
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          className="bg-thriva-coral/5 border border-thriva-coral/10 p-5 rounded-[24px] flex gap-4 items-center shadow-lg shadow-thriva-coral/5"
+          className="bg-brand-coral/5 border border-brand-coral/10 p-5 rounded-[24px] flex gap-4 items-center shadow-lg shadow-brand-coral/5"
         >
-          <div className="w-12 h-12 rounded-2xl bg-thriva-coral/10 flex items-center justify-center text-thriva-coral shadow-inner">
+          <div className="w-12 h-12 rounded-2xl bg-brand-coral/10 flex items-center justify-center text-brand-coral shadow-inner">
             <AlertTriangle size={24} />
           </div>
           <div>
-            <p className="text-[10px] font-bold text-thriva-coral uppercase tracking-[0.2em]">Inefficiency Alert</p>
-            <p className="text-[11px] text-thriva-navy/60 font-medium font-inter">Gold concentration spike detected. Check Carbon activity.</p>
+            <p className="text-[10px] font-bold text-brand-coral uppercase tracking-[0.2em]">Inefficiency Alert</p>
+            <p className="text-[11px] text-brand-navy/60 font-medium font-inter">Gold concentration spike detected. Check Carbon activity.</p>
           </div>
         </motion.div>
       )}
 
-      <div className="bg-white border border-thriva-navy/5 rounded-[40px] p-8 h-80 shadow-thriva relative overflow-hidden group">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-thriva-mint/5 rounded-full blur-[100px] -mr-32 -mt-32" />
+      <div className="bg-white border border-brand-navy/5 rounded-[40px] p-8 h-80 shadow-brand relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-brand-mint/5 rounded-full blur-[100px] -mr-32 -mt-32" />
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={adsorptionData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#128C7E08" vertical={false} />
@@ -651,14 +652,14 @@ const PlantProfile = ({ samples }: { samples: Sample[] }) => {
 
       <div className="grid grid-cols-1 gap-4">
         {adsorptionData.map((d, i) => (
-          <div key={i} className="flex justify-between items-center p-5 bg-white rounded-2xl border border-thriva-navy/5 shadow-sm group hover:shadow-thriva transition-all duration-300">
+          <div key={i} className="flex justify-between items-center p-5 bg-white rounded-2xl border border-brand-navy/5 shadow-sm group hover:shadow-brand transition-all duration-300">
              <div className="flex items-center gap-4">
-               <div className="w-10 h-10 rounded-xl bg-[#FCFAF7] border border-thriva-navy/5 flex items-center justify-center text-thriva-navy font-display text-base font-medium shadow-inner">{i+1}</div>
-               <span className="text-sm font-bold text-thriva-navy">{d.tank}</span>
+               <div className="w-10 h-10 rounded-xl bg-[#FCFAF7] border border-brand-navy/5 flex items-center justify-center text-brand-navy font-display text-base font-medium shadow-inner">{i+1}</div>
+               <span className="text-sm font-bold text-brand-navy">{d.tank}</span>
              </div>
              <div className="text-right">
-               <span className="text-xl font-display text-thriva-navy font-medium">{d.au.toFixed(4)}</span>
-               <span className="text-[10px] text-thriva-navy/30 ml-2 uppercase font-bold tracking-widest">g/t</span>
+               <span className="text-xl font-display text-brand-navy font-medium">{d.au.toFixed(4)}</span>
+               <span className="text-[10px] text-brand-navy/30 ml-2 uppercase font-bold tracking-widest">g/t</span>
              </div>
           </div>
         ))}
@@ -669,30 +670,30 @@ const PlantProfile = ({ samples }: { samples: Sample[] }) => {
 
 const SampleItem = ({ sample, onClick }: { sample: Sample, onClick: () => void }) => {
   const statusColors: Record<SampleStatus, string> = {
-    'Received': 'text-thriva-navy/40 bg-[#FCFAF7]',
-    'Preparation': 'text-thriva-coral bg-thriva-coral/10',
-    'Analysis': 'text-thriva-mint bg-thriva-mint/10',
-    'Finalized': 'text-thriva-mint bg-thriva-mint/10',
+    'Received': 'text-brand-navy/40 bg-[#FCFAF7]',
+    'Preparation': 'text-brand-coral bg-brand-coral/10',
+    'Analysis': 'text-brand-mint bg-brand-mint/10',
+    'Finalized': 'text-brand-mint bg-brand-mint/10',
     'Cancelled': 'text-red-400 bg-red-400/10'
   };
 
   const priorityColors: Record<string, string> = {
-    'Low': 'text-thriva-navy/30 bg-[#FCFAF7]',
-    'Standard': 'text-thriva-mint bg-thriva-mint/10',
-    'High': 'text-thriva-coral bg-thriva-coral/10',
-    'Emergency': 'text-white bg-thriva-coral'
+    'Low': 'text-brand-navy/30 bg-[#FCFAF7]',
+    'Standard': 'text-brand-mint bg-brand-mint/10',
+    'High': 'text-brand-coral bg-brand-coral/10',
+    'Emergency': 'text-white bg-brand-coral'
   };
 
   const typeIconColor: Record<SampleType, string> = {
-    'Ore': 'bg-[#FCFAF7] text-thriva-navy/40',
-    'Concentrate': 'bg-thriva-mint/10 text-thriva-mint',
-    'Tailings': 'bg-thriva-coral/10 text-thriva-coral',
+    'Ore': 'bg-[#FCFAF7] text-brand-navy/40',
+    'Concentrate': 'bg-brand-mint/10 text-brand-mint',
+    'Tailings': 'bg-brand-coral/10 text-brand-coral',
     'Bullion': 'bg-yellow-500/10 text-yellow-600',
     'Waste': 'bg-slate-100 text-slate-400',
     'Cyanidation': 'bg-purple-500/10 text-purple-600',
     'Pulp': 'bg-slate-500/10 text-slate-400',
-    'Solution': 'bg-thriva-mint/5 text-thriva-mint',
-    'Carbon': 'bg-thriva-navy/5 text-thriva-navy'
+    'Solution': 'bg-brand-mint/5 text-brand-mint',
+    'Carbon': 'bg-brand-navy/5 text-brand-navy'
   };
 
   return (
@@ -700,7 +701,7 @@ const SampleItem = ({ sample, onClick }: { sample: Sample, onClick: () => void }
       onClick={onClick}
       whileHover={{ scale: 1.01, y: -2 }}
       whileTap={{ scale: 0.99 }}
-      className={`p-5 bg-white border rounded-[28px] flex items-center justify-between shadow-sm hover:shadow-thriva transition-all duration-300 cursor-pointer ${sample.priority === 'Emergency' ? 'border-thriva-coral shadow-lg shadow-thriva-coral/10' : 'border-thriva-navy/5'}`}
+      className={`p-5 bg-white border rounded-[28px] flex items-center justify-between shadow-sm hover:shadow-brand transition-all duration-300 cursor-pointer ${sample.priority === 'Emergency' ? 'border-brand-coral shadow-lg shadow-brand-coral/10' : 'border-brand-navy/5'}`}
     >
       <div className="flex items-center gap-5">
         <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-inner ${typeIconColor[sample.sampleType]}`}>
@@ -708,7 +709,7 @@ const SampleItem = ({ sample, onClick }: { sample: Sample, onClick: () => void }
         </div>
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-bold text-thriva-navy">{sample.clientName}</span>
+            <span className="text-sm font-bold text-brand-navy">{sample.clientName}</span>
             <span className={`text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest ${priorityColors[sample.priority || 'Standard']}`}>
               {sample.priority || 'STD'}
             </span>
@@ -717,14 +718,14 @@ const SampleItem = ({ sample, onClick }: { sample: Sample, onClick: () => void }
             <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border border-current opacity-40 uppercase tracking-widest ${statusColors[sample.status].split(' ')[0]}`}>
               {sample.jobId}
             </span>
-            <p className="text-[10px] text-thriva-navy/30 font-bold uppercase tracking-widest">
+            <p className="text-[10px] text-brand-navy/30 font-bold uppercase tracking-widest">
               {sample.status} • {new Date(sample.collectedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </p>
           </div>
         </div>
       </div>
       <div className="text-right flex flex-col items-end gap-1">
-        <div className="text-base font-display font-medium text-thriva-navy">
+        <div className="text-base font-display font-medium text-brand-navy">
           {sample.status === 'Finalized' ? `${(sample.elements?.gold || 0).toFixed(2)} g/t` : '---'}
         </div>
         <div className="flex items-center gap-1 opacity-20 group-hover:opacity-40 transition-opacity">
@@ -776,25 +777,25 @@ const AnalyticsView = ({ samples }: { samples: Sample[] }) => {
   return (
     <div className="p-6 space-y-8">
       <div className="space-y-2">
-        <h2 className="text-3xl font-display font-medium text-thriva-navy tracking-tight">Assay Analytics</h2>
-        <p className="text-[10px] text-thriva-navy/40 uppercase tracking-widest font-bold">Trend Analysis & Correlation</p>
+        <h2 className="text-3xl font-display font-medium text-brand-navy tracking-tight">Assay Analytics</h2>
+        <p className="text-[10px] text-brand-navy/40 uppercase tracking-widest font-bold">Trend Analysis & Correlation</p>
       </div>
 
       {/* Parameter Controls */}
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-thriva-navy/30 ml-2">Primary Attribute</label>
+          <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-brand-navy/30 ml-2">Primary Attribute</label>
           <select 
             value={metric} 
             onChange={(e) => setMetric(e.target.value as any)}
-            className="w-full bg-white border border-thriva-navy/10 rounded-xl px-4 py-3 text-xs text-thriva-navy outline-none shadow-sm"
+            className="w-full bg-white border border-brand-navy/10 rounded-xl px-4 py-3 text-xs text-brand-navy outline-none shadow-sm"
           >
             {metrics.map(m => <option key={m.id} value={m.id}>{m.label}</option>)}
           </select>
         </div>
         <div className="space-y-2">
-          <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-thriva-navy/30 ml-2">Visualization Engine</label>
-          <div className="flex bg-white border border-thriva-navy/10 rounded-xl p-1 shadow-sm">
+          <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-brand-navy/30 ml-2">Visualization Engine</label>
+          <div className="flex bg-white border border-brand-navy/10 rounded-xl p-1 shadow-sm">
             {[
               { id: 'line', icon: LineChartIcon },
               { id: 'bar', icon: BarChartIcon },
@@ -803,7 +804,7 @@ const AnalyticsView = ({ samples }: { samples: Sample[] }) => {
               <button
                 key={type.id}
                 onClick={() => setChartType(type.id as any)}
-                className={`flex-1 flex justify-center py-2 rounded-lg transition-all ${chartType === type.id ? 'bg-thriva-navy text-white shadow-md' : 'text-thriva-navy/30 hover:text-thriva-navy'}`}
+                className={`flex-1 flex justify-center py-2 rounded-lg transition-all ${chartType === type.id ? 'bg-brand-navy text-white shadow-md' : 'text-brand-navy/30 hover:text-brand-navy'}`}
               >
                 <type.icon size={16} />
               </button>
@@ -813,8 +814,8 @@ const AnalyticsView = ({ samples }: { samples: Sample[] }) => {
       </div>
 
       {/* Main Visualization Area */}
-      <div className="bg-white border border-thriva-navy/5 rounded-[40px] p-8 shadow-thriva relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-thriva-mint/5 rounded-full blur-[100px] -mr-32 -mt-32" />
+      <div className="bg-white border border-brand-navy/5 rounded-[40px] p-8 shadow-brand relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-brand-mint/5 rounded-full blur-[100px] -mr-32 -mt-32" />
         <div className="h-72 w-full mt-4 relative z-10">
           <ResponsiveContainer width="100%" height="100%">
             {chartType === 'line' ? (
@@ -857,13 +858,13 @@ const AnalyticsView = ({ samples }: { samples: Sample[] }) => {
 
         {chartType === 'scatter' && (
           <div className="mt-8 space-y-4 relative z-10">
-            <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-thriva-navy/30 ml-2">Correlation Axis (Y)</label>
+            <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-brand-navy/30 ml-2">Correlation Axis (Y)</label>
             <div className="flex flex-wrap gap-2">
               {metrics.map(m => (
                 <button
                   key={m.id}
                   onClick={() => setComparisonMetric(m.id as any)}
-                  className={`px-4 py-2 rounded-full text-[10px] font-bold border transition-all shadow-sm ${comparisonMetric === m.id ? 'bg-thriva-navy border-thriva-navy text-white shadow-lg' : 'bg-thriva-bg border-thriva-navy/5 text-thriva-navy/40 hover:text-thriva-navy'}`}
+                  className={`px-4 py-2 rounded-full text-[10px] font-bold border transition-all shadow-sm ${comparisonMetric === m.id ? 'bg-brand-navy border-brand-navy text-white shadow-lg' : 'bg-brand-bg border-brand-navy/5 text-brand-navy/40 hover:text-brand-navy'}`}
                 >
                   {m.id.toUpperCase()}
                 </button>
@@ -877,19 +878,19 @@ const AnalyticsView = ({ samples }: { samples: Sample[] }) => {
       <div className="pt-4">
         <button 
           onClick={handleExport}
-          className="w-full bg-white border border-thriva-navy/5 p-6 rounded-[32px] flex items-center justify-between group hover:shadow-thriva transition-all duration-500 shadow-sm"
+          className="w-full bg-white border border-brand-navy/5 p-6 rounded-[32px] flex items-center justify-between group hover:shadow-brand transition-all duration-500 shadow-sm"
         >
           <div className="flex items-center gap-4">
-             <div className="w-12 h-12 rounded-2xl bg-thriva-bg border border-thriva-navy/5 flex items-center justify-center text-thriva-navy shadow-inner group-hover:bg-thriva-mint group-hover:text-white transition-all">
+             <div className="w-12 h-12 rounded-2xl bg-brand-bg border border-brand-navy/5 flex items-center justify-center text-brand-navy shadow-inner group-hover:bg-brand-mint group-hover:text-white transition-all">
                <Download size={20} />
              </div>
              <div className="text-left">
-               <p className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em]">Data Pipeline</p>
-               <p className="text-sm font-bold text-thriva-navy">Export Integrated Dataset</p>
+               <p className="text-[10px] font-bold text-brand-navy/30 uppercase tracking-[0.2em]">Data Pipeline</p>
+               <p className="text-sm font-bold text-brand-navy">Export Integrated Dataset</p>
              </div>
           </div>
-          <div className="w-10 h-10 rounded-full bg-thriva-bg border border-thriva-navy/5 flex items-center justify-center group-hover:translate-x-2 transition-transform">
-             <ChevronRight size={18} className="text-thriva-navy/20" />
+          <div className="w-10 h-10 rounded-full bg-brand-bg border border-brand-navy/5 flex items-center justify-center group-hover:translate-x-2 transition-transform">
+             <ChevronRight size={18} className="text-brand-navy/20" />
           </div>
         </button>
       </div>
@@ -903,7 +904,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [samples, setSamples] = useState<Sample[]>([]);
-  const [view, setView] = useState<'dashboard' | 'create' | 'detail' | 'analytics' | 'control' | 'plant' | 'bench' | 'history' | 'instruments' | 'inventory' | 'requisitions' | 'billing' | 'store'>('history');
+  const [view, setView] = useState<'dashboard' | 'create' | 'detail' | 'analytics' | 'control' | 'plant' | 'bench' | 'history' | 'instruments' | 'inventory' | 'requisitions' | 'billing' | 'store'>('dashboard');
   const [jobs, setJobs] = useState<Job[]>([]);
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
   const [darkMode, setDarkMode] = useState(false);
@@ -1013,8 +1014,11 @@ export default function App() {
         if (!userDoc.exists()) {
           setShowOnboarding(true);
         } else {
-          setProfile(userDoc.data() as UserProfile);
+          const profileData = userDoc.data() as UserProfile;
+          setProfile(profileData);
           setShowOnboarding(false);
+          // Auto-navigate to dashboard on refresh if in a valid staff or client session
+          setView('dashboard');
         }
       } else {
         setUser(null);
@@ -1105,6 +1109,7 @@ export default function App() {
     await setDoc(doc(db, 'users', user.uid), newProfile);
     setProfile(newProfile);
     setShowOnboarding(false);
+    setView('dashboard');
   };
 
   if (showOnboarding) {
@@ -1166,50 +1171,42 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={{ user, profile, loading }}>
-      <div className={"min-h-screen transition-colors duration-500 " + (darkMode ? "dark bg-thriva-dark-bg text-white/90" : "bg-thriva-bg text-thriva-navy") + " font-sans selection:bg-thriva-mint/30 max-w-lg mx-auto shadow-[0_0_100px_rgba(0,43,46,0.05)] relative overflow-x-hidden border-x border-thriva-navy/5"}>
+      <div className={"min-h-screen transition-colors duration-500 " + (darkMode ? "dark bg-brand-dark-bg text-white/90" : "bg-brand-bg text-brand-navy") + " font-sans selection:bg-brand-mint/30 max-w-lg mx-auto shadow-[0_0_100px_rgba(0,43,46,0.05)] relative overflow-x-hidden border-x border-brand-navy/5"}>
         <SyncIndicator isOnline={isOnline} pendingCount={pendingSyncCount} />
         
         {/* Header */}
-        <header className={"border-b border-thriva-navy/5 p-4 pt-8 flex items-center justify-between sticky top-0 " + (darkMode ? "bg-thriva-dark-bg/60" : "bg-white/60") + " backdrop-blur-3xl z-[60] transition-all shadow-[0_4px_20px_rgba(0,0,0,0.01)] max-w-lg mx-auto"}>
-          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setView('dashboard')}>
-            <div className={"w-10 h-10 rounded-full " + (darkMode ? "bg-thriva-mint text-thriva-navy" : "bg-thriva-navy text-thriva-mint") + " flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"}>
-              <FlaskConical size={20} strokeWidth={2.5} />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-[10px] font-bold tracking-[0.3em] text-thriva-mint uppercase group-hover:tracking-[0.4em] transition-all leading-none mb-1">MetLyft</span>
-              <span className={"text-xl font-bold " + (darkMode ? "text-white" : "text-thriva-navy") + " leading-tight flex items-center gap-1"}>Portal</span>
-            </div>
-          </div>
+        <header className={"border-b border-brand-navy/5 p-4 pt-8 flex items-center justify-between sticky top-0 " + (darkMode ? "bg-brand-dark-bg/60" : "bg-white/60") + " backdrop-blur-3xl z-[60] transition-all shadow-[0_4px_20px_rgba(0,0,0,0.01)] max-w-lg mx-auto"}>
+          <Logo onClick={() => setView('dashboard')} className="cursor-pointer" size="md" />
           <div className="flex items-center gap-2">
               <button 
                 onClick={() => setIsCartOpen(true)}
-                className={"w-10 h-10 rounded-full flex items-center justify-center transition-all relative " + (darkMode ? "bg-white/5 text-thriva-mint hover:bg-white/10" : "bg-thriva-navy/5 text-thriva-navy/40 hover:bg-thriva-navy/10")}
+                className={"w-10 h-10 rounded-full flex items-center justify-center transition-all relative " + (darkMode ? "bg-white/5 text-brand-mint hover:bg-white/10" : "bg-brand-navy/5 text-brand-navy/40 hover:bg-brand-navy/10")}
               >
                 <ShoppingBag size={18} />
                 {cart.length > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-thriva-coral text-white text-[8px] font-bold rounded-full flex items-center justify-center shadow-lg">
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-brand-coral text-white text-[8px] font-bold rounded-full flex items-center justify-center shadow-lg">
                     {cart.reduce((acc, item) => acc + item.quantity, 0)}
                   </span>
                 )}
               </button>
             <button 
               onClick={toggleDarkMode}
-              className={"w-10 h-10 rounded-full flex items-center justify-center transition-all " + (darkMode ? "bg-white/5 text-thriva-mint hover:bg-white/10" : "bg-thriva-navy/5 text-thriva-navy/40 hover:bg-thriva-navy/10")}
+              className={"w-10 h-10 rounded-full flex items-center justify-center transition-all " + (darkMode ? "bg-white/5 text-brand-mint hover:bg-white/10" : "bg-brand-navy/5 text-brand-navy/40 hover:bg-brand-navy/10")}
             >
               {darkMode ? <Sun size={18} /> : <Moon size={18} />}
             </button>
             <motion.button 
               whileHover={{ scale: 1.05 }}
-              className={"w-10 h-10 rounded-full border flex items-center justify-center shadow-sm " + (darkMode ? "bg-thriva-dark-bg border-white/10" : "bg-white border-thriva-navy/5")}
+              className={"w-10 h-10 rounded-full border flex items-center justify-center shadow-sm " + (darkMode ? "bg-brand-dark-bg border-white/10" : "bg-white border-brand-navy/5")}
             >
-              <div className={"w-2 h-2 rounded-full " + (isOnline ? "bg-thriva-mint mint-glow" : "bg-red-500")}></div>
+              <div className={"w-2 h-2 rounded-full " + (isOnline ? "bg-brand-mint mint-glow" : "bg-red-500")}></div>
             </motion.button>
-            <button onClick={handleLogout} className={(darkMode ? "text-white/40 hover:text-white" : "text-thriva-navy/40 hover:text-thriva-navy") + " transition-colors p-2"}><LogOut size={18} /></button>
+            <button onClick={handleLogout} className={(darkMode ? "text-white/40 hover:text-white" : "text-brand-navy/40 hover:text-brand-navy") + " transition-colors p-2"}><LogOut size={18} /></button>
           </div>
         </header>
 
-        {/* Top Navigation Menu (Thriva style) */}
-        <nav className={`sticky top-[89px] ${darkMode ? 'bg-thriva-dark-bg/40' : 'bg-white/40'} backdrop-blur-2xl border-b border-thriva-navy/5 z-50 overflow-x-auto noscroll max-w-lg mx-auto`}>
+        {/* Top Navigation Menu (MetLyft style) */}
+        <nav className={`sticky top-[89px] ${darkMode ? 'bg-brand-dark-bg/40' : 'bg-white/40'} backdrop-blur-2xl border-b border-brand-navy/5 z-50 overflow-x-auto noscroll max-w-lg mx-auto`}>
           <div className="flex items-center px-4 py-3 gap-2 min-w-max">
             {[
               { id: 'dashboard', label: 'Summary', icon: LayoutGrid, roles: ['Admin', 'Technician', 'Client'] },
@@ -1221,11 +1218,12 @@ export default function App() {
               { id: 'plant', label: 'Profile', icon: Monitor, roles: ['Admin', 'Technician'] },
               { id: 'instruments', label: 'Sensors', icon: Cpu, roles: ['Admin', 'Technician'] },
               { id: 'requisitions', label: 'Requests', icon: ClipboardList, roles: ['Admin', 'Technician'] },
+              { id: 'store', label: 'Market', icon: ShoppingBag, roles: ['Admin', 'Technician', 'Client'] },
             ].filter(item => item.roles.includes(profile?.role || 'Client')).map(item => (
               <button
                 key={item.id}
                 onClick={() => setView(item.id as any)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all whitespace-nowrap ${view === item.id ? (darkMode ? 'bg-thriva-mint text-thriva-navy shadow-lg shadow-thriva-mint/20' : 'bg-thriva-navy text-white shadow-lg') : (darkMode ? 'bg-white/5 text-white/40 hover:bg-white/10' : 'bg-white/50 text-thriva-navy/60 hover:bg-white')}`}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all whitespace-nowrap ${view === item.id ? (darkMode ? 'bg-brand-mint text-white shadow-lg shadow-brand-mint/20' : 'bg-brand-navy text-white shadow-lg') : (darkMode ? 'bg-white/5 text-white/40 hover:bg-white/10' : 'bg-white/50 text-brand-navy/60 hover:bg-white')}`}
               >
                 {view === item.id && <item.icon size={12} />}
                 {item.label}
@@ -1275,40 +1273,40 @@ export default function App() {
               >
                 <button 
                   onClick={() => setView('dashboard')}
-                  className="font-bold text-[9px] uppercase tracking-[0.3em] text-thriva-navy/30 flex items-center gap-2 hover:text-thriva-navy transition-colors mb-4"
+                  className="font-bold text-[9px] uppercase tracking-[0.3em] text-brand-navy/30 flex items-center gap-2 hover:text-brand-navy transition-colors mb-4"
                 >
                   <Search size={14} /> Back to Laboratory
                 </button>
 
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
-                     <span className="text-4xl font-display font-medium text-thriva-navy tracking-tight">{selectedSample.sampleId}</span>
-                     <span className={`px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest ${selectedSample.priority === 'Emergency' ? 'bg-thriva-coral text-white shadow-lg shadow-thriva-coral/20' : 'bg-thriva-mint/10 text-thriva-mint'}`}>
+                     <span className="text-4xl font-display font-medium text-brand-navy tracking-tight">{selectedSample.sampleId}</span>
+                     <span className={`px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest ${selectedSample.priority === 'Emergency' ? 'bg-brand-coral text-white shadow-lg shadow-brand-coral/20' : 'bg-brand-mint/10 text-brand-mint'}`}>
                         {selectedSample.priority}
                      </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 bg-thriva-navy/5 text-thriva-navy/40 text-[9px] rounded-full font-bold uppercase tracking-widest">
+                    <span className="px-2 py-0.5 bg-brand-navy/5 text-brand-navy/40 text-[9px] rounded-full font-bold uppercase tracking-widest">
                       {selectedSample.sampleType}
                     </span>
-                    <span className="px-2 py-0.5 bg-thriva-mint/10 text-thriva-mint text-[9px] rounded-full font-bold uppercase tracking-widest">
+                    <span className="px-2 py-0.5 bg-brand-mint/10 text-brand-mint text-[9px] rounded-full font-bold uppercase tracking-widest">
                       {selectedSample.status}
                     </span>
                   </div>
                 </div>
 
-                <div className="bg-white border border-thriva-navy/5 rounded-[40px] p-8 shadow-thriva space-y-8 relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-thriva-mint/5 rounded-full blur-[100px] -mr-32 -mt-32" />
+                <div className="bg-white border border-brand-navy/5 rounded-[40px] p-8 shadow-brand space-y-8 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-brand-mint/5 rounded-full blur-[100px] -mr-32 -mt-32" />
                   
                   <div className="space-y-1 relative z-10">
-                    <p className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em]">Primary Holder</p>
-                    <h2 className="text-2xl font-display font-medium text-thriva-navy">{selectedSample.clientName}</h2>
+                    <p className="text-[9px] font-bold text-brand-navy/30 uppercase tracking-[0.2em]">Primary Holder</p>
+                    <h2 className="text-2xl font-display font-medium text-brand-navy">{selectedSample.clientName}</h2>
                   </div>
 
                   <div className="h-64 relative z-10">
                     <div className="flex justify-between items-center mb-4">
-                      <p className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em]">Assay Composition</p>
-                      <Layers size={14} className="text-thriva-navy/20" />
+                      <p className="text-[9px] font-bold text-brand-navy/30 uppercase tracking-[0.2em]">Assay Composition</p>
+                      <Layers size={14} className="text-brand-navy/20" />
                     </div>
                     
                     {selectedSample.status === 'Finalized' ? (
@@ -1333,28 +1331,28 @@ export default function App() {
                         </BarChart>
                       </ResponsiveContainer>
                     ) : (
-                      <div className="h-full border border-dashed border-thriva-navy/10 rounded-3xl flex flex-col items-center justify-center space-y-3 bg-thriva-bg/50">
+                      <div className="h-full border border-dashed border-brand-navy/10 rounded-3xl flex flex-col items-center justify-center space-y-3 bg-brand-bg/50">
                         <motion.div animate={{ rotate: 360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }}>
-                          <Clock className="text-thriva-navy/20" size={32} />
+                          <Clock className="text-brand-navy/20" size={32} />
                         </motion.div>
-                        <p className="text-[10px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em]">Analysis in Progress</p>
+                        <p className="text-[10px] font-bold text-brand-navy/30 uppercase tracking-[0.2em]">Analysis in Progress</p>
                       </div>
                     )}
                   </div>
 
                   <div className="space-y-4 relative z-10">
-                    <p className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em]">Core Assay Metrics</p>
+                    <p className="text-[9px] font-bold text-brand-navy/30 uppercase tracking-[0.2em]">Core Assay Metrics</p>
                     <div className="grid grid-cols-2 gap-3">
-                      <div className="p-4 bg-thriva-bg border border-thriva-navy/5 rounded-2xl shadow-inner group-hover:bg-white transition-colors">
-                        <p className="text-[8px] font-bold text-thriva-navy/30 uppercase tracking-widest mb-1">Gold (Au)</p>
-                        <p className="text-xl font-display text-thriva-mint font-medium">
-                          {selectedSample.elements?.gold?.toFixed(4) || '---'} <span className="text-[10px] text-thriva-navy/20">g/t</span>
+                      <div className="p-4 bg-brand-bg border border-brand-navy/5 rounded-2xl shadow-inner group-hover:bg-white transition-colors">
+                        <p className="text-[8px] font-bold text-brand-navy/30 uppercase tracking-widest mb-1">Gold (Au)</p>
+                        <p className="text-xl font-display text-brand-mint font-medium">
+                          {selectedSample.elements?.gold?.toFixed(4) || '---'} <span className="text-[10px] text-brand-navy/20">g/t</span>
                         </p>
                       </div>
-                      <div className="p-4 bg-thriva-bg border border-thriva-navy/5 rounded-2xl shadow-inner group-hover:bg-white transition-colors">
-                        <p className="text-[8px] font-bold text-thriva-navy/30 uppercase tracking-widest mb-1">Silver (Ag)</p>
-                        <p className="text-xl font-display text-thriva-navy/80 font-medium">
-                          {selectedSample.elements?.silver?.toFixed(3) || '---'} <span className="text-[10px] text-thriva-navy/20">g/t</span>
+                      <div className="p-4 bg-brand-bg border border-brand-navy/5 rounded-2xl shadow-inner group-hover:bg-white transition-colors">
+                        <p className="text-[8px] font-bold text-brand-navy/30 uppercase tracking-widest mb-1">Silver (Ag)</p>
+                        <p className="text-xl font-display text-brand-navy/80 font-medium">
+                          {selectedSample.elements?.silver?.toFixed(3) || '---'} <span className="text-[10px] text-brand-navy/20">g/t</span>
                         </p>
                       </div>
                     </div>
@@ -1364,9 +1362,9 @@ export default function App() {
                     {(profile?.role === 'Technician' || profile?.role === 'Admin') && selectedSample.status !== 'Finalized' && (
                       <button 
                          onClick={() => setView('processing')}
-                         className="w-full bg-thriva-navy hover:bg-thriva-banner text-white font-bold py-6 rounded-full shadow-2xl shadow-thriva-navy/20 active:scale-[0.98] transition-all flex items-center justify-center gap-3 uppercase text-[11px] tracking-widest"
+                         className="w-full bg-brand-navy hover:bg-brand-banner text-white font-bold py-6 rounded-full shadow-2xl shadow-brand-navy/20 active:scale-[0.98] transition-all flex items-center justify-center gap-3 uppercase text-[11px] tracking-widest"
                       >
-                         <FlaskConical size={18} /> ENTER LAB BENCH
+                         <Logo iconOnly size="sm" /> ENTER LAB BENCH
                       </button>
                     )}
                     {selectedSample.status === 'Finalized' && (
@@ -1374,7 +1372,7 @@ export default function App() {
                          onClick={() => {
                            alert(`CERTIFICATE OF ANALYSIS\n--------------------------\nSample: ${selectedSample.sampleId}\nClient: ${selectedSample.clientName}\nAu: ${selectedSample.elements?.gold} g/t\nStatus: AUTHENTICATED\nDigital Sign: ${selectedSample.id.slice(0,8)}`);
                          }}
-                         className="w-full bg-thriva-mint text-thriva-navy font-bold py-6 rounded-full shadow-xl shadow-thriva-mint/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 uppercase text-[11px] tracking-widest"
+                         className="w-full bg-brand-mint text-brand-navy font-bold py-6 rounded-full shadow-xl shadow-brand-mint/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 uppercase text-[11px] tracking-widest"
                       >
                          <ShieldCheck size={18} /> DOWNLOAD COA
                       </button>
@@ -1384,19 +1382,19 @@ export default function App() {
 
                 <div className="space-y-6">
                   <div className="flex justify-between items-center px-4">
-                    <h3 className="text-[9px] font-bold uppercase tracking-[0.2em] text-thriva-navy/30">Secure Chain of Custody</h3>
-                    <ShieldCheck size={14} className="text-thriva-mint/40" />
+                    <h3 className="text-[9px] font-bold uppercase tracking-[0.2em] text-brand-navy/30">Secure Chain of Custody</h3>
+                    <ShieldCheck size={14} className="text-brand-mint/40" />
                   </div>
                   <div className="space-y-4">
                     {(selectedSample.history || []).slice().reverse().map((h, i) => (
-                      <div key={i} className="flex gap-4 items-start p-5 bg-white border border-thriva-navy/5 rounded-[24px] shadow-sm transform transition-all hover:scale-[1.01]">
-                        <div className="w-10 h-10 rounded-2xl bg-thriva-bg border border-thriva-navy/5 flex items-center justify-center text-thriva-navy/10 shrink-0 shadow-inner">
+                      <div key={i} className="flex gap-4 items-start p-5 bg-white border border-brand-navy/5 rounded-[24px] shadow-sm transform transition-all hover:scale-[1.01]">
+                        <div className="w-10 h-10 rounded-2xl bg-brand-bg border border-brand-navy/5 flex items-center justify-center text-brand-navy/10 shrink-0 shadow-inner">
                            <History size={18} />
                         </div>
                         <div className="space-y-1">
-                           <p className="text-[11px] font-bold text-thriva-navy tracking-tight">{h.action}</p>
-                           <p className="text-[9px] text-thriva-navy/40 font-bold uppercase tracking-widest">{h.userName} • {new Date(h.timestamp).toLocaleString()}</p>
-                           {h.notes && <p className="text-[10px] text-thriva-navy/50 italic bg-thriva-bg p-3 rounded-xl mt-2 border border-thriva-navy/5">"{h.notes}"</p>}
+                           <p className="text-[11px] font-bold text-brand-navy tracking-tight">{h.action}</p>
+                           <p className="text-[9px] text-brand-navy/40 font-bold uppercase tracking-widest">{h.userName} • {new Date(h.timestamp).toLocaleString()}</p>
+                           {h.notes && <p className="text-[10px] text-brand-navy/50 italic bg-brand-bg p-3 rounded-xl mt-2 border border-brand-navy/5">"{h.notes}"</p>}
                         </div>
                       </div>
                     ))}
@@ -1490,7 +1488,7 @@ export default function App() {
 
             {view === 'billing' && (
               <motion.div key="billing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                <BillingManager />
+                <BillingManager profile={profile} />
               </motion.div>
             )}
           </AnimatePresence>
@@ -1519,41 +1517,45 @@ export default function App() {
           <AnimatePresence>
             {!isChatOpen && (
               <>
-                <motion.div
-                  initial={{ opacity: 0, y: 20, scale: 0.5 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 20, scale: 0.5 }}
-                  className="group flex flex-col items-center relative"
-                >
-                  <button 
-                    onClick={() => setIsRegistrationOpen(true)}
-                    title="Register Sample"
-                    className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 ${darkMode ? 'bg-thriva-mint text-thriva-navy shadow-thriva-mint/30' : 'bg-thriva-navy text-white shadow-thriva-navy/30'}`}
+                {(profile?.role === 'Admin' || profile?.role === 'Technician') && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20, scale: 0.5 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 20, scale: 0.5 }}
+                    className="group flex flex-col items-center relative"
                   >
-                    <FlaskConical size={28} strokeWidth={1.5} />
-                  </button>
-                  <div className="absolute right-16 px-3 py-1 bg-thriva-navy text-white text-[9px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-widest">
-                    Register Sample
-                  </div>
-                </motion.div>
+                    <button 
+                      onClick={() => setIsRegistrationOpen(true)}
+                      title="Register Sample"
+                      className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 ${darkMode ? 'bg-brand-mint text-white shadow-brand-mint/30' : 'bg-brand-navy text-white shadow-brand-navy/30'}`}
+                    >
+                      <Logo iconOnly size="md" />
+                    </button>
+                    <div className="absolute right-16 px-3 py-1 bg-brand-navy text-white text-[9px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-widest">
+                      Register Sample
+                    </div>
+                  </motion.div>
+                )}
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20, scale: 0.5 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 20, scale: 0.5 }}
-                  className="group flex flex-col items-center relative"
-                >
-                  <button 
-                    onClick={() => setView('analytics')}
-                    title="Insights"
-                    className={`w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 border ${darkMode ? 'bg-white/5 text-white border-white/10 hover:bg-white/10' : 'bg-white text-thriva-navy border-thriva-navy/5 shadow-sm'}`}
+                {(profile?.role === 'Admin' || profile?.role === 'Technician') && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20, scale: 0.5 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 20, scale: 0.5 }}
+                    className="group flex flex-col items-center relative"
                   >
-                    <Activity size={28} strokeWidth={1.5} className="text-thriva-mint" />
-                  </button>
-                  <div className="absolute right-16 px-3 py-1 bg-thriva-navy text-white text-[9px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-widest">
-                    Insights
-                  </div>
-                </motion.div>
+                    <button 
+                      onClick={() => setView('analytics')}
+                      title="Insights"
+                      className={`w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 border ${darkMode ? 'bg-white/5 text-white border-white/10 hover:bg-white/10' : 'bg-white text-brand-navy border-brand-navy/5 shadow-sm'}`}
+                    >
+                      <Activity size={28} strokeWidth={1.5} className="text-brand-mint" />
+                    </button>
+                    <div className="absolute right-16 px-3 py-1 bg-brand-navy text-white text-[9px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-widest">
+                      Insights
+                    </div>
+                  </motion.div>
+                )}
               </>
             )}
           </AnimatePresence>
@@ -1562,7 +1564,7 @@ export default function App() {
             whileHover={{ scale: 1.1, y: -5 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsChatOpen(!isChatOpen)}
-            className={`p-3 rounded-full transition-all ${darkMode ? 'text-thriva-mint' : 'text-thriva-navy'} bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/10 shadow-xl`}
+            className={`p-3 rounded-full transition-all ${darkMode ? 'text-brand-mint' : 'text-brand-navy'} bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/10 shadow-xl`}
           >
             {isChatOpen ? (
               <X size={28} className="opacity-80 hover:opacity-100 transition-opacity" />

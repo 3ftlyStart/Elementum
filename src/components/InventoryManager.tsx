@@ -144,12 +144,12 @@ export const InventoryManager = () => {
     <div className="p-6 space-y-8 pb-32">
       <div className="flex justify-between items-start">
         <div className="space-y-2">
-          <h2 className="text-3xl font-display font-medium text-thriva-navy tracking-tight">Inventory Control</h2>
-          <p className="text-[10px] text-thriva-navy/40 uppercase tracking-widest font-bold">Consumables & Reagent Lifecycle</p>
+          <h2 className="text-3xl font-display font-medium text-brand-navy tracking-tight">Inventory Control</h2>
+          <p className="text-[10px] text-brand-navy/40 uppercase tracking-widest font-bold">Consumables & Reagent Lifecycle</p>
         </div>
         <button 
           onClick={() => setShowAddModal(true)}
-          className="bg-thriva-mint text-thriva-navy px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all shadow-xl shadow-thriva-mint/20"
+          className="bg-brand-mint text-brand-navy px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all shadow-xl shadow-brand-mint/20"
         >
           <PlusCircle size={16} /> Add SKU
         </button>
@@ -157,32 +157,32 @@ export const InventoryManager = () => {
 
       {/* Quick Alerts */}
       {lowStockItems.length > 0 && (
-        <div className="bg-thriva-coral/5 border border-thriva-coral/20 p-6 rounded-[32px] flex items-center justify-between shadow-sm relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-24 h-full bg-thriva-coral/5 -mr-12 skew-x-12 group-hover:bg-thriva-coral/10 transition-colors" />
+        <div className="bg-brand-coral/5 border border-brand-coral/20 p-6 rounded-[32px] flex items-center justify-between shadow-sm relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-24 h-full bg-brand-coral/5 -mr-12 skew-x-12 group-hover:bg-brand-coral/10 transition-colors" />
           <div className="flex items-center gap-4 relative z-10">
-             <div className="w-12 h-12 rounded-2xl bg-thriva-coral text-white flex items-center justify-center shadow-lg shadow-thriva-coral/20">
+             <div className="w-12 h-12 rounded-2xl bg-brand-coral text-white flex items-center justify-center shadow-lg shadow-brand-coral/20">
                <TrendingDown size={24} />
              </div>
              <div>
-                <p className="text-[11px] font-bold text-thriva-coral uppercase tracking-widest">Low Stock Detected</p>
-                <p className="text-[10px] text-thriva-navy/40 font-bold uppercase tracking-widest mt-1">{lowStockItems.length} SKUs require immediate action</p>
+                <p className="text-[11px] font-bold text-brand-coral uppercase tracking-widest">Low Stock Detected</p>
+                <p className="text-[10px] text-brand-navy/40 font-bold uppercase tracking-widest mt-1">{lowStockItems.length} SKUs require immediate action</p>
              </div>
           </div>
-          <AlertTriangle className="text-thriva-coral animate-pulse relative z-10" size={20} />
+          <AlertTriangle className="text-brand-coral animate-pulse relative z-10" size={20} />
         </div>
       )}
 
       {/* Summary Chips */}
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-white border border-thriva-navy/5 p-6 rounded-[32px] space-y-2 shadow-thriva relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-thriva-navy/5 rounded-full blur-3xl -mr-12 -mt-12 transition-colors group-hover:bg-thriva-mint/5" />
-          <p className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em] relative z-10">Total SKU Inventory</p>
-          <div className="text-3xl font-display font-medium text-thriva-navy tracking-tight relative z-10">{items.length.toString().padStart(2, '0')}</div>
+        <div className="bg-white border border-brand-navy/5 p-6 rounded-[32px] space-y-2 shadow-brand relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-brand-navy/5 rounded-full blur-3xl -mr-12 -mt-12 transition-colors group-hover:bg-brand-mint/5" />
+          <p className="text-[9px] font-bold text-brand-navy/30 uppercase tracking-[0.2em] relative z-10">Total SKU Inventory</p>
+          <div className="text-3xl font-display font-medium text-brand-navy tracking-tight relative z-10">{items.length.toString().padStart(2, '0')}</div>
         </div>
-        <div className="bg-white border border-thriva-navy/5 p-6 rounded-[32px] space-y-2 shadow-thriva relative overflow-hidden group">
-           <div className="absolute top-0 right-0 w-24 h-24 bg-thriva-coral/5 rounded-full blur-3xl -mr-12 -mt-12 transition-colors group-hover:bg-thriva-coral/10" />
-          <p className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-[0.2em] relative z-10">Depleted Lines</p>
-          <div className="text-3xl font-display font-medium text-thriva-coral tracking-tight relative z-10">
+        <div className="bg-white border border-brand-navy/5 p-6 rounded-[32px] space-y-2 shadow-brand relative overflow-hidden group">
+           <div className="absolute top-0 right-0 w-24 h-24 bg-brand-coral/5 rounded-full blur-3xl -mr-12 -mt-12 transition-colors group-hover:bg-brand-coral/10" />
+          <p className="text-[9px] font-bold text-brand-navy/30 uppercase tracking-[0.2em] relative z-10">Depleted Lines</p>
+          <div className="text-3xl font-display font-medium text-brand-coral tracking-tight relative z-10">
             {activeRequestCount.toString().padStart(2, '0')}
           </div>
         </div>
@@ -191,13 +191,13 @@ export const InventoryManager = () => {
       {/* Search & Filter */}
       <div className="space-y-6">
         <div className="relative group">
-          <Search size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-thriva-navy/20 group-focus-within:text-thriva-mint transition-colors" />
+          <Search size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-navy/20 group-focus-within:text-brand-mint transition-colors" />
           <input 
             type="text" 
             placeholder="Search stock repository..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-white border border-thriva-navy/10 rounded-[20px] py-4 pl-12 pr-6 text-xs text-thriva-navy outline-none focus:border-thriva-mint transition-all shadow-thriva font-medium"
+            className="w-full bg-white border border-brand-navy/10 rounded-[20px] py-4 pl-12 pr-6 text-xs text-brand-navy outline-none focus:border-brand-mint transition-all shadow-brand font-medium"
           />
         </div>
 
@@ -206,7 +206,7 @@ export const InventoryManager = () => {
             <button 
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest border transition-all whitespace-nowrap shadow-sm ${activeCategory === cat ? 'bg-thriva-navy text-white border-thriva-navy shadow-lg' : 'bg-white border-thriva-navy/5 text-thriva-navy/40 hover:text-thriva-navy'}`}
+              className={`px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest border transition-all whitespace-nowrap shadow-sm ${activeCategory === cat ? 'bg-brand-navy text-white border-brand-navy shadow-lg' : 'bg-white border-brand-navy/5 text-brand-navy/40 hover:text-brand-navy'}`}
             >
               {cat}
             </button>
@@ -217,8 +217,8 @@ export const InventoryManager = () => {
       {/* Loading State */}
       {loading && (
         <div className="flex flex-col items-center justify-center py-20 gap-4">
-          <Loader2 size={40} className="text-thriva-mint animate-spin" />
-          <p className="text-[10px] text-thriva-navy/20 font-bold uppercase tracking-widest">Synchronizing Ledger...</p>
+          <Loader2 size={40} className="text-brand-mint animate-spin" />
+          <p className="text-[10px] text-brand-navy/20 font-bold uppercase tracking-widest">Synchronizing Ledger...</p>
         </div>
       )}
 
@@ -229,18 +229,18 @@ export const InventoryManager = () => {
           const progress = Math.min(100, (item.currentStock / (item.minStockLevel * 2)) * 100);
 
           return (
-            <div key={item.id} className="bg-white border border-thriva-navy/5 rounded-[32px] p-5 space-y-4 hover:shadow-thriva transition-all duration-300 relative shadow-sm h-fit">
+            <div key={item.id} className="bg-white border border-brand-navy/5 rounded-[32px] p-5 space-y-4 hover:shadow-brand transition-all duration-300 relative shadow-sm h-fit">
               <div className="flex justify-between items-start">
                 <div className="space-y-1">
-                  <h3 className="text-sm font-bold text-thriva-navy leading-tight line-clamp-1">{item.name}</h3>
+                  <h3 className="text-sm font-bold text-brand-navy leading-tight line-clamp-1">{item.name}</h3>
                   <div className="flex items-center gap-2">
-                    <span className="text-[8px] font-bold bg-thriva-navy/5 px-2 py-0.5 rounded text-thriva-navy/30 uppercase tracking-widest">{item.category}</span>
-                    <span className="text-[8px] font-bold text-thriva-navy/20 uppercase tracking-widest leading-none">{item.location}</span>
+                    <span className="text-[8px] font-bold bg-brand-navy/5 px-2 py-0.5 rounded text-brand-navy/30 uppercase tracking-widest">{item.category}</span>
+                    <span className="text-[8px] font-bold text-brand-navy/20 uppercase tracking-widest leading-none">{item.location}</span>
                   </div>
                 </div>
                 <button 
                   onClick={() => handleDelete(item.id)}
-                  className="text-thriva-navy/10 hover:text-thriva-coral p-1 transition-colors"
+                  className="text-brand-navy/10 hover:text-brand-coral p-1 transition-colors"
                 >
                   <Trash2 size={12} />
                 </button>
@@ -248,23 +248,23 @@ export const InventoryManager = () => {
 
               <div className="flex justify-between items-end">
                 <div className="space-y-0.5">
-                  <div className={`text-2xl font-display font-medium leading-none ${isLow ? 'text-thriva-coral' : 'text-thriva-mint'}`}>
+                  <div className={`text-2xl font-display font-medium leading-none ${isLow ? 'text-brand-coral' : 'text-brand-mint'}`}>
                     {item.currentStock} 
-                    <span className="text-[9px] text-thriva-navy/20 ml-1 font-bold uppercase tracking-widest">{item.unit}</span>
+                    <span className="text-[9px] text-brand-navy/20 ml-1 font-bold uppercase tracking-widest">{item.unit}</span>
                   </div>
-                  <p className="text-[8px] text-thriva-navy/20 uppercase font-bold tracking-widest">Min: {item.minStockLevel}</p>
+                  <p className="text-[8px] text-brand-navy/20 uppercase font-bold tracking-widest">Min: {item.minStockLevel}</p>
                 </div>
                 
                 <div className="flex gap-1.5 items-center">
                   <button 
                     onClick={() => handleAdjustStock(item, -1, 'Manual adjustment (Decrease)')}
-                    className="w-8 h-8 rounded-xl bg-thriva-bg border border-thriva-navy/5 flex items-center justify-center text-thriva-navy/30 hover:text-thriva-coral transition-colors"
+                    className="w-8 h-8 rounded-xl bg-brand-bg border border-brand-navy/5 flex items-center justify-center text-brand-navy/30 hover:text-brand-coral transition-colors"
                   >
                     <Minus size={14} />
                   </button>
                   <button 
                     onClick={() => handleAdjustStock(item, 1, 'Manual adjustment (Increase)')}
-                    className="w-8 h-8 rounded-xl bg-thriva-mint/5 border border-thriva-mint/20 flex items-center justify-center text-thriva-mint hover:bg-thriva-mint hover:text-white transition-colors"
+                    className="w-8 h-8 rounded-xl bg-brand-mint/5 border border-brand-mint/20 flex items-center justify-center text-brand-mint hover:bg-brand-mint hover:text-white transition-colors"
                   >
                     <Plus size={14} />
                   </button>
@@ -272,18 +272,18 @@ export const InventoryManager = () => {
               </div>
 
               <div className="space-y-2">
-                <div className="h-1.5 bg-thriva-bg rounded-full overflow-hidden shadow-inner">
+                <div className="h-1.5 bg-brand-bg rounded-full overflow-hidden shadow-inner">
                   <motion.div 
                     initial={{ width: 0 }}
                     animate={{ width: `${progress}%` }}
-                    className={`h-full rounded-full transition-all duration-1000 ${isLow ? 'bg-thriva-coral' : 'bg-thriva-mint'}`}
+                    className={`h-full rounded-full transition-all duration-1000 ${isLow ? 'bg-brand-coral' : 'bg-brand-mint'}`}
                   ></motion.div>
                 </div>
                 
                 <div className="flex justify-between items-center">
                   <button 
                     onClick={() => setExpandedItemId(expandedItemId === item.id ? null : item.id)}
-                    className={`flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-widest px-2 py-1 rounded-lg transition-all ${expandedItemId === item.id ? 'bg-thriva-navy text-white' : 'text-thriva-navy/30 hover:text-thriva-navy bg-thriva-navy/5'}`}
+                    className={`flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-widest px-2 py-1 rounded-lg transition-all ${expandedItemId === item.id ? 'bg-brand-navy text-white' : 'text-brand-navy/30 hover:text-brand-navy bg-brand-navy/5'}`}
                   >
                     <History size={10} /> {expandedItemId === item.id ? 'Hide Audit' : 'Audit Log'}
                   </button>
@@ -292,7 +292,7 @@ export const InventoryManager = () => {
                     <button 
                       onClick={() => handleReorder(item)}
                       disabled={!!orderLoading}
-                      className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-[0.1em] text-thriva-coral"
+                      className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-[0.1em] text-brand-coral"
                     >
                       {orderLoading === item.id ? <Loader2 size={10} className="animate-spin" /> : <ShoppingCart size={10} />}
                       {orderSuccess === item.id ? 'Requested' : 'Reorder'}
@@ -308,27 +308,27 @@ export const InventoryManager = () => {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    className="overflow-hidden border-t border-thriva-navy/5 pt-4 mt-2 space-y-3"
+                    className="overflow-hidden border-t border-brand-navy/5 pt-4 mt-2 space-y-3"
                   >
                     {!transactions[item.id] || transactions[item.id].length === 0 ? (
-                      <div className="py-4 text-center text-[8px] text-thriva-navy/20 uppercase font-bold tracking-[0.1em]">No mutations logged</div>
+                      <div className="py-4 text-center text-[8px] text-brand-navy/20 uppercase font-bold tracking-[0.1em]">No mutations logged</div>
                     ) : (
                       transactions[item.id].slice(0, 5).map(tx => (
-                        <div key={tx.id} className="flex justify-between items-center bg-thriva-bg p-3 rounded-xl border border-thriva-navy/5 gap-3">
+                        <div key={tx.id} className="flex justify-between items-center bg-brand-bg p-3 rounded-xl border border-brand-navy/5 gap-3">
                           <div className="flex items-start gap-3 flex-1 overflow-hidden">
-                            <div className={`w-2 h-2 rounded-full shrink-0 mt-1.5 ${tx.type === 'In' ? 'bg-thriva-mint' : 'bg-thriva-coral'}`}></div>
+                            <div className={`w-2 h-2 rounded-full shrink-0 mt-1.5 ${tx.type === 'In' ? 'bg-brand-mint' : 'bg-brand-coral'}`}></div>
                             <div className="space-y-0.5 overflow-hidden">
-                              <p className="text-[10px] font-bold text-thriva-navy/60 truncate">{tx.reason || 'Mutation'}</p>
-                              <p className="text-[8px] text-thriva-navy/30 font-medium uppercase tracking-widest">
+                              <p className="text-[10px] font-bold text-brand-navy/60 truncate">{tx.reason || 'Mutation'}</p>
+                              <p className="text-[8px] text-brand-navy/30 font-medium uppercase tracking-widest">
                                 {new Date(tx.timestamp).toLocaleDateString()} • {new Date(tx.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                               </p>
                             </div>
                           </div>
                           <div className="text-right shrink-0">
-                            <p className={`text-[10px] font-bold ${tx.type === 'In' ? 'text-thriva-mint' : 'text-thriva-coral'}`}>
+                            <p className={`text-[10px] font-bold ${tx.type === 'In' ? 'text-brand-mint' : 'text-brand-coral'}`}>
                               {tx.type === 'In' ? '+' : '-'}{tx.quantity}
                             </p>
-                            <p className="text-[8px] text-thriva-navy/20 font-bold uppercase">{item.unit}</p>
+                            <p className="text-[8px] text-brand-navy/20 font-bold uppercase">{item.unit}</p>
                           </div>
                         </div>
                       ))
@@ -344,7 +344,7 @@ export const InventoryManager = () => {
       {/* Add Item Modal */}
       <AnimatePresence>
         {showAddModal && (
-          <div className="fixed inset-0 z-[60] flex items-center justify-center p-6 bg-thriva-navy/40 backdrop-blur-md">
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-6 bg-brand-navy/40 backdrop-blur-md">
             <motion.div 
                initial={{ opacity: 0 }}
                animate={{ opacity: 1 }}
@@ -356,19 +356,19 @@ export const InventoryManager = () => {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white border border-thriva-navy/5 rounded-[48px] w-full max-w-md p-10 relative z-10 space-y-8 shadow-2xl max-h-[90vh] overflow-y-auto"
+              className="bg-white border border-brand-navy/5 rounded-[48px] w-full max-w-md p-10 relative z-10 space-y-8 shadow-2xl max-h-[90vh] overflow-y-auto"
             >
-              <div className="flex justify-between items-center border-b border-thriva-navy/5 pb-6">
+              <div className="flex justify-between items-center border-b border-brand-navy/5 pb-6">
                 <div className="flex items-center gap-4">
-                   <div className="w-14 h-14 rounded-3xl bg-thriva-bg flex items-center justify-center text-thriva-mint shadow-inner">
+                   <div className="w-14 h-14 rounded-3xl bg-brand-bg flex items-center justify-center text-brand-mint shadow-inner">
                       <Package size={28} />
                    </div>
                    <div className="space-y-1">
-                     <h3 className="text-2xl font-display font-medium text-thriva-navy tracking-tight">New SKU</h3>
-                     <p className="text-[10px] text-thriva-navy/30 uppercase font-bold tracking-widest">Inventory sequence initiation</p>
+                     <h3 className="text-2xl font-display font-medium text-brand-navy tracking-tight">New SKU</h3>
+                     <p className="text-[10px] text-brand-navy/30 uppercase font-bold tracking-widest">Inventory sequence initiation</p>
                    </div>
                 </div>
-                <button onClick={() => setShowAddModal(false)} className="w-10 h-10 rounded-full bg-thriva-bg flex items-center justify-center text-thriva-navy/20 hover:text-thriva-coral transition-all">
+                <button onClick={() => setShowAddModal(false)} className="w-10 h-10 rounded-full bg-brand-bg flex items-center justify-center text-brand-navy/20 hover:text-brand-coral transition-all">
                   <X size={20} />
                 </button>
               </div>
@@ -395,14 +395,14 @@ export const InventoryManager = () => {
                 }
               }}>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Item Name</label>
-                  <input name="name" required className="w-full bg-thriva-bg border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-all font-medium" />
+                  <label className="text-[10px] font-bold text-brand-navy/40 uppercase tracking-[0.2em] px-1">Item Name</label>
+                  <input name="name" required className="w-full bg-brand-bg border border-brand-navy/5 rounded-[24px] px-6 py-4 text-brand-navy outline-none focus:border-brand-mint transition-all font-medium" />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Category</label>
-                    <select name="category" className="w-full bg-thriva-bg border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none cursor-pointer hover:border-thriva-mint/50 transition-all appearance-none font-medium">
+                    <label className="text-[10px] font-bold text-brand-navy/40 uppercase tracking-[0.2em] px-1">Category</label>
+                    <select name="category" className="w-full bg-brand-bg border border-brand-navy/5 rounded-[24px] px-6 py-4 text-brand-navy outline-none cursor-pointer hover:border-brand-mint/50 transition-all appearance-none font-medium">
                       <option value="Reagent">Reagent</option>
                       <option value="Consumable">Consumable</option>
                       <option value="Standard">Standard</option>
@@ -410,8 +410,8 @@ export const InventoryManager = () => {
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Unit</label>
-                    <select name="unit" className="w-full bg-thriva-bg border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none cursor-pointer hover:border-thriva-mint/50 transition-all appearance-none font-medium">
+                    <label className="text-[10px] font-bold text-brand-navy/40 uppercase tracking-[0.2em] px-1">Unit</label>
+                    <select name="unit" className="w-full bg-brand-bg border border-brand-navy/5 rounded-[24px] px-6 py-4 text-brand-navy outline-none cursor-pointer hover:border-brand-mint/50 transition-all appearance-none font-medium">
                       <option value="kg">kg</option>
                       <option value="L">L</option>
                       <option value="g">g</option>
@@ -423,26 +423,26 @@ export const InventoryManager = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Initial Stock</label>
-                    <input name="currentStock" type="number" defaultValue="0" className="w-full bg-thriva-bg border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-all font-medium font-display" />
+                    <label className="text-[10px] font-bold text-brand-navy/40 uppercase tracking-[0.2em] px-1">Initial Stock</label>
+                    <input name="currentStock" type="number" defaultValue="0" className="w-full bg-brand-bg border border-brand-navy/5 rounded-[24px] px-6 py-4 text-brand-navy outline-none focus:border-brand-mint transition-all font-medium font-display" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Warning Level</label>
-                    <input name="minStockLevel" type="number" defaultValue="10" className="w-full bg-thriva-bg border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-all font-medium font-display" />
+                    <label className="text-[10px] font-bold text-brand-navy/40 uppercase tracking-[0.2em] px-1">Warning Level</label>
+                    <input name="minStockLevel" type="number" defaultValue="10" className="w-full bg-brand-bg border border-brand-navy/5 rounded-[24px] px-6 py-4 text-brand-navy outline-none focus:border-brand-mint transition-all font-medium font-display" />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Storage Location</label>
-                  <input name="location" required placeholder="e.g. Rack B-1" className="w-full bg-thriva-bg border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-all font-medium" />
+                  <label className="text-[10px] font-bold text-brand-navy/40 uppercase tracking-[0.2em] px-1">Storage Location</label>
+                  <input name="location" required placeholder="e.g. Rack B-1" className="w-full bg-brand-bg border border-brand-navy/5 rounded-[24px] px-6 py-4 text-brand-navy outline-none focus:border-brand-mint transition-all font-medium" />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Preferred Supplier</label>
-                  <input name="supplier" className="w-full bg-thriva-bg border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-all font-medium" />
+                  <label className="text-[10px] font-bold text-brand-navy/40 uppercase tracking-[0.2em] px-1">Preferred Supplier</label>
+                  <input name="supplier" className="w-full bg-brand-bg border border-brand-navy/5 rounded-[24px] px-6 py-4 text-brand-navy outline-none focus:border-brand-mint transition-all font-medium" />
                 </div>
 
-                <button type="submit" className="w-full bg-thriva-navy text-white font-bold py-5 rounded-[28px] shadow-2xl shadow-thriva-navy/30 hover:bg-thriva-mint hover:text-thriva-navy active:scale-95 transition-all duration-300 uppercase tracking-[0.2em] text-[11px] mt-4">
+                <button type="submit" className="w-full bg-brand-navy text-white font-bold py-5 rounded-[28px] shadow-2xl shadow-brand-navy/30 hover:bg-brand-mint hover:text-brand-navy active:scale-95 transition-all duration-300 uppercase tracking-[0.2em] text-[11px] mt-4">
                   REGISTER SKU
                 </button>
               </form>

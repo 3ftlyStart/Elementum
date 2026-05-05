@@ -17,6 +17,7 @@ import {
   MessageCircle
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
+import Logo from './Logo';
 
 interface Message {
   role: 'user' | 'bot';
@@ -88,8 +89,8 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
   ];
 
   const faqs = [
-    "When should I take my test?",
-    "How do discount codes work?",
+    "How should I prepare my samples?",
+    "Do you offer bulk assay pricing?",
     "How does MetLyft work?",
     "Where can I see my results?",
     "What is the precision of your assays?"
@@ -109,7 +110,7 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 }}
-                className="text-4xl font-display font-semibold text-thriva-navy leading-[1.1] tracking-tight"
+                className="text-4xl font-display font-semibold text-brand-navy leading-[1.1] tracking-tight"
               >
                 Hi there 👋 <br /> How can we help?
               </motion.h2>
@@ -120,10 +121,10 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
               className="w-full bg-white shadow-[0_12px_40px_rgba(0,0,0,0.04)] rounded-[28px] p-8 flex items-center justify-between group hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all transform hover:-translate-y-1"
             >
               <div className="text-left space-y-1">
-                <h4 className="font-bold text-thriva-navy text-[17px]">Send us a message</h4>
-                <p className="text-sm text-thriva-navy/40 font-medium">We'll be back online later today</p>
+                <h4 className="font-bold text-brand-navy text-[17px]">Send us a message</h4>
+                <p className="text-sm text-brand-navy/40 font-medium">We'll be back online later today</p>
               </div>
-              <div className="text-thriva-purple group-hover:scale-110 transition-transform">
+              <div className="text-brand-purple group-hover:scale-110 transition-transform">
                 <ArrowRight size={24} strokeWidth={3} />
               </div>
             </button>
@@ -132,32 +133,32 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
               href="https://wa.me/263700000000" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="w-full bg-thriva-mint rounded-[28px] p-8 flex items-center justify-between group hover:bg-thriva-navy transition-all transform hover:-translate-y-1 shadow-xl shadow-thriva-mint/20"
+              className="w-full bg-brand-mint rounded-[28px] p-8 flex items-center justify-between group hover:bg-brand-navy transition-all transform hover:-translate-y-1 shadow-xl shadow-brand-mint/20"
             >
               <div className="text-left space-y-1">
-                <h4 className="font-bold text-thriva-navy group-hover:text-white text-[17px]">WhatsApp Support</h4>
-                <p className="text-sm text-thriva-navy/80 group-hover:text-white/80 font-medium">Chat directly with a specialist</p>
+                <h4 className="font-bold text-brand-navy group-hover:text-white text-[17px]">WhatsApp Support</h4>
+                <p className="text-sm text-brand-navy/80 group-hover:text-white/80 font-medium">Chat directly with a specialist</p>
               </div>
-              <div className="text-thriva-mint group-hover:scale-110 transition-transform bg-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg">
+              <div className="text-brand-mint group-hover:scale-110 transition-transform bg-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg">
                 <MessageCircle size={24} strokeWidth={2.5} fill="currentColor" className="text-white" />
               </div>
             </a>
 
             <div className="bg-white shadow-[0_12px_40px_rgba(0,0,0,0.04)] rounded-[32px] overflow-hidden">
-               <div className="p-6 bg-thriva-navy/[0.02]">
+               <div className="p-6 bg-brand-navy/[0.02]">
                  <div className="relative">
                    <input 
                      placeholder="Search for help" 
-                     className="w-full bg-thriva-navy/[0.03] border-none rounded-2xl py-4 pl-12 pr-6 text-sm font-semibold text-thriva-navy placeholder:text-thriva-navy/30 focus:ring-0"
+                     className="w-full bg-brand-navy/[0.03] border-none rounded-2xl py-4 pl-12 pr-6 text-sm font-semibold text-brand-navy placeholder:text-brand-navy/30 focus:ring-0"
                    />
-                   <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-thriva-navy/30" />
+                   <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-navy/30" />
                  </div>
                </div>
-               <div className="divide-y divide-thriva-navy/[0.04]">
+               <div className="divide-y divide-brand-navy/[0.04]">
                  {faqs.slice(0, 3).map((item, i) => (
-                   <button key={i} className="w-full p-5 pl-7 flex items-center justify-between text-left group hover:bg-thriva-navy/[0.01] transition-colors">
-                     <span className="text-[14px] font-semibold text-thriva-navy/70 group-hover:text-thriva-navy transition-colors">{item}</span>
-                     <ChevronRight size={16} className="text-thriva-navy/20 group-hover:text-thriva-purple transition-colors mr-2" />
+                   <button key={i} className="w-full p-5 pl-7 flex items-center justify-between text-left group hover:bg-brand-navy/[0.01] transition-colors">
+                     <span className="text-[14px] font-semibold text-brand-navy/70 group-hover:text-brand-navy transition-colors">{item}</span>
+                     <ChevronRight size={16} className="text-brand-navy/20 group-hover:text-brand-purple transition-colors mr-2" />
                    </button>
                  ))}
                </div>
@@ -177,8 +178,8 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
                 >
                   <div className={`max-w-[85%] p-5 rounded-[28px] text-sm leading-relaxed shadow-[0_4px_15px_rgba(0,0,0,0.03)] ${
                     m.role === 'user' 
-                      ? 'bg-thriva-navy text-white rounded-tr-none' 
-                      : 'bg-white text-thriva-navy/80 rounded-tl-none border border-thriva-navy/5'
+                      ? 'bg-brand-navy text-white rounded-tr-none' 
+                      : 'bg-white text-brand-navy/80 rounded-tl-none border border-brand-navy/5'
                   }`}>
                     {m.content}
                   </div>
@@ -186,28 +187,28 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
               ))}
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-white p-4 rounded-[28px] rounded-tl-none border border-thriva-navy/5 shadow-[0_4px_15px_rgba(0,0,0,0.03)]">
-                    <Loader2 size={20} className="text-thriva-mint animate-spin" />
+                  <div className="bg-white p-4 rounded-[28px] rounded-tl-none border border-brand-navy/5 shadow-[0_4px_15px_rgba(0,0,0,0.03)]">
+                    <Loader2 size={20} className="text-brand-mint animate-spin" />
                   </div>
                 </div>
               )}
             </div>
-            <div className="p-6 bg-white border-t border-thriva-navy/5 pb-36">
+            <div className="p-6 bg-white border-t border-brand-navy/5 pb-36">
               <div className="relative">
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                   placeholder="Tell us what you need..."
-                  className="w-full bg-thriva-navy/5 border-none rounded-full py-5 pl-8 pr-16 text-sm font-semibold text-thriva-navy placeholder:text-thriva-navy/30 focus:ring-0"
+                  className="w-full bg-brand-navy/5 border-none rounded-full py-5 pl-8 pr-16 text-sm font-semibold text-brand-navy placeholder:text-brand-navy/30 focus:ring-0"
                 />
                 <button
                   onClick={handleSend}
                   disabled={!input.trim() || isLoading}
                   className={`absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full transition-all ${
                     input.trim() && !isLoading 
-                      ? 'bg-thriva-purple text-white shadow-lg' 
-                      : 'bg-thriva-navy/10 text-thriva-navy/20 cursor-not-allowed'
+                      ? 'bg-brand-purple text-white shadow-lg' 
+                      : 'bg-brand-navy/10 text-brand-navy/20 cursor-not-allowed'
                   }`}
                 >
                   <Send size={18} />
@@ -223,19 +224,19 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
             animate={{ opacity: 1 }}
             className="p-6 space-y-6 pt-10"
           >
-             <h2 className="text-2xl font-display font-semibold text-thriva-navy">Help Center</h2>
+             <h2 className="text-2xl font-display font-semibold text-brand-navy">Help Center</h2>
              <div className="relative">
                <input 
                  placeholder="Search our knowledge base..." 
-                 className="w-full bg-white border border-thriva-navy/10 rounded-[20px] py-5 pl-12 pr-6 text-sm font-semibold focus:ring-2 focus:ring-thriva-purple/20 transition-all shadow-sm"
+                 className="w-full bg-white border border-brand-navy/10 rounded-[20px] py-5 pl-12 pr-6 text-sm font-semibold focus:ring-2 focus:ring-brand-purple/20 transition-all shadow-sm"
                />
-               <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-thriva-navy/30" />
+               <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-navy/30" />
              </div>
              <div className="space-y-3">
                 {faqs.map((item, i) => (
-                  <button key={i} className="w-full p-6 bg-white border border-thriva-navy/5 shadow-[0_4px_20px_rgba(0,0,0,0.02)] rounded-[28px] flex items-center justify-between text-left group hover:border-thriva-purple transition-all">
-                    <span className="text-[14px] font-semibold text-thriva-navy group-hover:text-thriva-purple transition-colors">{item}</span>
-                    <ChevronRight size={18} className="text-thriva-navy/20 group-hover:text-thriva-purple transition-transform group-hover:translate-x-1" />
+                  <button key={i} className="w-full p-6 bg-white border border-brand-navy/5 shadow-[0_4px_20px_rgba(0,0,0,0.02)] rounded-[28px] flex items-center justify-between text-left group hover:border-brand-purple transition-all">
+                    <span className="text-[14px] font-semibold text-brand-navy group-hover:text-brand-purple transition-colors">{item}</span>
+                    <ChevronRight size={18} className="text-brand-navy/20 group-hover:text-brand-purple transition-transform group-hover:translate-x-1" />
                   </button>
                 ))}
              </div>
@@ -247,12 +248,12 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-thriva-navy/40 backdrop-blur-md pointer-events-auto overflow-hidden p-0 md:p-4">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-brand-navy/40 backdrop-blur-md pointer-events-auto overflow-hidden p-0 md:p-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.98, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98, y: 30 }}
-            className="w-full h-full md:w-[420px] md:h-[85vh] md:max-h-[780px] bg-thriva-bg md:rounded-[48px] shadow-[0_40px_100px_-20px_rgba(0,109,119,0.4)] flex flex-col relative overflow-hidden"
+            className="w-full h-full md:w-[420px] md:h-[85vh] md:max-h-[780px] bg-brand-bg md:rounded-[48px] shadow-[0_40px_100px_-20px_rgba(0,109,119,0.4)] flex flex-col relative overflow-hidden"
           >
             {/* Background Texture Overlay - Perfectly matching Thriva visual */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -265,33 +266,28 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
                 referrerPolicy="no-referrer"
               />
               {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-thriva-bg/90 to-thriva-bg" />
+              <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-brand-bg/90 to-brand-bg" />
               {/* Extra Glows */}
-              <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-thriva-mint/10 blur-[100px] rounded-full" />
-              <div className="absolute top-[20%] left-[-20%] w-[50%] h-[50%] bg-thriva-coral/5 blur-[100px] rounded-full" />
+              <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-brand-mint/10 blur-[100px] rounded-full" />
+              <div className="absolute top-[20%] left-[-20%] w-[50%] h-[50%] bg-brand-coral/5 blur-[100px] rounded-full" />
             </div>
 
             {/* Header / Top Bar - Glassy */}
             <div className="relative z-10 p-6 flex justify-between items-center bg-white/50 backdrop-blur-sm border-b border-black/[0.03]">
-              <div className="flex items-center gap-2">
-                <div className="w-9 h-9 rounded-full bg-thriva-navy flex items-center justify-center text-thriva-mint shadow-lg">
-                    <FlaskConical size={20} strokeWidth={2.5} />
-                </div>
-                <span className="font-bold text-[20px] tracking-tighter text-thriva-navy">MetLyft</span>
-              </div>
+              <Logo size="md" />
             <div className="flex items-center gap-2">
               <a 
                 href="https://wa.me/263700000000" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="p-2 hover:bg-thriva-mint/10 rounded-full transition-all text-thriva-mint hover:scale-110"
+                className="p-2 hover:bg-brand-mint/10 rounded-full transition-all text-brand-mint hover:scale-110"
                 title="WhatsApp Support"
               >
                 <MessageCircle size={22} fill="currentColor" strokeWidth={2.5} className="opacity-80" />
               </a>
               <button 
                 onClick={onClose}
-                className="p-2 hover:bg-thriva-navy/5 rounded-full transition-all text-thriva-navy/40 hover:text-thriva-navy"
+                className="p-2 hover:bg-brand-navy/5 rounded-full transition-all text-brand-navy/40 hover:text-brand-navy"
               >
                 <X size={24} strokeWidth={1.5} />
               </button>
@@ -310,14 +306,14 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
                   key={item.id}
                   onClick={() => setActiveTab(item.id as TabType)}
                   className={`flex flex-col items-center gap-1.5 transition-all duration-300 ${
-                    activeTab === item.id ? 'text-thriva-purple scale-110' : 'text-thriva-navy/20 hover:text-thriva-navy/40'
+                    activeTab === item.id ? 'text-brand-purple scale-110' : 'text-brand-navy/20 hover:text-brand-navy/40'
                   }`}
                 >
                   <item.icon 
                     size={24} 
                     strokeWidth={activeTab === item.id ? 2.5 : 2} 
                     fill={activeTab === item.id ? 'currentColor' : 'none'} 
-                    className={activeTab === item.id ? 'fill-thriva-purple/10' : ''}
+                    className={activeTab === item.id ? 'fill-brand-purple/10' : ''}
                   />
                   <span className={`text-[11px] font-bold tracking-tight ${activeTab === item.id ? 'opacity-100' : 'opacity-60'}`}>
                     {item.label}

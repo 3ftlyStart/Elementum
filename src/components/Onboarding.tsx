@@ -11,6 +11,7 @@ import {
   Loader2
 } from 'lucide-react';
 import { UserRole } from '../types';
+import Logo from './Logo';
 
 interface OnboardingProps {
   user: { uid: string; email: string | null; displayName: string | null };
@@ -38,14 +39,14 @@ export const Onboarding = ({ user, onComplete }: OnboardingProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-thriva-bg flex flex-col items-center justify-center p-6 text-thriva-navy">
+    <div className="min-h-screen bg-brand-bg flex flex-col items-center justify-center p-6 text-brand-navy">
       <div className="max-w-md w-full space-y-12">
         {/* Progress Bar */}
         <div className="flex gap-2 justify-center">
           {[1, 2, 3].map((s) => (
             <div 
               key={s} 
-              className={`h-1.5 rounded-full transition-all duration-500 ${step >= s ? 'w-10 bg-thriva-mint' : 'w-4 bg-thriva-navy/10'}`} 
+              className={`h-1.5 rounded-full transition-all duration-500 ${step >= s ? 'w-10 bg-brand-mint' : 'w-4 bg-brand-navy/10'}`} 
             />
           ))}
         </div>
@@ -60,41 +61,39 @@ export const Onboarding = ({ user, onComplete }: OnboardingProps) => {
               className="space-y-8"
             >
               <div className="text-center space-y-4">
-                <div className="w-16 h-16 bg-thriva-mint/10 rounded-[28px] mx-auto flex items-center justify-center text-thriva-mint">
-                   <FlaskConical size={32} />
-                </div>
+                <Logo size="lg" iconOnly className="mx-auto" />
                 <h2 className="font-display text-4xl font-medium tracking-tight">Welcome to MetLyft</h2>
-                <p className="text-thriva-navy/60 font-medium leading-relaxed">How will you be using the portal today?</p>
+                <p className="text-brand-navy/60 font-medium leading-relaxed">How will you be using the portal today?</p>
               </div>
 
               <div className="space-y-4">
                 <button
                   onClick={() => { setRole('Technician'); handleNext(); }}
-                  className={`w-full p-6 text-left rounded-[40px] border-2 transition-all group ${role === 'Technician' ? 'border-thriva-mint bg-thriva-mint/5' : 'border-transparent bg-white shadow-thriva hover:border-thriva-mint/20 hover:-translate-y-1'}`}
+                  className={`w-full p-6 text-left rounded-[40px] border-2 transition-all group ${role === 'Technician' ? 'border-brand-mint bg-brand-mint/5' : 'border-transparent bg-white shadow-brand hover:border-brand-mint/20 hover:-translate-y-1'}`}
                 >
                   <div className="flex justify-between items-center">
                     <div className="space-y-1">
-                      <div className="flex items-center gap-2 font-bold uppercase tracking-widest text-[9px] text-thriva-mint">
+                      <div className="flex items-center gap-2 font-bold uppercase tracking-widest text-[9px] text-brand-mint">
                          Laboratory Team
                       </div>
-                      <div className="text-base font-bold text-thriva-navy">Assay Specialist or Lab Admin</div>
+                      <div className="text-base font-bold text-brand-navy">Assay Specialist or Lab Admin</div>
                     </div>
-                    <ChevronRight size={20} className="text-thriva-navy/20 group-hover:text-thriva-mint transition-colors" />
+                    <ChevronRight size={20} className="text-brand-navy/20 group-hover:text-brand-mint transition-colors" />
                   </div>
                 </button>
 
                 <button
                   onClick={() => { setRole('Client'); handleNext(); }}
-                  className={`w-full p-6 text-left rounded-[40px] border-2 transition-all group ${role === 'Client' ? 'border-thriva-mint bg-thriva-mint/5' : 'border-transparent bg-white shadow-thriva hover:border-thriva-mint/20 hover:-translate-y-1'}`}
+                  className={`w-full p-6 text-left rounded-[40px] border-2 transition-all group ${role === 'Client' ? 'border-brand-mint bg-brand-mint/5' : 'border-transparent bg-white shadow-brand hover:border-brand-mint/20 hover:-translate-y-1'}`}
                 >
                   <div className="flex justify-between items-center">
                     <div className="space-y-1">
-                      <div className="flex items-center gap-2 font-bold uppercase tracking-widest text-[9px] text-thriva-mint">
+                      <div className="flex items-center gap-2 font-bold uppercase tracking-widest text-[9px] text-brand-mint">
                          Mining Stakeholder 
                       </div>
-                      <div className="text-base font-bold text-thriva-navy">View Results & Manage Billing</div>
+                      <div className="text-base font-bold text-brand-navy">View Results & Manage Billing</div>
                     </div>
-                    <ChevronRight size={20} className="text-thriva-navy/20 group-hover:text-thriva-mint transition-colors" />
+                    <ChevronRight size={20} className="text-brand-navy/20 group-hover:text-brand-mint transition-colors" />
                   </div>
                 </button>
               </div>
@@ -111,39 +110,39 @@ export const Onboarding = ({ user, onComplete }: OnboardingProps) => {
             >
               <div className="text-center space-y-4">
                 <h2 className="font-display text-4xl font-medium tracking-tight">Personalize your profile</h2>
-                <p className="text-thriva-navy/60 font-medium">How should colleagues address you?</p>
+                <p className="text-brand-navy/60 font-medium">How should colleagues address you?</p>
               </div>
 
               <div className="space-y-6">
                 <div className="space-y-3">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Full Name</label>
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-brand-navy/40 ml-2">Full Name</label>
                   <input 
                     type="text"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     placeholder="Enter your name"
-                    className="w-full bg-white border border-thriva-navy/10 rounded-[28px] px-6 py-5 outline-none focus:border-thriva-mint transition-colors text-sm font-bold shadow-thriva"
+                    className="w-full bg-white border border-brand-navy/10 rounded-[28px] px-6 py-5 outline-none focus:border-brand-mint transition-colors text-sm font-bold shadow-brand"
                   />
                 </div>
                 {role === 'Client' && (
                   <div className="space-y-3">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-thriva-navy/40 ml-2">Mining Site / Company</label>
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-brand-navy/40 ml-2">Mining Site / Company</label>
                     <input 
                       type="text"
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       placeholder="e.g. Western Goldfields"
-                      className="w-full bg-white border border-thriva-navy/10 rounded-[28px] px-6 py-5 outline-none focus:border-thriva-mint transition-colors text-sm font-bold shadow-thriva"
+                      className="w-full bg-white border border-brand-navy/10 rounded-[28px] px-6 py-5 outline-none focus:border-brand-mint transition-colors text-sm font-bold shadow-brand"
                     />
                   </div>
                 )}
                 
                 <div className="pt-6 flex gap-4">
-                  <button onClick={handleBack} className="flex-1 px-8 py-5 rounded-full font-bold text-sm bg-white border border-thriva-navy/5 shadow-sm text-thriva-navy/60 hover:text-thriva-navy transition-colors">Back</button>
+                  <button onClick={handleBack} className="flex-1 px-8 py-5 rounded-full font-bold text-sm bg-white border border-brand-navy/5 shadow-sm text-brand-navy/60 hover:text-brand-navy transition-colors">Back</button>
                   <button 
                     onClick={handleNext} 
                     disabled={!displayName || (role === 'Client' && !company)}
-                    className="flex-[2] bg-thriva-navy text-white px-8 py-5 rounded-full font-bold text-sm hover:bg-thriva-banner disabled:opacity-20 transition-all flex items-center justify-center gap-2 shadow-thriva"
+                    className="flex-[2] bg-brand-navy text-white px-8 py-5 rounded-full font-bold text-sm hover:bg-brand-banner disabled:opacity-20 transition-all flex items-center justify-center gap-2 shadow-brand"
                   >
                     Continue <ArrowRight size={16} />
                   </button>
@@ -161,14 +160,14 @@ export const Onboarding = ({ user, onComplete }: OnboardingProps) => {
               className="space-y-8"
             >
               <div className="text-center space-y-6">
-                <div className="w-20 h-20 bg-thriva-mint/10 rounded-[32px] mx-auto flex items-center justify-center text-thriva-mint">
+                <div className="w-20 h-20 bg-brand-mint/10 rounded-[32px] mx-auto flex items-center justify-center text-brand-mint">
                   <Check size={40} strokeWidth={3} />
                 </div>
                 <h2 className="font-display text-4xl font-medium tracking-tight">You’re all set</h2>
-                <p className="text-thriva-navy/60 font-medium">Your access to the {role} portal is being provisioned.</p>
+                <p className="text-brand-navy/60 font-medium">Your access to the {role} portal is being provisioned.</p>
               </div>
 
-              <div className="bg-white p-8 rounded-[48px] shadow-thriva space-y-5 border border-thriva-navy/5">
+              <div className="bg-white p-8 rounded-[48px] shadow-brand space-y-5 border border-brand-navy/5">
                 <div className="flex justify-between items-center text-sm">
                   <span className="opacity-40 font-bold uppercase tracking-widest text-[9px]">Role</span>
                   <span className="font-bold">{role}</span>
@@ -188,7 +187,7 @@ export const Onboarding = ({ user, onComplete }: OnboardingProps) => {
               <button 
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="w-full bg-thriva-mint text-thriva-navy py-6 rounded-full font-bold text-lg hover:scale-[1.02] transition-all shadow-xl shadow-thriva-mint/20 flex items-center justify-center gap-3 active:scale-[0.98]"
+                className="w-full bg-brand-mint text-brand-navy py-6 rounded-full font-bold text-lg hover:scale-[1.02] transition-all shadow-xl shadow-brand-mint/20 flex items-center justify-center gap-3 active:scale-[0.98]"
               >
                 {isSubmitting ? (
                   <Loader2 size={24} className="animate-spin" />

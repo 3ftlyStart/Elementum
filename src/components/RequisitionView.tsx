@@ -81,10 +81,10 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
   const getStatusColor = (status: RequisitionStatus) => {
     switch (status) {
       case 'Pending': return 'bg-slate-50 text-slate-400 border-slate-200';
-      case 'Approved': return 'bg-thriva-navy/10 text-thriva-navy border-thriva-navy/20 font-bold';
-      case 'Ordered': return 'bg-thriva-mint/10 text-thriva-mint border-thriva-mint/30 font-bold';
-      case 'Received': return 'bg-thriva-navy text-white border-thriva-navy shadow-md';
-      case 'Cancelled': return 'bg-thriva-coral text-white border-thriva-coral shadow-md';
+      case 'Approved': return 'bg-brand-navy/10 text-brand-navy border-brand-navy/20 font-bold';
+      case 'Ordered': return 'bg-brand-mint/10 text-brand-mint border-brand-mint/30 font-bold';
+      case 'Received': return 'bg-brand-navy text-white border-brand-navy shadow-md';
+      case 'Cancelled': return 'bg-brand-coral text-white border-brand-coral shadow-md';
     }
   };
 
@@ -92,9 +92,9 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
     return (
       <div className="p-20 flex flex-col items-center justify-center gap-6">
         <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2, ease: "linear" }}>
-          <ShoppingBag className="text-thriva-mint" size={48} />
+          <ShoppingBag className="text-brand-mint" size={48} />
         </motion.div>
-        <p className="text-[10px] text-thriva-navy/20 font-bold uppercase tracking-[0.3em]">Mapping Supply Chain...</p>
+        <p className="text-[10px] text-brand-navy/20 font-bold uppercase tracking-[0.3em]">Mapping Supply Chain...</p>
       </div>
     );
   }
@@ -103,12 +103,12 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
     <div className="p-6 space-y-8 pb-32">
       <div className="flex justify-between items-start">
         <div className="space-y-2">
-          <h2 className="text-3xl font-display font-medium text-thriva-navy tracking-tight">Procurement Pipe</h2>
-          <p className="text-[10px] text-thriva-navy/40 uppercase tracking-widest font-bold">Requisition Lifecycle Management</p>
+          <h2 className="text-3xl font-display font-medium text-brand-navy tracking-tight">Procurement Pipe</h2>
+          <p className="text-[10px] text-brand-navy/40 uppercase tracking-widest font-bold">Requisition Lifecycle Management</p>
         </div>
         <button 
           onClick={() => setShowAddModal(true)}
-          className="bg-thriva-mint text-thriva-navy px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all shadow-xl shadow-thriva-mint/20"
+          className="bg-brand-mint text-brand-navy px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all shadow-xl shadow-brand-mint/20"
         >
           <PlusCircle size={16} /> New Request
         </button>
@@ -118,15 +118,15 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
       <div className="flex gap-2 overflow-x-auto pb-4 noscroll px-2">
         {(['All', 'Pending', 'Approved', 'Ordered', 'Received', 'Cancelled'] as const).map(f => {
           const isActive = statusFilter === f;
-          let activeStyles = 'bg-thriva-navy text-white border-thriva-navy shadow-lg';
+          let activeStyles = 'bg-brand-navy text-white border-brand-navy shadow-lg';
           
           if (isActive) {
             switch (f) {
               case 'Pending': activeStyles = 'bg-slate-100 text-slate-600 border-slate-200 shadow-lg'; break;
-              case 'Approved': activeStyles = 'bg-thriva-navy/20 text-thriva-navy border-thriva-navy/30 shadow-lg font-bold'; break;
-              case 'Ordered': activeStyles = 'bg-thriva-mint/20 text-thriva-mint border-thriva-mint/30 shadow-lg font-bold'; break;
-              case 'Received': activeStyles = 'bg-thriva-navy text-white border-thriva-navy shadow-lg'; break;
-              case 'Cancelled': activeStyles = 'bg-thriva-coral text-white border-thriva-coral shadow-lg'; break;
+              case 'Approved': activeStyles = 'bg-brand-navy/20 text-brand-navy border-brand-navy/30 shadow-lg font-bold'; break;
+              case 'Ordered': activeStyles = 'bg-brand-mint/20 text-brand-mint border-brand-mint/30 shadow-lg font-bold'; break;
+              case 'Received': activeStyles = 'bg-brand-navy text-white border-brand-navy shadow-lg'; break;
+              case 'Cancelled': activeStyles = 'bg-brand-coral text-white border-brand-coral shadow-lg'; break;
             }
           }
 
@@ -134,7 +134,7 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
             <button 
               key={f}
               onClick={() => setStatusFilter(f)}
-              className={`px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest border transition-all whitespace-nowrap shadow-sm ${isActive ? activeStyles : 'bg-white border-thriva-navy/5 text-thriva-navy/40 hover:text-thriva-navy'}`}
+              className={`px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest border transition-all whitespace-nowrap shadow-sm ${isActive ? activeStyles : 'bg-white border-brand-navy/5 text-brand-navy/40 hover:text-brand-navy'}`}
             >
               {f}
             </button>
@@ -145,50 +145,50 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
       {/* Requisition List */}
       <div className="space-y-6">
         {filteredRequisitions.length === 0 ? (
-          <div className="bg-white border border-thriva-navy/5 rounded-[48px] p-24 text-center shadow-thriva">
-            <Archive className="mx-auto text-thriva-navy/5 mb-6" size={48} />
-            <p className="text-[10px] text-thriva-navy/30 uppercase font-bold tracking-[0.3em]">Supply channel inactive</p>
+          <div className="bg-white border border-brand-navy/5 rounded-[48px] p-24 text-center shadow-brand">
+            <Archive className="mx-auto text-brand-navy/5 mb-6" size={48} />
+            <p className="text-[10px] text-brand-navy/30 uppercase font-bold tracking-[0.3em]">Supply channel inactive</p>
           </div>
         ) : (
           filteredRequisitions.map(req => (
             <motion.div 
               layout
               key={req.id} 
-              className="bg-white border border-thriva-navy/5 rounded-[40px] p-8 space-y-6 shadow-thriva hover:shadow-thriva-hover transition-all duration-500 overflow-hidden relative"
+              className="bg-white border border-brand-navy/5 rounded-[40px] p-8 space-y-6 shadow-brand hover:shadow-brand-hover transition-all duration-500 overflow-hidden relative"
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-thriva-navy/5 rounded-full blur-[60px] -mr-16 -mt-16 pointer-events-none opacity-50" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-brand-navy/5 rounded-full blur-[60px] -mr-16 -mt-16 pointer-events-none opacity-50" />
               
               <div className="flex justify-between items-start relative z-10">
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
-                    <h3 className="text-xl font-bold text-thriva-navy tracking-tight">{req.itemName}</h3>
+                    <h3 className="text-xl font-bold text-brand-navy tracking-tight">{req.itemName}</h3>
                     <span className={`px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest border flex items-center gap-2 transition-all ${getStatusColor(req.status)}`}>
                       {getStatusIcon(req.status)}
                       {req.status}
                     </span>
                   </div>
                   <div className="flex items-center gap-5">
-                    <div className="flex items-center gap-2 bg-thriva-bg px-3 py-1 rounded-full border border-thriva-navy/5">
-                      <UserIcon size={12} className="text-thriva-navy/20" />
-                      <span className="text-[9px] font-bold text-thriva-navy/30 uppercase tracking-widest">{req.requestedByUserName}</span>
+                    <div className="flex items-center gap-2 bg-brand-bg px-3 py-1 rounded-full border border-brand-navy/5">
+                      <UserIcon size={12} className="text-brand-navy/20" />
+                      <span className="text-[9px] font-bold text-brand-navy/30 uppercase tracking-widest">{req.requestedByUserName}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Calendar size={12} className="text-thriva-navy/20" />
-                      <span className="text-[9px] font-bold text-thriva-navy/20 uppercase tracking-widest">{new Date(req.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
+                      <Calendar size={12} className="text-brand-navy/20" />
+                      <span className="text-[9px] font-bold text-brand-navy/20 uppercase tracking-widest">{new Date(req.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
                     </div>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-3xl font-display font-medium text-thriva-navy tracking-tight">
+                  <div className="text-3xl font-display font-medium text-brand-navy tracking-tight">
                     {req.quantityRequested}
-                    <span className="text-[10px] text-thriva-navy/20 ml-2 font-bold uppercase tracking-widest">{req.unit}</span>
+                    <span className="text-[10px] text-brand-navy/20 ml-2 font-bold uppercase tracking-widest">{req.unit}</span>
                   </div>
                 </div>
               </div>
 
               {req.notes && (
-                <div className="bg-thriva-bg p-5 rounded-3xl border border-thriva-navy/5 relative z-10">
-                  <p className="text-[11px] text-thriva-navy/40 font-medium leading-relaxed">"{req.notes}"</p>
+                <div className="bg-brand-bg p-5 rounded-3xl border border-brand-navy/5 relative z-10">
+                  <p className="text-[11px] text-brand-navy/40 font-medium leading-relaxed">"{req.notes}"</p>
                 </div>
               )}
 
@@ -197,13 +197,13 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
                 <div className="grid grid-cols-2 gap-4 pt-4 relative z-10">
                   <button 
                     onClick={() => handleUpdateStatus(req.id, 'Cancelled')}
-                    className="bg-thriva-bg border border-thriva-navy/5 text-thriva-navy/20 py-4 rounded-[24px] text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-thriva-coral hover:text-white transition-all duration-300 flex items-center justify-center gap-3 shadow-sm"
+                    className="bg-brand-bg border border-brand-navy/5 text-brand-navy/20 py-4 rounded-[24px] text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-brand-coral hover:text-white transition-all duration-300 flex items-center justify-center gap-3 shadow-sm"
                   >
                     <XCircle size={16} /> Discard
                   </button>
                   <button 
                     onClick={() => handleUpdateStatus(req.id, 'Approved')}
-                    className="bg-thriva-navy text-white py-4 rounded-[24px] text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-thriva-mint hover:text-thriva-navy transition-all duration-300 flex items-center justify-center gap-3 shadow-xl shadow-thriva-navy/20"
+                    className="bg-brand-navy text-white py-4 rounded-[24px] text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-brand-mint hover:text-brand-navy transition-all duration-300 flex items-center justify-center gap-3 shadow-xl shadow-brand-navy/20"
                   >
                     <CheckCircle2 size={16} /> Authorize
                   </button>
@@ -214,7 +214,7 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
               {(userRole === 'Admin' || userRole === 'Technician') && req.status === 'Approved' && (
                 <button 
                   onClick={() => handleUpdateStatus(req.id, 'Ordered')}
-                  className="w-full bg-thriva-bg border border-thriva-navy/5 text-thriva-navy/30 py-4 rounded-[24px] text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-thriva-mint hover:text-white transition-all duration-300 flex items-center justify-center gap-3 relative z-10"
+                  className="w-full bg-brand-bg border border-brand-navy/5 text-brand-navy/30 py-4 rounded-[24px] text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-brand-mint hover:text-white transition-all duration-300 flex items-center justify-center gap-3 relative z-10"
                 >
                   <Truck size={18} /> Deploy Supply Chain
                 </button>
@@ -223,7 +223,7 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
               {(userRole === 'Admin' || userRole === 'Technician') && req.status === 'Ordered' && (
                 <button 
                   onClick={() => handleUpdateStatus(req.id, 'Received')}
-                  className="w-full bg-thriva-mint text-thriva-navy py-4 rounded-[24px] text-[10px] font-bold uppercase tracking-[0.2em] hover:scale-[1.01] transition-all duration-300 flex items-center justify-center gap-3 relative z-10 shadow-xl shadow-thriva-mint/20"
+                  className="w-full bg-brand-mint text-brand-navy py-4 rounded-[24px] text-[10px] font-bold uppercase tracking-[0.2em] hover:scale-[1.01] transition-all duration-300 flex items-center justify-center gap-3 relative z-10 shadow-xl shadow-brand-mint/20"
                 >
                   <PackageCheck size={18} /> Confirm Atomic Delivery
                 </button>
@@ -236,7 +236,7 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
       {/* Add Requisition Modal */}
       <AnimatePresence>
         {showAddModal && (
-          <div className="fixed inset-0 z-[60] flex items-center justify-center p-6 bg-thriva-navy/40 backdrop-blur-md">
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-6 bg-brand-navy/40 backdrop-blur-md">
             <motion.div 
                initial={{ opacity: 0 }}
                animate={{ opacity: 1 }}
@@ -248,21 +248,21 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="bg-white border border-thriva-navy/5 rounded-[48px] w-full max-w-lg p-10 relative z-10 space-y-8 shadow-2xl"
+              className="bg-white border border-brand-navy/5 rounded-[48px] w-full max-w-lg p-10 relative z-10 space-y-8 shadow-2xl"
             >
-              <div className="flex justify-between items-center border-b border-thriva-navy/5 pb-6">
+              <div className="flex justify-between items-center border-b border-brand-navy/5 pb-6">
                 <div className="flex items-center gap-4">
-                   <div className="w-14 h-14 rounded-3xl bg-thriva-bg flex items-center justify-center text-thriva-mint shadow-inner">
+                   <div className="w-14 h-14 rounded-3xl bg-brand-bg flex items-center justify-center text-brand-mint shadow-inner">
                       <ShoppingBag size={28} />
                    </div>
                    <div className="space-y-1">
-                     <h3 className="text-2xl font-display font-medium text-thriva-navy tracking-tight">Purchase Request</h3>
-                     <p className="text-[10px] text-thriva-navy/30 uppercase font-bold tracking-widest">Procurement sequence initiation</p>
+                     <h3 className="text-2xl font-display font-medium text-brand-navy tracking-tight">Purchase Request</h3>
+                     <p className="text-[10px] text-brand-navy/30 uppercase font-bold tracking-widest">Procurement sequence initiation</p>
                    </div>
                 </div>
                 <button 
                   onClick={() => setShowAddModal(false)} 
-                  className="w-10 h-10 rounded-full bg-thriva-bg flex items-center justify-center text-thriva-navy/20 hover:text-thriva-coral transition-all"
+                  className="w-10 h-10 rounded-full bg-brand-bg flex items-center justify-center text-brand-navy/20 hover:text-brand-coral transition-all"
                 >
                   <X size={20} />
                 </button>
@@ -294,18 +294,18 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
                 }
               }}>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Item Nomenclature</label>
-                  <input name="itemName" required placeholder="e.g. Molecular Reagents Kit" className="w-full bg-thriva-bg border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-all font-medium" />
+                  <label className="text-[10px] font-bold text-brand-navy/40 uppercase tracking-[0.2em] px-1">Item Nomenclature</label>
+                  <input name="itemName" required placeholder="e.g. Assay Reagents Kit" className="w-full bg-brand-bg border border-brand-navy/5 rounded-[24px] px-6 py-4 text-brand-navy outline-none focus:border-brand-mint transition-all font-medium" />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Target Volume</label>
-                    <input name="quantity" type="number" required defaultValue="1" className="w-full bg-thriva-bg border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-all font-medium font-display" />
+                    <label className="text-[10px] font-bold text-brand-navy/40 uppercase tracking-[0.2em] px-1">Target Volume</label>
+                    <input name="quantity" type="number" required defaultValue="1" className="w-full bg-brand-bg border border-brand-navy/5 rounded-[24px] px-6 py-4 text-brand-navy outline-none focus:border-brand-mint transition-all font-medium font-display" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Unit of Measure</label>
-                    <select name="unit" className="w-full bg-thriva-bg border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none cursor-pointer hover:border-thriva-mint/50 transition-all appearance-none font-medium">
+                    <label className="text-[10px] font-bold text-brand-navy/40 uppercase tracking-[0.2em] px-1">Unit of Measure</label>
+                    <select name="unit" className="w-full bg-brand-bg border border-brand-navy/5 rounded-[24px] px-6 py-4 text-brand-navy outline-none cursor-pointer hover:border-brand-mint/50 transition-all appearance-none font-medium">
                       <option value="kg">kg</option>
                       <option value="L">L</option>
                       <option value="g">g</option>
@@ -315,11 +315,11 @@ export const RequisitionView = ({ userRole }: RequisitionViewProps) => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-thriva-navy/40 uppercase tracking-[0.2em] px-1">Operational Justification</label>
-                  <textarea name="notes" placeholder="Explain the molecular necessity of this item..." className="w-full bg-thriva-bg border border-thriva-navy/5 rounded-[24px] px-6 py-4 text-thriva-navy outline-none focus:border-thriva-mint transition-all font-medium h-32 resize-none" />
+                  <label className="text-[10px] font-bold text-brand-navy/40 uppercase tracking-[0.2em] px-1">Operational Justification</label>
+                  <textarea name="notes" placeholder="Explain the assay necessity of this item..." className="w-full bg-brand-bg border border-brand-navy/5 rounded-[24px] px-6 py-4 text-brand-navy outline-none focus:border-brand-mint transition-all font-medium h-32 resize-none" />
                 </div>
 
-                <button type="submit" className="w-full bg-thriva-navy text-white font-bold py-5 rounded-[28px] shadow-2xl shadow-thriva-navy/30 hover:bg-thriva-mint hover:text-thriva-navy active:scale-95 transition-all duration-300 uppercase tracking-[0.2em] text-[11px] mt-4">
+                <button type="submit" className="w-full bg-brand-navy text-white font-bold py-5 rounded-[28px] shadow-2xl shadow-brand-navy/30 hover:bg-brand-mint hover:text-brand-navy active:scale-95 transition-all duration-300 uppercase tracking-[0.2em] text-[11px] mt-4">
                   COMMIT PROCUREMENT REQUEST
                 </button>
               </form>
